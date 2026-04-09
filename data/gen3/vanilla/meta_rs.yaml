@@ -291,6 +291,6 @@ spheres:
 sphere_generation_modes:
   all: [1,2,3,4,5,6] # all areas including postgame
   no_postgame: [1,2,3,4,5] # beginning of game through Victory Road, excluding postgame
-  pre_victory_road: [1,2,3,4] # beginning of game up to post-Rayquaza areas, before Elite Four
+  pre_victory_road: [1,2,3,4] # beginning of game up to Victory Road
 
 selected_sphere_mode: pre_victory_road

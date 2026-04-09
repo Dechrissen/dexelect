@@ -691,7 +691,7 @@
   super_rod:
   - WAILMER
   - SHARPEDO
-- map_name: ShoalCave1F1RHighTide
+- map_name: ShoalCave1F1R_HighTide
   walk:
   - GOLBAT
   - SPHEAL
@@ -709,12 +709,12 @@
   - WAILMER
   super_rod:
   - WAILMER
-- map_name: ShoalCave1F1RLowTide
+- map_name: ShoalCave1F1R_LowTide
   walk:
   - GOLBAT
   - SPHEAL
   - ZUBAT
-- map_name: ShoalCave1F2RHighTide
+- map_name: ShoalCave1F2R_HighTide
   walk:
   - GOLBAT
   - SPHEAL
@@ -732,22 +732,22 @@
   - WAILMER
   super_rod:
   - WAILMER
-- map_name: ShoalCave1F2RLowTide
+- map_name: ShoalCave1F2R_LowTide
   walk:
   - GOLBAT
   - SPHEAL
   - ZUBAT
-- map_name: ShoalCaveB1FLowTide
+- map_name: ShoalCaveB1F_LowTide
   walk:
   - GOLBAT
   - SPHEAL
   - ZUBAT
-- map_name: ShoalCaveB2FLowTide
+- map_name: ShoalCaveB2F_LowTide
   walk:
   - GOLBAT
   - SPHEAL
   - ZUBAT
-- map_name: ShoalCaveB3FLowTide
+- map_name: ShoalCaveB3F_LowTide
   walk:
   - GOLBAT
   - SPHEAL

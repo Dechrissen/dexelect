@@ -23,10 +23,9 @@ but also with romhacks that might contain the following (as long as the relevant
 
 ## Currently supported games
 - **Vanilla**
-  - Pokémon Red
-  - Pokémon Blue
-  - Pokémon Gold
-  - Pokémon Silver
+  - Pokémon Red & Blue
+  - Pokémon Gold & Silver
+  - Pokémon Ruby & Sapphire
 - **Romhacks**
   - [Pokémon Solus RGB](https://github.com/Dechrissen/poke-solus-rgb)
 

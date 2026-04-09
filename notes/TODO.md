@@ -48,7 +48,7 @@
 - toggle for "gen 2 or gen 1 pokemon only" in gen 2 generation? and onward
   - or not a toggle, but a list of 'allowed generations' e.g. [1,2,3]
 
-- add ko-fi support link or link to support page on website into tool footer/header
-
 - add 'Milk Drink' as field moves (HMs) in Gen 2 and 3?
 - add 'Secret Power' as field move (HM) in gen 3?
+
+- add party size limit to config file options

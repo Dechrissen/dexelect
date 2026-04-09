@@ -145,7 +145,7 @@ def display_party(party_blob, config_data, global_settings, duration, game, gene
                     f"{prescribed_acquisition_method} at {prescribed_acquiring_location} "
                     f"(Sphere {earliest_pool})"
                 )
-        print(f"{BRIGHT_MAGENTA}{i}.{RESET} {pokemon['party_member_obj'].name}" + prescription_details)
+        print(f"{i}. {pokemon['party_member_obj'].name}" + prescription_details)
     # ---------------------------------------------------------------------------- END PRINT PARTY ----------
 
     if show_balance_stats:
@@ -158,7 +158,7 @@ def display_party(party_blob, config_data, global_settings, duration, game, gene
     print()
 
     if duration:
-        print(f"Generation took {duration:.2f}s\n")
+        print(f"[Generation took {duration:.2f}s]\n")
 
     print_global_settings()
 
@@ -166,6 +166,8 @@ def display_party(party_blob, config_data, global_settings, duration, game, gene
 def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_settings):
     # ANSI codes
     BRIGHT_CYAN = "\033[96m"
+    BRIGHT_GREEN = "\033[92m"
+    BRIGHT_MAGENTA = "\033[95m"
     RESET = "\033[0m"
 
     party_on_screen = None
@@ -190,6 +192,8 @@ def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_set
         print(f"{BRIGHT_CYAN}S{RESET} - Set game")
         print(f"{BRIGHT_CYAN}R{RESET} - Reload config")
         print(f"{BRIGHT_CYAN}Q{RESET} - Quit")
+        print("")
+        print(f"Support this software: {BRIGHT_MAGENTA}https://ko-fi.com/dechrissen{RESET}")
         print("")
 
         user = input("> ").strip().lower()

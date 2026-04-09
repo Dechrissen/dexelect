@@ -7,7 +7,7 @@ import random
 DEBUG = False
 
 def generate_final_party(all_pools: dict, all_pokemon: dict, config_data: dict, meta_data: dict, n: int = 6,
-                         retry: int = 0, max_retries: int = 100, max_iterations: int = 10000):
+                         retry: int = 0, max_retries: int = 300, max_iterations: int = 10000):
     """
     Generates a final party of Pokemon.
 
@@ -698,7 +698,13 @@ def construct_full_location_set(location_data) -> dict[str, Location]:
             rock_smash=cur_loc["rock_smash"] if "rock_smash" in cur_loc else None,
             roaming=cur_loc["roaming"] if "roaming" in cur_loc else None,
             rainbow_wing=cur_loc["rainbow_wing"] if "rainbow_wing" in cur_loc else None,
-            silver_wing=cur_loc["silver_wing"] if "silver_wing" in cur_loc else None
+            silver_wing=cur_loc["silver_wing"] if "silver_wing" in cur_loc else None,
+            # gen 3 methods ...
+            dive=cur_loc["dive"] if "dive" in cur_loc else None,
+            go_goggles=cur_loc["go_goggles"] if "go_goggles" in cur_loc else None,
+            devon_scope=cur_loc["devon_scope"] if "devon_scope" in cur_loc else None,
+            sealed_chamber_puzzle=cur_loc["sealed_chamber_puzzle"] if "sealed_chamber_puzzle" in cur_loc else None,
+            mirage_island=cur_loc["mirage_island"] if "mirage_island" in cur_loc else None
         )
 
         # add current loc's Location object to dict

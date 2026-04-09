@@ -29,14 +29,15 @@ def test_pokedex_required_fields(yaml_files):
 def test_pokedex_data_types(yaml_files):
     """Tests whether all data types are valid for each Pokemon."""
     valid_hms = {'CUT', 'FLASH', 'SURF', 'STRENGTH', 'FLY', 'DIG', 'TELEPORT', 'SOFTBOILED',
-                 'WATERFALL', 'WHIRLPOOL', 'ROCK_SMASH', 'HEADBUTT'}
+                 'WATERFALL', 'WHIRLPOOL', 'ROCK_SMASH', 'DIVE', 'HEADBUTT'}
     valid_types = {'normal', 'fire', 'water', 'grass', 'electric', 'flying', 'fighting',
                    'ice', 'psychic', 'ground', 'rock', 'poison', 'bug', 'dragon', 'ghost',
                    'steel', 'dark'}
     valid_evo_methods = {'none', 'level-up', 'moon_stone', 'fire_stone', 'water_stone',
                          'thunder_stone', 'leaf_stone', 'trade',
                          'happiness', 'trade_metal_coat', 'trade_kings_rock', 'trade_dragon_scale', 'trade_upgrade',
-                         'level-up_atk_equal_def', 'level-up_atk_greater_def', 'level-up_def_greater_atk', 'sun_stone'}
+                         'level-up_atk_equal_def', 'level-up_atk_greater_def', 'level-up_def_greater_atk', 'sun_stone',
+                         'trade_deepseatooth', 'trade_deepseascale', 'level-up_beauty'}
 
     for path, category in filter_yaml(yaml_files, "pokedex"):
         pokedex = load_yaml(path)
@@ -84,7 +85,8 @@ def test_location_fields(yaml_files):
     valid_acquisition_methods = {'starter','walk','surf','old_rod','good_rod','super_rod','poke_flute',
                                  'static_encounter','trade','gift','purchase','fossil_restore','prize_window',
                                  'bug_catching_contest', 'rock_smash', 'squirt_bottle', 'headbutt', 'roaming',
-                                 'rainbow_wing', 'silver_wing'}
+                                 'rainbow_wing', 'silver_wing', 'dive', 'go_goggles', 'devon_scope',
+                                 'sealed_chamber_puzzle', 'mirage_island'}
     for path, category in filter_yaml(yaml_files, "locations"):
         locations = load_yaml(path)
         for location in locations:

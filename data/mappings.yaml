@@ -23,6 +23,18 @@ Silver:
   locations: 'data/gen2/vanilla/locations_silver.yaml'
   config: 'config/config_gen2.yaml'
 
+Ruby:
+  meta: 'data/gen3/vanilla/meta_rs.yaml'
+  pokedex: 'data/gen3/vanilla/pokedex_rs.yaml'
+  locations: 'data/gen3/vanilla/locations_ruby.yaml'
+  config: 'config/config_gen3.yaml'
+
+Sapphire:
+  meta: 'data/gen3/vanilla/meta_rs.yaml'
+  pokedex: 'data/gen3/vanilla/pokedex_rs.yaml'
+  locations: 'data/gen3/vanilla/locations_sapphire.yaml'
+  config: 'config/config_gen3.yaml'
+
 ### romhacks ###
 Solus RGB:
   meta: 'data/gen1/romhacks/meta_solusrgb.yaml'
