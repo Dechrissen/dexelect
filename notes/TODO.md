@@ -2,14 +2,17 @@
 
 - make a logo
 - add to itch.io
-- add Yellow
-- add Crystal
+
+- add support for:
+  - Yellow
+  - Crystal
+  - Emerald
 
 - clean up CLI UI code and add some comments
 
 - add comments to unit test functions
 
-- make "gift" into "choice" for HITMONs?
+- make "gift" into "choice" for HITMONs? this would allow "modal" list to not be used for fossils etc.
 
 - add "user defined modals" to the config, which are extra modals that get added to the modal list when doing the check
   - e.g. "nidoran_m and nidoran_f"
@@ -29,6 +32,8 @@
 
 - add unit tests for party generation functions (define test parties)
 
+- add coverage tests for running generation for a few minutes and making sure certain % of pokemon get generated? gotta figure out what metric makes sense
+
 - add toggle options for "Show balance stats" and "Show acquisition details" in UI
 
 - add 'export to txt' option for saving teams, or do it automatically (last X teams generated in a file)
@@ -47,8 +52,11 @@
 
 - toggle for "gen 2 or gen 1 pokemon only" in gen 2 generation? and onward
   - or not a toggle, but a list of 'allowed generations' e.g. [1,2,3]
+  - will need to add a field for every pokemon in every pokedex file "gen_introduced"
+  - additional possibile field: "in_regional_dex" (bool)
 
 - add 'Milk Drink' as field moves (HMs) in Gen 2 and 3?
 - add 'Secret Power' as field move (HM) in gen 3?
 
 - add party size limit to config file options
+

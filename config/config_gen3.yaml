@@ -49,6 +49,8 @@ allowed_evo_methods:
   trade_deepseascale: false
   happiness: true
   level-up_beauty: true # Feebas -> Milotic
+  level-up_empty_slot_extra_ball: true # Nincada -> Shedinja
+  level-up_personality: true # Wurmple -> Silcoon or Cascoon (random)
   level-up_atk_greater_def: true
   level-up_def_greater_atk: true
   level-up_atk_equal_def: true

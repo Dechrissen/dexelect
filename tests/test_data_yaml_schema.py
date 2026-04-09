@@ -37,7 +37,8 @@ def test_pokedex_data_types(yaml_files):
                          'thunder_stone', 'leaf_stone', 'trade',
                          'happiness', 'trade_metal_coat', 'trade_kings_rock', 'trade_dragon_scale', 'trade_upgrade',
                          'level-up_atk_equal_def', 'level-up_atk_greater_def', 'level-up_def_greater_atk', 'sun_stone',
-                         'trade_deepseatooth', 'trade_deepseascale', 'level-up_beauty'}
+                         'trade_deepseatooth', 'trade_deepseascale', 'level-up_beauty', 'level-up_empty_slot_extra_ball',
+                         'level-up_personality'}
 
     for path, category in filter_yaml(yaml_files, "pokedex"):
         pokedex = load_yaml(path)

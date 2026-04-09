@@ -3351,7 +3351,7 @@
   is_legendary: false
   base_stat_total: 205
   hm_learnset: []
-  evolution_method_required: level-up
+  evolution_method_required: level-up_personality
 - name: BEAUTIFLY
   is_fully_evolved: true
   evo_stage: 3
@@ -3373,7 +3373,7 @@
   is_legendary: false
   base_stat_total: 205
   hm_learnset: []
-  evolution_method_required: level-up
+  evolution_method_required: level-up_personality
 - name: DUSTOX
   is_fully_evolved: true
   evo_stage: 3
@@ -3679,7 +3679,7 @@
   - CUT
   - FLASH
   - ROCK_SMASH
-  evolution_method_required: level-up_shedinja
+  evolution_method_required: level-up_empty_slot_extra_ball
 - name: WHISMUR
   is_fully_evolved: false
   evo_stage: 1
