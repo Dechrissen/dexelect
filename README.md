@@ -1,8 +1,12 @@
 # _TeamGen_ – Universal Party Generator
 
-A tool for generating a random, progression-viable party of six Pokémon for use in a playthrough. 
+A tool for generating a random, progression-viable party of Pokémon for use in a playthrough. 
 Pokémon availability and game progression are respected in the final output, and customization options are 
 available to curate the output further.
+
+<p align="center" style="margin-left: 10%; margin-right: 10%">
+  <img src="screenshots/sample-output.png">
+</p>
 
 ## Table of contents
 1. [Introduction](#introduction)
@@ -58,11 +62,12 @@ Steps:
 
 ### Using the app
 - `ENTER` – Generate a party with the current settings
-- `G` – Toggle the generation mode between Progression-viable and Random
-  - Progression-viable: Considers game data, locations, progression, config settings
-  - Random: Completely random generation
-- `S` – Open the 'Set game' menu to switch current game setting
+- `M` – Toggle the generation mode between 'Progression' and 'Random'
+  - Progression: Considers game data, locations, progression, config settings
+  - Random: Completely random generation using current game's National Dex
+- `G` – Open the 'Supported Games' menu to switch current game
 - `R` – Reload the config file (after making any config changes while the app is running)
+- `H` – Display help menu
 - `Q` – Quit the app
 
 ### Changing config settings

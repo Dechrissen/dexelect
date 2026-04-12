@@ -1,0 +1,26 @@
+Help
+----
+
+TeamGen — Universal Pokemon team generator
+
+Usage:
+  ENTER – Generate a party
+  M – Toggle the generation mode between 'Progression' and 'Random'
+  G – Open the Supported Games menu to change the game mode
+  R – Reload the current configuration file (if changes were made while the app is running)
+  H – Display this help
+  Q – Quit the app
+
+Modes:
+  Progression — Generated party adheres to logical game progression and config settings
+  Random — Generated party is completely random using current game's National Dex
+
+Definitions:
+  Sphere – Broad chunk of game progression (e.g. Sphere 1 for Kanto is Pallet Town to Cerulean City)
+  Distribution – Breakdown of how many party members appear in each Sphere
+  Lean – Semantic tag encoding the general trend in the Distribution (early_game_heavy / balanced / late_game_heavy)
+  Spread – Semantic tag encoding the distance between all party members (clustered / mixed_spread / wide_spread)
+  Pattern – Semantic tag encoding the pattern that the Distribution follows, if there is one (early_late_split, middle_only, dual_cluster, single_cluster)
+
+Notes:
+  - Configuration files are located in /config (e.g. /config/config_gen2.yaml for Gen 2 games)

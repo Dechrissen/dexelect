@@ -27,6 +27,8 @@
 
 - add HM coverage output
   - list of HMs, check marks next to covered ones, or color them green
+  
+- other similar coverage bar graphs, etc. (type coverage distribution)
 
 - check every location from locations is in meta spheres list (also add unit test for this?)
 
@@ -42,7 +44,9 @@
 
 - add "types to exclude" config setting
 
-- add setting to meta file for G/S that is a boolean to enable or disable whether player has access to CELEBI event. 
+- add event support generally (gen 2/3)
+  - might just be eon_ticket acquisition method toggle
+  - add setting to meta file for G/S that is a boolean to enable or disable whether player has access to CELEBI event. 
   celebi event data (gs ball acquisition method? will just be in the data files but only work if this setting is 
   turned on.)
 
@@ -59,4 +63,4 @@
 - add 'Secret Power' as field move (HM) in gen 3?
 
 - add party size limit to config file options
-
+- add flag to check to "ensure_at_least_one_sphere_1_mon" is generated

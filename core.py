@@ -1,3 +1,7 @@
+# Copyright 2025 Derek Andersen
+# https://derekandersen.net
+# https://github.com/Dechrissen/
+
 from models.pokemon import Pokemon
 from models.location import Location
 from models.sphere import Sphere

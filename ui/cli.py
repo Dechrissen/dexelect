@@ -1,3 +1,7 @@
+# Copyright 2025 Derek Andersen
+# https://derekandersen.net
+# https://github.com/Dechrissen/
+
 from util import resource_path
 from core import *
 from data.loader import build_all_data_structures
@@ -5,20 +9,39 @@ from version import __version__
 import os
 import yaml
 import time
+from util import resource_path
 
 def clear():
     os.system("cls" if os.name == "nt" else "clear")
+
+def print_help():
+    print_header()
+
+    with open(resource_path('ui/cli-help.txt')) as f:
+        help_text = f.read()
+        print(help_text)
+
+    print_copyright()
+
+    print("")
+
+    user = input("Press ENTER to go back.")
+    return
 
 def set_game(mappings):
     selected_game = None
     valid_options = {}
 
+    print_header()
+
+    print("Supported Games")
+    print("---------------")
     for i, game_title in enumerate(mappings.keys(), start=1):
         valid_options[str(i)] = game_title
         print(f"{i}. {game_title}")
 
     print("")
-    print("Select game number.\n")
+    print("Enter game number.\n")
 
     user = input("> ").strip().lower()
 
@@ -37,13 +60,13 @@ def set_game(mappings):
         return True
 
 def toggle_generation_mode(generation_mode):
-    if generation_mode == 'Progression-viable':
+    if generation_mode == 'Progression':
         new_generation_mode = 'Random'
     elif generation_mode == 'Random':
-        new_generation_mode = 'Progression-viable'
+        new_generation_mode = 'Progression'
     else:
         # probably don't need this case but w/e
-        new_generation_mode = 'Progression-viable'
+        new_generation_mode = 'Progression'
 
     with open(resource_path("config/global_settings.yaml"), "r") as f:
         data = yaml.safe_load(f)
@@ -53,13 +76,28 @@ def toggle_generation_mode(generation_mode):
 
     return new_generation_mode
 
+def print_header():
+    TITLE = "\033[1;100;96m"
+    RESET = "\033[0m"
+    print(f"{TITLE}======== TeamGen v{__version__} ========{RESET}\n")
+
+def print_copyright():
+    BRIGHT_BLACK = "\033[90m"
+    RESET = "\033[0m"
+    print(
+            f"{BRIGHT_BLACK}"
+            "Copyright 2025 Derek Andersen (derekandersen.net). Licensed under the MIT License.\n"
+            "Support this software: https://ko-fi.com/dechrissen"
+            f"{RESET}"
+        )
+
 def display_party(party_blob, config_data, global_settings, duration, game, generation_mode, config_file_path):
     # ANSI codes
-    TITLE = "\033[1;100;93m" # bright black background, bold bright yellow text
     BRIGHT_GREEN = "\033[92m"
     BRIGHT_MAGENTA = "\033[95m"
     BRIGHT_RED = "\033[91m"
     BRIGHT_BLUE = "\033[94m"
+    BRIGHT_CYAN = "\033[96m"
     BRIGHT_BLACK = "\033[90m"
     BRIGHT_YELLOW = "\033[93m"
     RESET = "\033[0m"
@@ -68,11 +106,14 @@ def display_party(party_blob, config_data, global_settings, duration, game, gene
     show_balance_stats = global_settings['show_balance_stats']
 
     def print_global_settings():
-        print(f"Game setting:\t {game}")
-        print(f"Config file:\t {config_file_path}")
-        print(f"Generation mode: {generation_mode}\n")
+        # ---------------- PRINT SETTINGS ---------------------------------------------------------------------
+        print(f"{BRIGHT_CYAN}---- SETTINGS ------------------{RESET}")
+        print(f"Game:\t {game}")
+        print(f"Mode:\t {generation_mode}")
+        print(f"Config:\t {config_file_path}")
+        print("")
 
-    print(f"{TITLE}===== TeamGen v{__version__} ====={RESET}\n")
+    print_header()
 
     # Case 1: Never generated yet, or set_game invalid option was passed
     if party_blob is None:
@@ -82,7 +123,7 @@ def display_party(party_blob, config_data, global_settings, duration, game, gene
 
     # Case 2: Tried but failed
     if party_blob is False:
-        print("No party could be generated with current settings!\n")
+        print("No party could be generated. Please adjust settings or try again.\n")
         print_global_settings()
         return
 
@@ -93,22 +134,22 @@ def display_party(party_blob, config_data, global_settings, duration, game, gene
         return
 
     if party_blob == 'game_updated':
-        print(f"{BRIGHT_GREEN}Game setting updated.{RESET}\n")
+        print(f"{BRIGHT_GREEN}Success! Game updated.{RESET}\n")
         print_global_settings()
         return
 
     if party_blob == 'generation_mode_toggled':
-        print(f"{BRIGHT_GREEN}Generation mode updated.{RESET}\n")
+        print(f"{BRIGHT_GREEN}Success! Mode updated.{RESET}\n")
         print_global_settings()
         return
 
     if party_blob == 'config_reloaded':
-        print(f"{BRIGHT_GREEN}Config reloaded.{RESET}\n")
+        print(f"{BRIGHT_GREEN}Success! Config reloaded.{RESET}\n")
         print_global_settings()
         return
 
     # ---------------- PRINT PARTY --------------------------------------------------------------------------
-    print(f"{BRIGHT_YELLOW}---- PARTY -------------------{RESET}")
+    print(f"{BRIGHT_YELLOW}---- PARTY ---------------------{RESET}")
     # sort party by Sphere number appearance ascending, with exception for starter in slot 1
     def sort_key(p):
         prescribed = p["random_pool_entry_instance"]
@@ -149,7 +190,7 @@ def display_party(party_blob, config_data, global_settings, duration, game, gene
     # ---------------------------------------------------------------------------- END PRINT PARTY ----------
 
     if show_balance_stats:
-        print(f"\n{BRIGHT_YELLOW}---- STATS -------------------{RESET}")
+        print(f"\n{BRIGHT_YELLOW}---- STATS ---------------------{RESET}")
         print("Distribution:\t", [("Sphere " + str(sphere) + ": " + str(party_blob["party_distribution"][sphere])) for sphere in party_blob["party_distribution"]] if party_blob["party_distribution"] else None)
         #print("score_median:", party_blob["score_median"])
         print("Lean:\t\t", party_blob["lean"])
@@ -168,6 +209,7 @@ def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_set
     BRIGHT_CYAN = "\033[96m"
     BRIGHT_GREEN = "\033[92m"
     BRIGHT_MAGENTA = "\033[95m"
+    BRIGHT_BLACK = "\033[90m"
     RESET = "\033[0m"
 
     party_on_screen = None
@@ -188,12 +230,15 @@ def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_set
         display_party(party_on_screen, config_data, global_settings, duration, game, generation_mode, config_file_path)
 
         print(f"Press {BRIGHT_CYAN}ENTER{RESET} to generate a party.")
-        print(f"{BRIGHT_CYAN}G{RESET} - Toggle generation mode")
-        print(f"{BRIGHT_CYAN}S{RESET} - Set game")
-        print(f"{BRIGHT_CYAN}R{RESET} - Reload config")
-        print(f"{BRIGHT_CYAN}Q{RESET} - Quit")
+        print(f"{BRIGHT_CYAN}M{RESET} - Toggle [M]ode")
+        print(f"{BRIGHT_CYAN}G{RESET} - Set [G]ame")
+        print(f"{BRIGHT_CYAN}R{RESET} - [R]eload config")
+        print(f"{BRIGHT_CYAN}H{RESET} - [H]elp")
+        print(f"{BRIGHT_CYAN}Q{RESET} - [Q]uit")
         print("")
-        print(f"Support this software: {BRIGHT_MAGENTA}https://ko-fi.com/dechrissen{RESET}")
+
+        print_copyright()
+
         print("")
 
         user = input("> ").strip().lower()
@@ -202,12 +247,14 @@ def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_set
         if user == "q":
             print("Goodbye!")
             return
+        if user == "m":
+            mode = "toggle_generation_mode"
         if user == "g":
-            mode='toggle_generation_mode'
-        if user == "s":
             mode = "set_game"
         if user == "r":
             mode = "reload_config"
+        if user == "h":
+            mode = "help"
 
         # otherwise, when ENTER pressed ...
         if DEBUG:
@@ -235,6 +282,10 @@ def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_set
             all_pools, all_pokemon, config_data, meta_data, mappings, global_settings = build_all_data_structures()
             party_on_screen = 'config_reloaded'
             continue
+        elif mode == 'help':
+            print_help()
+            continue
+
 
         # generation
         if generation_mode == 'Random':
@@ -243,7 +294,7 @@ def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_set
             party_blob = generate_fully_randomized_party(all_pokemon, n=6)
             end = time.time()
             duration = end - start
-        elif generation_mode == 'Progression-viable':
+        elif generation_mode == 'Progression':
             print("Generating party...\n")
             start = time.time()
             party_blob = generate_final_party(
