@@ -102,11 +102,11 @@ def fetch_gen(gen_num: int, cfg: dict, out_root: Path) -> None:
 
         if ok:
             downloaded += 1
-            print(f"  [{downloaded+skipped:>3}/{total}] ✓ #{dex_id:03d}")
+            print(f"  [{downloaded+skipped:>3}/{total}] OK #{dex_id:03d}")
             time.sleep(REQUEST_DELAY)
         else:
             missing += 1
-            print(f"  [{downloaded+skipped+missing:>3}/{total}] ✗ #{dex_id:03d}  (not found, skipped)")
+            print(f"  [{downloaded+skipped+missing:>3}/{total}] -- #{dex_id:03d}  (not found, skipped)")
 
     print(f"\n  Done — {downloaded} downloaded, {skipped} already existed, {missing} not found.")
 
