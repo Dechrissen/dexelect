@@ -527,7 +527,7 @@ class TeamGenApp(ctk.CTk):
             elif event.num == 5:
                 canvas.yview_scroll(1, "units")
             else:
-                canvas.yview_scroll(-int(event.delta / 120), "units")
+                canvas.yview_scroll(-int(event.delta / 40), "units")
 
         scroll.bind("<Enter>", lambda e: [
             self.bind_all("<MouseWheel>", _on_config_scroll),
