@@ -8,10 +8,6 @@
 - poketeamgen
 - pokesix
 
-## Gen 3 ideas
-- for gen 3, mach and acro bike selection doesnt cause issue because you can always swap them, so the pokemon generated for you in that sphere will always be gettable
-- gen 3 "blacklist" where feebas is prepopulated by default
-
 
 ## example "build" (list and order of routes and items in file)
 - or "world" ? "structure" ?
@@ -99,7 +95,6 @@ output some sort of "incompatibility" message if it detects that the 3 data YAML
   - then you can have a check that selects only from that pool of pokemon, OR there must be X overlap or something
   - for this mode, it might not work with the other options like BALANCED, etc. so i wonder if you just leave it 
     all as-is and let the user see if it works, or if you add in overrides to ignore the balancing for this mode
-- add PNGs of all the sprites and output them with some image library
 - wacky "team name assignment" feature. analyzes certain things about the pokemon (types? egg group? etc) and 
   somehow generates a name for the team from a preset pool of nouns and adjectives etc. ("the aquatic defenders"... 
   "the fiery humanoids") :/ ... idk

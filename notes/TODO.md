@@ -36,7 +36,7 @@
 
 - add coverage tests for running generation for a few minutes and making sure certain % of pokemon get generated? gotta figure out what metric makes sense
 
-- add toggle options for "Show balance stats" and "Show acquisition details" in UI
+- add toggle options for "Show balance stats" and "Show acquisition details" in CLI UI?
 
 - add 'export to txt' option for saving teams, or do it automatically (last X teams generated in a file)
 
@@ -72,8 +72,14 @@
 - add to AUR somehow, or add some instructions in README for "how to install on Linux so it can run from launchers like wofi, etc.".
   - Use a `.desktop` file setup?
   - add to `/bin`?
+  - PATH?
   - app icon which can be used by application launchers in Linux but also to replace the top left window icon in Windows
   
+- add Help option to GUI
+- add `--help` to main.py
+
+- add instructions for building local Linux binary and testing to some TEST.md file
+
 - add Claude skill file which acts as instructions for Claude to help guide users when adding a new romhack from the command line (Claude code). e.g. it knows the structure of the pokedex and locations files, it knows the data it needs and where to get it (Serebii or something), and it knows how to add all that to the repo, but it asks user questions along the way, like "does this romhack have custom pokemon or can I use an existing pokedex file?". It needs context about whole project structure.
 
 

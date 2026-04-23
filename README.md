@@ -1,4 +1,4 @@
-# _TeamGen_ – Universal Party Generator
+# _TeamGen_ – Progression-viable Party Generator
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Q5Q311GBFF)
 
@@ -6,9 +6,10 @@ A tool for generating a random, progression-viable party of Pokémon for use in 
 Pokémon availability and game progression are respected in the final output, and customization options are 
 available to curate the output further.
 
-<p align="center" style="margin-left: 15%; margin-right: 15%">
+<p align="center">
   <img src="screenshots/sample-gui-output.png">
 </p>
+
 
 ## Table of contents
 1. [Introduction](#introduction)
@@ -19,11 +20,12 @@ available to curate the output further.
 6. [Support the app](#support-teamgen)
 7. [License](#license)
 
+
 ## Introduction
-_TeamGen_ generates (prescribes) a party for use in a playthrough — either to introduce an element of 
+_TeamGen_ generates (prescribes) a **progression-viable** party for use in a playthrough — either to introduce an element of 
 challenge or simply for team inspiration. See the [suggested rulesets](/docs/RULESETS.md) for some ideas about how to use _TeamGen_.
 
-The app is **universal** in the sense that it maintains compatibility with most generations of Pokémon, 
+The app is **universal** in the sense that it maintains compatibility with most generations of Pokémon games, 
 _and_ with romhacks that might contain the following (as long as the relevant game data files are added):
 - New Pokémon
 - New locations 
@@ -31,13 +33,32 @@ _and_ with romhacks that might contain the following (as long as the relevant ga
 
 See [`CONTRIBUTING.md`](/CONTRIBUTING.md) if you'd like to add support for a romhack.
 
+
 ## Currently supported games
-- **Vanilla**
-  - Pokémon Red & Blue
-  - Pokémon Gold & Silver
-  - Pokémon Ruby & Sapphire
-- **Romhacks**
-  - [Pokémon Solus RGB](https://github.com/Dechrissen/poke-solus-rgb)
+
+### Vanilla
+
+| Gen | Game       | Supported |
+|-----|------------|-----------|
+| 1   | Red        | ✔         |
+| 1   | Blue       | ✔         |
+| 1   | Yellow     | Planned   |
+| 2   | Gold       | ✔         |
+| 2   | Silver     | ✔         |
+| 2   | Crystal    | Planned   |
+| 3   | Ruby       | ✔         |
+| 3   | Sapphire   | ✔         |
+| 3   | Emerald    | Planned   |
+| 4   | Diamond    | Planned   |
+| 4   | Pearl      | Planned   |
+| 4   | Platinum   | Planned   |
+
+### Romhacks
+
+| Gen | Game | Supported |
+|-----|-----------------------------------------------------------|----|
+| 1   | [Solus RGB](https://github.com/Dechrissen/poke-solus-rgb) | ✔  |
+
 
 ## Installation
 
@@ -76,7 +97,10 @@ Steps:
 - Main window:
   - "Generate" and "Config" tabs at the top can be switched between
   - Click "Generate party" to generate a party
-  - Modify settings in the 'Config' tab if desired
+  - Modify settings in the 'Config' tab if 
+  
+> [!NOTE]
+> If you are running the standalone binary, the config files are in `/_internal/config` and they can still be modified in a text editor (but the 'Config' tab in the GUI is preferred).
 
 ### Using the CLI app (`python main.py --ui=cli`)
 - `ENTER` – Generate a party with the current settings
@@ -92,20 +116,20 @@ Steps:
 Open `/config/config_gen1.yaml` (for example, for Generation 1 games). Modify values according to your preferences. 
 Save the file and then, if the app was running, use the `R` option in the app to reload.
 
-> [!NOTE]
-> If you are running the standalone binary, the config files are in `/_internal/config` and they can still be modified in a text editor (but the 'Config' tab in the GUI is preferred).
 
 ## Contributing
 
 If you'd like to add support for a missing game or romhack, see [`CONTRIBUTING.md`](/CONTRIBUTING.md).
 
-## Support TeamGen
+
+## Support _TeamGen_
 
 Please support _TeamGen_ development! The app is free and open-source, but you can support it in these ways:
 - [Donate on Ko-fi](https://ko-fi.com/Q5Q311GBFF)
 - Give this repository a Star :star:
 - [Join the Solus Discord](https://discord.gg/YTxu5uM7r6)
 - Share the app with someone who might be interested
+
 
 ## License
 
