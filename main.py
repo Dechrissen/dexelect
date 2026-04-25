@@ -3,7 +3,7 @@ from data.loader import build_all_data_structures
 from ui.cli import ui_loop
 
 def main():
-    parser = argparse.ArgumentParser(description="TeamGen")
+    parser = argparse.ArgumentParser(description="Dexelect")
     parser.add_argument("--ui", choices=["cli", "gui"], default="gui")
     parser.add_argument("--fetch-sprites", action="store_true", help="Download sprites then exit")
     parser.add_argument("--gens", nargs="+", type=int, choices=[1, 2, 3], default=[1, 2, 3],
@@ -24,8 +24,8 @@ def main():
     all_pools, all_pokemon, config_data, meta_data, mappings, global_settings = build_all_data_structures()
 
     if args.ui == "gui":
-        from ui.gui import TeamGenApp
-        app = TeamGenApp(all_pools, all_pokemon, config_data, meta_data, mappings, global_settings)
+        from ui.gui import DexelectApp
+        app = DexelectApp(all_pools, all_pokemon, config_data, meta_data, mappings, global_settings)
         app.mainloop()
     else:
         ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_settings)

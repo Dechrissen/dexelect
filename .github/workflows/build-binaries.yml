@@ -1,4 +1,4 @@
-name: Build TeamGen Binaries
+name: Build Dexelect Binaries
 
 on:
   push:
@@ -25,20 +25,20 @@ jobs:
         run: python main.py --fetch-sprites
 
       - name: Build
-        run: python -m PyInstaller --clean --noconfirm teamgen.spec
+        run: python -m PyInstaller --clean --noconfirm dexelect.spec
 
       - name: Get version
         id: get_version
         run: echo "VERSION=$(python -c 'import version; print(version.__version__)')" >> $GITHUB_ENV
 
       - name: Rename output folder
-        run: mv dist/teamgen dist/teamgen-v${{ env.VERSION }}-linux-x86_64
+        run: mv dist/dexelect dist/dexelect-v${{ env.VERSION }}-linux-x86_64
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: teamgen-v${{ env.VERSION }}-linux-x86_64
-          path: dist/teamgen-v${{ env.VERSION }}-linux-x86_64
+          name: dexelect-v${{ env.VERSION }}-linux-x86_64
+          path: dist/dexelect-v${{ env.VERSION }}-linux-x86_64
 
 
   build-windows:
@@ -59,7 +59,7 @@ jobs:
         run: python main.py --fetch-sprites
 
       - name: Build
-        run: python -m PyInstaller --clean --noconfirm teamgen.spec
+        run: python -m PyInstaller --clean --noconfirm dexelect.spec
 
       - name: Get version
         id: get_version
@@ -70,10 +70,10 @@ jobs:
 
       - name: Rename output folder
         shell: pwsh
-        run: Rename-Item dist/teamgen "teamgen-v${{ env.VERSION }}-windows-x86_64"
+        run: Rename-Item dist/dexelect "dexelect-v${{ env.VERSION }}-windows-x86_64"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: teamgen-v${{ env.VERSION }}-windows-x86_64
-          path: dist/teamgen-v${{ env.VERSION }}-windows-x86_64
+          name: dexelect-v${{ env.VERSION }}-windows-x86_64
+          path: dist/dexelect-v${{ env.VERSION }}-windows-x86_64

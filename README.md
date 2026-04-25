@@ -1,4 +1,4 @@
-# _TeamGen_ – Progression-viable Party Generator
+# _Dexelect_ – Progression-viable Party Generator
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Q5Q311GBFF)
 
@@ -17,13 +17,13 @@ available to curate the output further.
 3. [Installation](#installation)
 4. [Usage](#usage)
 5. [Contributing](#contributing)
-6. [Support the app](#support-teamgen)
+6. [Support the app](#support-dexelect)
 7. [License](#license)
 
 
 ## Introduction
-_TeamGen_ generates (prescribes) a **progression-viable** party for use in a playthrough — either to introduce an element of 
-challenge or simply for team inspiration. See the [suggested rulesets](/docs/RULESETS.md) for some ideas about how to use _TeamGen_.
+_Dexelect_ generates (prescribes) a **progression-viable** party for use in a playthrough — either to introduce an element of 
+challenge or simply for team inspiration. See the [suggested rulesets](/docs/RULESETS.md) for some ideas about how to use _Dexelect_.
 
 The app is **universal** in the sense that it maintains compatibility with most generations of Pokémon games, 
 _and_ with romhacks that might contain the following (as long as the relevant game data files are added):
@@ -64,9 +64,9 @@ See [`CONTRIBUTING.md`](/CONTRIBUTING.md) if you'd like to add support for a rom
 
 ### Option 1: Download the pre-built GUI executable (Windows/Linux)
 
-1. Download `teamgen-<version>-<platform>.zip` from the [latest release](https://github.com/Dechrissen/teamgen/releases/latest) 
+1. Download `dexelect-<version>-<platform>.zip` from the [latest release](https://github.com/Dechrissen/dexelect/releases/latest) 
 2. Extract it
-3. Run `teamgen.exe` on Windows, or `teamgen` on Linux
+3. Run `dexelect.exe` on Windows, or `dexelect` on Linux
 
 ### Option 2: Command-line installation
 
@@ -76,9 +76,9 @@ Prerequisites:
 - (Optional) `venv`
 
 Steps:
-1. Clone this repository (or download the [latest release](https://github.com/Dechrissen/teamgen/releases/latest) 
+1. Clone this repository (or download the [latest release](https://github.com/Dechrissen/dexelect/releases/latest) 
    source code and extract it)
-2. `cd teamgen`
+2. `cd dexelect`
 3. (Optional) Create a virtual environment (`python -m venv .venv`)
 4. (Optional) Activate the virtual environment  (`source .venv/bin/activate`)
 5. Install dependencies (`pip install -r requirements.txt`)
@@ -122,9 +122,9 @@ Save the file and then, if the app was running, use the `R` option in the app to
 If you'd like to add support for a missing game or romhack, see [`CONTRIBUTING.md`](/CONTRIBUTING.md).
 
 
-## Support _TeamGen_
+## Support _Dexelect_
 
-Please support _TeamGen_ development! The app is free and open-source, but you can support it in these ways:
+Please support _Dexelect_ development! The app is free and open-source, but you can support it in these ways:
 - [Donate on Ko-fi](https://ko-fi.com/Q5Q311GBFF)
 - Give this repository a Star :star:
 - [Join the Solus Discord](https://discord.gg/YTxu5uM7r6)
@@ -133,4 +133,4 @@ Please support _TeamGen_ development! The app is free and open-source, but you c
 
 ## License
 
-_TeamGen_ is licensed under the MIT License. See [`LICENSE`](/LICENSE) for full details.
+_Dexelect_ is licensed under the MIT License. See [`LICENSE`](/LICENSE) for full details.

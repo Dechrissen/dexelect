@@ -8,6 +8,38 @@
 - poketeamgen
 - pokesix
 
+## names phase 2
+- MonGenie
+- Monfigurator
+- MonSelect
+- Monselectrx
+- Monselectool
+- Monselector
+- MonSelRx
+- DexSelect
+- DeXelect
+- Dexelect <--
+- Dexelector
+- DexSel
+- Monscriber
+- MonScribe
+- MonConfig
+- Moncompile
+- Parselec
+- Parselector
+- Partsel
+- Genster
+- Runtool
+- Selectrx
+- Partselrx
+- ProgTeam
+- Proggy
+- ProgPal
+- Proggymon
+- Progerator
+- Proggydex
+- Progdexter
+- Progster
 
 ## example "build" (list and order of routes and items in file)
 - or "world" ? "structure" ?
@@ -101,7 +133,7 @@ output some sort of "incompatibility" message if it detects that the 3 data YAML
   - can take into account stats of the pokemon as well, e.g. "defenders" gets high probability of being picked if 
     most pokemon on team have relatively high defense
 - add a "Team Defense" and "Team Coverage" analysis to the output, like here: https://richi3f.github.io/pokemon-team-planner
-- Learn how to make a Python app work on web app --> `www.teamgen.app`
+- Learn how to make a Python app work on web app --> `www.dexelect.app`
 - Integrate with randomized roms of vanilla games (need a function that reads rom data and outputs pokemon data in 
   my needed format in `locations` yaml)
 

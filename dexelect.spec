@@ -30,7 +30,7 @@ exe = EXE(
     pyz,
     a.scripts,
     exclude_binaries=True,
-    name='teamgen',
+    name='dexelect',
     debug=False,
     strip=False,
     upx=True,
@@ -44,5 +44,5 @@ coll = COLLECT(
     a.datas,
     strip=False,
     upx=True,
-    name='teamgen',
+    name='dexelect',
 )

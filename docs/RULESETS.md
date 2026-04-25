@@ -1,6 +1,6 @@
-# _TeamGen_ Suggested Rulesets
+# _Dexelect_ Suggested Rulesets
 
-The purpose of this document is to provide inspiration for how to use _TeamGen_. This is not an exhaustive list — just ideas!
+The purpose of this document is to provide inspiration for how to use _Dexelect_. This is not an exhaustive list — just ideas!
 
 ## Regular challenge run
 - Generate a party with the default config settings (or your own)

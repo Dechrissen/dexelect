@@ -1,7 +1,7 @@
 Help
 ----
 
-TeamGen — Universal Pokemon team generator
+Dexelect — Universal Pokemon team generator
 
 Usage:
   ENTER – Generate a party

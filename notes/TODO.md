@@ -63,6 +63,7 @@
 
 - add 'Milk Drink' as field moves (HMs) in Gen 2 and 3?
 - add 'Secret Power' as field move (HM) in gen 3?
+- "Sweet Scent" Gen 3?
 
 - add party size limit to config file options
 - add flag to check to "ensure_at_least_one_sphere_1_mon" is generated
@@ -90,3 +91,10 @@
 - dynamic color theme matching game? (GUI)
 - add the subtitle (progressin-viable party generator) to the GUI under title?
 
+- for the CLI, add a flag that lets you generate X number of teams and then save to a file
+  - i guess this could also be used for coverage testing to make sure certain distributions are being met
+  - also have e.g. `dexelect --generate` to print a generated team to the command line instantly and `dexelect --random`
+  
+- Config setting: "at least one pokemon in each sphere" (or is this balanced basically?)
+
+- add bug report link / template

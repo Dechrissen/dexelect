@@ -79,7 +79,7 @@ def toggle_generation_mode(generation_mode):
 def print_header():
     TITLE = "\033[1;100;96m"
     RESET = "\033[0m"
-    print(f"{TITLE}======== TeamGen v{__version__} ========{RESET}\n")
+    print(f"{TITLE}======== Dexelect v{__version__} ========{RESET}\n")
 
 def print_copyright():
     BRIGHT_BLACK = "\033[90m"
@@ -117,7 +117,7 @@ def display_party(party_blob, config_data, global_settings, duration, game, gene
 
     # Case 1: Never generated yet, or set_game invalid option was passed
     if party_blob is None:
-        print("Welcome to TeamGen!\n")
+        print("Welcome to Dexelect!\n")
         print_global_settings()
         return
 

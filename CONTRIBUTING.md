@@ -1,12 +1,12 @@
-# Contribute to _TeamGen_ development
+# Contribute to _Dexelect_ development
 
-Contributions to _TeamGen_ are appreciated.
+Contributions to _Dexelect_ are appreciated.
 
 If you think support for...
 - a missing game within an already-supported generation, or
 - a romhack based on an already-supported generation
 
-should be added, then please follow these guidelines to kickstart their inclusion. Reach out in a [GitHub issue](https://github.com/Dechrissen/teamgen/issues) or in the [Solus Discord server](https://discord.gg/YTxu5uM7r6) if you have any questions about the structure of this project.
+should be added, then please follow these guidelines to kickstart their inclusion. Reach out in a [GitHub issue](https://github.com/Dechrissen/dexelect/issues) or in the [Solus Discord server](https://discord.gg/YTxu5uM7r6) if you have any questions about the structure of this project.
 
 ## Order of operations for the contributor
 1. [Fork this repository](#fork-this-repository)
@@ -172,7 +172,7 @@ Solus RGB:
 
 ## Test plan
 After all new files have been added and existing files have been updated:
-1. `cd teamgen`
+1. `cd dexelect`
 2. install dependencies with `pip install -r requirements.txt`
 3. run tests with `pytest tests`
 
@@ -181,5 +181,5 @@ All tests should pass.
 It would also be wise to run a few test team generations, and make sure all the config settings are working.
 
 ## Open a pull request
-1. Open a [pull request](https://github.com/Dechrissen/teamgen/pulls) (from your fork to _TeamGen_) on GitHub
+1. Open a [pull request](https://github.com/Dechrissen/dexelect/pulls) (from your fork to _Dexelect_) on GitHub
 2. Assign it to me ([Dechrissen](https://github.com/Dechrissen)) for review

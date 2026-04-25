@@ -2,7 +2,7 @@
 # https://derekandersen.net
 # https://github.com/Dechrissen/
 
-# gui.py — CustomTkinter GUI for TeamGen
+# gui.py — CustomTkinter GUI for Dexelect
 # This file is a self-contained GUI alternative to cli.py.
 # It reads/writes the same config files as cli.py, so both UIs stay in sync.
 #
@@ -15,7 +15,7 @@
 # Structure:
 #   - Constants / theme setup
 #   - Helper functions (config I/O, generation worker)
-#   - TeamGenApp class
+#   - DexelectApp class
 #       - __init__          : root window, layout skeleton
 #       - _build_sidebar    : left panel (game, mode, global settings)
 #       - _build_main       : right panel with tabs (Generate, Config)
@@ -191,13 +191,13 @@ class _Tooltip:
 # MAIN APP CLASS
 # =============================================================================
 
-class TeamGenApp(ctk.CTk):
+class DexelectApp(ctk.CTk):
 
     def __init__(self, all_pools, all_pokemon, config_data, meta_data, mappings, global_settings):
         super().__init__()
 
         # ---- Window setup ----
-        self.title(f"TeamGen v{__version__}")
+        self.title(f"Dexelect v{__version__}")
         self.geometry("1100x750")
         self.minsize(900, 620)
         self.configure(fg_color=C_BG)
@@ -293,7 +293,7 @@ class TeamGenApp(ctk.CTk):
         sf.grid_columnconfigure(0, weight=1)
 
         # ---- Title ----
-        ctk.CTkLabel(sf, text="TeamGen", font=FONT_TITLE, text_color=C_ACCENT).grid(
+        ctk.CTkLabel(sf, text="Dexelect", font=FONT_TITLE, text_color=C_ACCENT).grid(
             row=0, column=0, padx=20, pady=(24, 2), sticky="w")
         ctk.CTkLabel(sf, text=f"v{__version__}", font=FONT_MONO, text_color=C_TEXT).grid(
             row=1, column=0, padx=20, pady=(0, 20), sticky="w")
@@ -1139,5 +1139,5 @@ class TeamGenApp(ctk.CTk):
 
 if __name__ == "__main__":
     _pools, _pokemon, _config, _meta, _mappings, _settings = build_all_data_structures()
-    app = TeamGenApp(_pools, _pokemon, _config, _meta, _mappings, _settings)
+    app = DexelectApp(_pools, _pokemon, _config, _meta, _mappings, _settings)
     app.mainloop()
