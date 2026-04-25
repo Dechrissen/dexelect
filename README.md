@@ -1,8 +1,10 @@
-# _Dexelect_ – Progression-viable Party Generator
+# Dexelect – Progression-aware Party Generator
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Q5Q311GBFF)
 
-A tool for generating a random, progression-viable party of Pokémon for use in a challenge playthrough. 
+> "Dex" (Pokédex) + "elect" / "select" — a tool that elects Pokémon to be used in the player's party
+
+A tool for generating (prescribing) a random, progression-aware party of Pokémon for use in a challenge playthrough. 
 Pokémon availability and game progression are respected in the final output, and customization options are 
 available to curate the output further.
 
@@ -22,8 +24,8 @@ available to curate the output further.
 
 
 ## Introduction
-_Dexelect_ generates (prescribes) a **progression-viable** party for use in a playthrough — either to introduce an element of 
-challenge or simply for team inspiration. See the [suggested rulesets](/docs/RULESETS.md) for some ideas about how to use _Dexelect_.
+Dexelect generates (prescribes) a **progressively-sound** party for use in a playthrough — either to introduce an element of 
+challenge or simply for team inspiration. See the [suggested rulesets](/docs/RULESETS.md) for some ideas about how to use Dexelect.
 
 The app is **universal** in the sense that it maintains compatibility with most generations of Pokémon games, 
 _and_ with romhacks that might contain the following (as long as the relevant game data files are added):
@@ -122,9 +124,9 @@ Save the file and then, if the app was running, use the `R` option in the app to
 If you'd like to add support for a missing game or romhack, see [`CONTRIBUTING.md`](/CONTRIBUTING.md).
 
 
-## Support _Dexelect_
+## Support Dexelect
 
-Please support _Dexelect_ development! The app is free and open-source, but you can support it in these ways:
+Please support Dexelect development! The app is free and open-source, but you can support it in these ways:
 - [Donate on Ko-fi](https://ko-fi.com/Q5Q311GBFF)
 - Give this repository a Star :star:
 - [Join the Solus Discord](https://discord.gg/YTxu5uM7r6)
@@ -133,4 +135,4 @@ Please support _Dexelect_ development! The app is free and open-source, but you 
 
 ## License
 
-_Dexelect_ is licensed under the MIT License. See [`LICENSE`](/LICENSE) for full details.
+Dexelect is licensed under the MIT License. See [`LICENSE`](/LICENSE) for full details.

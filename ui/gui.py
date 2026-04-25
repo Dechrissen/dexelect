@@ -199,7 +199,7 @@ class DexelectApp(ctk.CTk):
         # ---- Window setup ----
         self.title(f"Dexelect v{__version__}")
         self.geometry("1100x750")
-        self.minsize(900, 620)
+        self.minsize(900, 860)
         self.configure(fg_color=C_BG)
 
         # ---- App state ----
@@ -376,7 +376,7 @@ class DexelectApp(ctk.CTk):
         # ---- Reload config button ----
         ctk.CTkButton(
             sf,
-            text="↺  Reload Config",
+            text="Reload Config",
             command=self._reload_data,
             fg_color=C_ACCENT,
             hover_color=C_ACCENT2,
@@ -428,6 +428,7 @@ class DexelectApp(ctk.CTk):
         self.tabview = ctk.CTkTabview(
             self.main_frame,
             fg_color=C_PANEL,
+            corner_radius=0,
             segmented_button_fg_color=C_SIDEBAR,
             segmented_button_selected_color=C_ACCENT,
             segmented_button_selected_hover_color=C_ACCENT2,
@@ -439,6 +440,23 @@ class DexelectApp(ctk.CTk):
         self.tabview.grid(row=0, column=0, sticky="nsew", padx=12, pady=12)
         self.tabview.add("Generate")
         self.tabview.add("Config")
+
+        # Selected-tab text colour + remove font-glyph corner feathering + no gaps
+        _sb = self.tabview._segmented_button
+        _sb.configure(corner_radius=0, border_width=0)
+        _btns = _sb._buttons_dict
+        for _btn in _btns.values():
+            _btn._text_label.configure(padx=12)
+        _btns["Generate"].configure(text_color=C_BTN_TEXT)
+        _btns["Config"].configure(text_color=C_TEXT)
+
+        _orig_tab_cmd = self.tabview._segmented_button._command
+        def _tab_switch(val, _cmd=_orig_tab_cmd):
+            if _cmd:
+                _cmd(val)
+            for _n, _b in self.tabview._segmented_button._buttons_dict.items():
+                _b.configure(text_color=C_BTN_TEXT if _n == val else C_TEXT)
+        self.tabview._segmented_button.configure(command=_tab_switch)
 
         self._build_gen_tab(self.tabview.tab("Generate"))
         self._build_config_tab(self.tabview.tab("Config"))
@@ -456,7 +474,7 @@ class DexelectApp(ctk.CTk):
           - Stats strip below the grid
         """
         parent.grid_columnconfigure(0, weight=1)
-        parent.grid_rowconfigure(1, weight=1)
+        parent.grid_rowconfigure(1, weight=1, minsize=625)
 
         # ---- Top bar ----
         top_bar = ctk.CTkFrame(parent, fg_color="transparent")
@@ -465,7 +483,7 @@ class DexelectApp(ctk.CTk):
 
         self.generate_btn = ctk.CTkButton(
             top_bar,
-            text="▶  Generate Party",
+            text="Generate Party",
             command=self._run_generation,
             fg_color=C_ACCENT,
             hover_color=C_ACCENT2,
@@ -475,14 +493,16 @@ class DexelectApp(ctk.CTk):
             width=180,
             corner_radius=5,
         )
-        self.generate_btn.grid(row=0, column=0, padx=(0, 16))
+        self.generate_btn.grid(row=0, column=0, padx=(6, 16))
+        self.generate_btn._canvas.configure(bg=C_BG)
 
         self.status_label = ctk.CTkLabel(
             top_bar,
-            text="Press Generate to begin.",
+            text="Press Generate Party to begin.",
             font=FONT_BODY,
             text_color=C_MUTED,
             anchor="w",
+            width=350,
         )
         self.status_label.grid(row=0, column=1, sticky="w")
 
@@ -492,7 +512,7 @@ class DexelectApp(ctk.CTk):
         cards_outer.grid_columnconfigure(0, weight=1)
         cards_outer.grid_columnconfigure(1, weight=1)
         for r in range(3):
-            cards_outer.grid_rowconfigure(r, weight=1, minsize=135)
+            cards_outer.grid_rowconfigure(r, weight=1, minsize=195)
 
         self.party_cards = []
         for r in range(3):
@@ -541,15 +561,16 @@ class DexelectApp(ctk.CTk):
             border_width=1,
             border_color=C_ACCENT2,
         )
+        frame.grid_columnconfigure(0, weight=0)
         frame.grid_columnconfigure(1, weight=1)
         frame.grid_rowconfigure(0, weight=0)   # name
         frame.grid_rowconfigure(1, weight=0)   # types
         frame.grid_rowconfigure(2, weight=0)   # bst
-        frame.grid_rowconfigure(3, weight=0)   # acq
-        frame.grid_rowconfigure(4, weight=1)   # bottom spacer
+        frame.grid_rowconfigure(3, weight=1)   # spacer (fills sprite column height)
+        frame.grid_rowconfigure(4, weight=0)   # separator
+        frame.grid_rowconfigure(5, weight=0)   # acq (full width)
         frame.grid_propagate(False)
 
-        # Sprite spans all rows, pinned top-left so its top edge aligns with the name
         sprite = ctk.CTkLabel(
             frame,
             text="",
@@ -559,25 +580,29 @@ class DexelectApp(ctk.CTk):
             width=112,
             height=112,
         )
-        sprite.grid(row=0, column=0, rowspan=5, padx=(10, 8), pady=(8, 0), sticky="nw")
+        sprite.grid(row=0, column=0, rowspan=4, padx=(8, 8), pady=(10, 0), sticky="nw")
 
         name_lbl = ctk.CTkLabel(frame, text="—", font=FONT_MONO_HEADER, text_color=C_TEXT, anchor="w")
-        name_lbl.grid(row=0, column=1, padx=(0, 10), pady=(8, 2), sticky="nw")
+        name_lbl.grid(row=0, column=1, padx=(0, 10), pady=(4, 2), sticky="nw")
 
         # plain tk.Frame avoids CTkFrame canvas overpainting the card border
         types_frame = tk.Frame(frame, bg=C_PANEL)
         types_frame.grid(row=1, column=1, padx=(0, 10), pady=(0, 2), sticky="nw")
 
-        bst_lbl = ctk.CTkLabel(frame, text="", font=FONT_SMALL, text_color=C_MUTED, anchor="nw")
-        bst_lbl.grid(row=2, column=1, padx=(0, 10), pady=(0, 2), sticky="nw")
+        bst_lbl = ctk.CTkLabel(frame, text="", font=FONT_BODY, text_color=C_MUTED, anchor="nw")
+        bst_lbl.grid(row=2, column=1, padx=(0, 10), pady=(0, 0), sticky="nw")
+
+        sep = ctk.CTkFrame(frame, height=1, fg_color=C_ACCENT2)
+        sep.grid(row=4, column=0, columnspan=2, padx=10, pady=(6, 0), sticky="ew")
+        sep.grid_remove()
 
         acq_lbl = ctk.CTkLabel(
-            frame, text="", font=FONT_SMALL, text_color=C_MUTED,
-            anchor="nw", justify="left", wraplength=240,
+            frame, text="", font=FONT_BODY, text_color=C_MUTED,
+            anchor="nw", justify="left", wraplength=0,
         )
-        acq_lbl.grid(row=3, column=1, padx=(0, 10), pady=(0, 0), sticky="nw")
+        acq_lbl.grid(row=5, column=0, columnspan=2, padx=(14, 10), pady=(4, 8), sticky="nw")
 
-        return {"frame": frame, "name": name_lbl, "acq": acq_lbl, "sprite": sprite,
+        return {"frame": frame, "name": name_lbl, "acq": acq_lbl, "sep": sep, "sprite": sprite,
                 "types_frame": types_frame, "bst": bst_lbl}
 
     def _clear_cards(self):
@@ -585,6 +610,7 @@ class DexelectApp(ctk.CTk):
         for i, card in enumerate(self.party_cards):
             card["name"].configure(text="—", text_color=C_MUTED)
             card["acq"].configure(text="")
+            card["sep"].grid_remove()
             card["bst"].configure(text="")
             card["frame"].configure(border_color=C_ACCENT2)
             card["sprite"].configure(image=None)
@@ -603,8 +629,8 @@ class DexelectApp(ctk.CTk):
             color = TYPE_COLORS.get(type_name.lower(), C_MUTED)
             badge = tk.Frame(types_frame, bg=C_PANEL)
             badge.grid(row=0, column=col, padx=(0, 6))
-            tk.Frame(badge, width=10, height=10, bg=color).grid(row=0, column=0, padx=(0, 4))
-            ctk.CTkLabel(badge, text=type_name.capitalize(), font=FONT_SMALL,
+            tk.Frame(badge, width=12, height=12, bg=color).grid(row=0, column=0, padx=(0, 4))
+            ctk.CTkLabel(badge, text=type_name.capitalize(), font=FONT_BODY,
                          text_color=color, anchor="w", fg_color=C_PANEL).grid(row=0, column=1)
 
 
@@ -994,13 +1020,12 @@ class DexelectApp(ctk.CTk):
             return
 
         self.is_generating = True
-        self.generate_btn.configure(state="disabled", text="Generating…")
-        self._set_status("Generating party…", color=C_MUTED)
+        self.generate_btn.configure(state="disabled")
         self._clear_cards()
 
         thread = threading.Thread(target=self._generation_worker, daemon=True)
         thread.start()
-        self._animate_status(0)
+        self._animate_status(2)
 
     def _animate_status(self, tick: int):
         """Dot-cycling animation on the status label while generation runs."""
@@ -1035,7 +1060,7 @@ class DexelectApp(ctk.CTk):
     def _on_generation_done(self, party_blob, duration: float, error: str | None):
         """Called on the main thread once generation finishes."""
         self.is_generating = False
-        self.generate_btn.configure(state="normal", text="▶  Generate Party")
+        self.generate_btn.configure(state="normal", text="Generate Party")
 
         if error:
             self._set_status(f"Error: {error}", color=C_WARNING)
@@ -1045,7 +1070,7 @@ class DexelectApp(ctk.CTk):
             self._set_status("Could not generate a party. Try adjusting settings.", color=C_WARNING)
             return
 
-        self._set_status(f"Done! ({duration:.2f}s)", color=C_SUCCESS)
+        self._set_status(f"Done! (Took {duration:.2f}s)", color=C_SUCCESS)
         self.last_party_blob = party_blob
         self._populate_cards(party_blob)
 
@@ -1101,8 +1126,10 @@ class DexelectApp(ctk.CTk):
                         f"(Sphere {earliest_pool})"
                     )
                 )
+                card["sep"].grid()
             else:
                 card["acq"].configure(text="")
+                card["sep"].grid_remove()
 
         if show_balance and party_blob.get("lean") is not None:
             self.stat_labels["lean"].configure(text=str(party_blob.get("lean", "—")), text_color=C_TEXT)

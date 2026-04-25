@@ -1,6 +1,6 @@
-# Contribute to _Dexelect_ development
+# Contribute to Dexelect development
 
-Contributions to _Dexelect_ are appreciated.
+Contributions to Dexelect are appreciated.
 
 If you think support for...
 - a missing game within an already-supported generation, or
@@ -181,5 +181,5 @@ All tests should pass.
 It would also be wise to run a few test team generations, and make sure all the config settings are working.
 
 ## Open a pull request
-1. Open a [pull request](https://github.com/Dechrissen/dexelect/pulls) (from your fork to _Dexelect_) on GitHub
+1. Open a [pull request](https://github.com/Dechrissen/dexelect/pulls) (from your fork to Dexelect) on GitHub
 2. Assign it to me ([Dechrissen](https://github.com/Dechrissen)) for review
