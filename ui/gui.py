@@ -42,10 +42,10 @@ from version import __version__
 # THEME & APPEARANCE
 # =============================================================================
 
-from ui.theme import (
+from ui.gui_theme import (
     C_BG, C_PANEL, C_SIDEBAR, C_ACCENT, C_ACCENT2, C_ACCENT_DIM,
-    C_TEXT, C_MUTED, C_BTN_TEXT, C_SUCCESS, C_WARNING, C_ENTRY_BG,
-    FONT_TITLE, FONT_HEADER, FONT_BTN, FONT_BODY, FONT_SMALL, FONT_MONO, FONT_MONO_HEADER,
+    C_TEXT, C_MUTED, C_BTN_TEXT, C_SUCCESS, C_WARNING, C_ENTRY_BG, C_TITLE, C_SELECT_BG, C_SELECT_FG,
+    FONT_TITLE, FONT_APP_TITLE, FONT_HEADER, FONT_BTN, FONT_BODY, FONT_SMALL, FONT_MONO, FONT_MONO_HEADER,
     TYPE_COLORS,
 )
 
@@ -105,7 +105,7 @@ class _Tooltip:
     def _on_enter(self, event=None):
         self._cancel_hide()
         if not self._tip:
-            self._show_id = self._widget.after(500, self._show)
+            self._show_id = self._widget.after(300, self._show)
 
     def _on_leave(self, event=None):
         self._cancel_show()
@@ -122,7 +122,7 @@ class _Tooltip:
             wh = self._widget.winfo_height()
             if wx <= px <= wx + ww and wy <= py <= wy + wh:
                 if self._tip is None and self._show_id is None:
-                    self._show_id = self._widget.after(500, self._show)
+                    self._show_id = self._widget.after(300, self._show)
                 return
         except tk.TclError:
             pass
@@ -272,6 +272,12 @@ class DexelectApp(ctk.CTk):
         # ---- Populate UI from loaded data ----
         self._populate_ui_from_state()
 
+        self.bind("<Return>", lambda e: self._run_generation()
+                  if self.generate_btn.cget("state") == "normal"
+                  and self.tabview.get() == "Generate"
+                  and not (self._help_overlay and self._help_overlay.winfo_exists())
+                  else None)
+
 
     # =========================================================================
     # DATA LOADING
@@ -330,7 +336,7 @@ class DexelectApp(ctk.CTk):
         sf.grid_columnconfigure(0, weight=1)
 
         # ---- Title ----
-        ctk.CTkLabel(sf, text="Dexelect", font=FONT_TITLE, text_color=C_ACCENT).grid(
+        ctk.CTkLabel(sf, text="Dexelect", font=FONT_APP_TITLE, text_color=C_TITLE).grid(
             row=0, column=0, padx=20, pady=(24, 2), sticky="w")
         ctk.CTkLabel(sf, text=f"v{__version__}", font=FONT_MONO, text_color=C_TEXT).grid(
             row=1, column=0, padx=20, pady=(0, 20), sticky="w")
@@ -526,7 +532,7 @@ class DexelectApp(ctk.CTk):
 
     def _show_help(self):
         overlay = tk.Frame(self, bg=C_BG, highlightthickness=2,
-                           highlightbackground=C_ACCENT)
+                           highlightbackground=C_ACCENT, highlightcolor=C_ACCENT)
         overlay.place(x=14, y=14, relwidth=1.0, relheight=1.0, width=-28, height=-28)
         overlay.lift()
         self._help_overlay = overlay
@@ -537,7 +543,7 @@ class DexelectApp(ctk.CTk):
         tk.Label(title_bar, text="Help", bg=C_BG, fg=C_TEXT,
                  font=FONT_HEADER, padx=14, pady=8).pack(side="left")
         close = tk.Label(title_bar, text="  ✕  ", bg=C_BG, fg=C_MUTED,
-                         font=FONT_BODY, cursor="hand2")
+                         font=("Roboto", 16), cursor="hand2")
         close.pack(side="right")
         close.bind("<Button-1>", lambda e: self._close_help())
         close.bind("<Enter>", lambda e: close.configure(fg=C_TEXT))
@@ -552,6 +558,7 @@ class DexelectApp(ctk.CTk):
             font=FONT_BODY, wrap="word",
             padx=20, pady=14,
             relief="flat", highlightthickness=0,
+            selectbackground=C_SELECT_BG, selectforeground=C_SELECT_FG,
             state="normal",
         )
         scrollbar = ctk.CTkScrollbar(overlay, command=text.yview,
@@ -576,13 +583,15 @@ class DexelectApp(ctk.CTk):
         self.unbind("<Escape>")
 
     def _render_help_text(self, text_widget):
-        text_widget.tag_configure("h1",  font=("Roboto", 16, "bold"), foreground=C_ACCENT,
+        text_widget.tag_configure("h1",  font=("Roboto", 17, "bold"), foreground=C_ACCENT,
                                          spacing1=2, spacing3=8)
-        text_widget.tag_configure("h2",  font=("Roboto", 13, "bold"), foreground=C_TEXT,
+        text_widget.tag_configure("h2",  font=("Roboto", 15, "bold"), foreground=C_TEXT,
                                          spacing1=12, spacing3=2)
-        text_widget.tag_configure("h3",  font=("Roboto", 12, "bold"), foreground=C_MUTED,
+        text_widget.tag_configure("h3",  font=("Roboto", 13, "bold"), foreground=C_TEXT,
                                          spacing1=8, spacing3=1)
         text_widget.tag_configure("body", font=FONT_BODY, foreground=C_MUTED)
+        text_widget.tag_configure("sel", foreground=C_SELECT_FG, background=C_SELECT_BG)
+        text_widget.tag_raise("sel")
 
         try:
             path = resource_path("ui/gui-help.md")

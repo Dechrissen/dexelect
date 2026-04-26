@@ -76,7 +76,6 @@
   - PATH?
   - app icon which can be used by application launchers in Linux but also to replace the top left window icon in Windows
   
-- add Help option to GUI
 - add `--help` to main.py
 
 - add instructions for building local Linux binary and testing to some TEST.md file
@@ -87,7 +86,6 @@
   - an "update" button in the standalone binary GUI would also be nice so users can update in-app
   
 - dynamic color theme matching game? (GUI)
-- add the subtitle (progressin-viable party generator) to the GUI under title?
 
 - for the CLI, add a flag that lets you generate X number of teams and then save to a file
   - i guess this could also be used for coverage testing to make sure certain distributions are being met

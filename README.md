@@ -68,7 +68,7 @@ See [`CONTRIBUTING.md`](/CONTRIBUTING.md) if you'd like to add support for a rom
 
 1. Download `dexelect-<version>-<platform>.zip` from the [latest release](https://github.com/Dechrissen/dexelect/releases/latest) 
 2. Extract it
-3. Run `dexelect.exe` on Windows, or `dexelect` on Linux
+3. Run `dexelect.exe` on Windows, or the `dexelect` binary on Linux (e.g. with `./dexelect`)
 
 ### Option 2: Command-line installation
 
@@ -91,15 +91,14 @@ Steps:
 ## Usage
 
 ### Using the GUI (`python main.py --ui=gui`)
-- The app is split into sidebar (left) and main window (right)
+- The app is split into sidebar (left) and main window (right). Help option is at the top right.
 - Left sidebar:
   - The mode can be toggled between 'Progression' and 'Random'
   - 'Acquisition details' and 'Balance stats' display can each be disabled
-  - 'Reload config' button will reload the config files into the app if they were modified on disk while the app is running
 - Main window:
   - "Generate" and "Config" tabs at the top can be switched between
-  - Click "Generate party" to generate a party
-  - Modify settings in the 'Config' tab if 
+  - Click "Generate Party" to generate a party
+  - Modify settings in the 'Config' tab to fine-tune output
   
 > [!NOTE]
 > If you are running the standalone binary, the config files are in `/_internal/config` and they can still be modified in a text editor (but the 'Config' tab in the GUI is preferred).
@@ -110,7 +109,7 @@ Steps:
   - Progression: Considers game data, locations, progression, config settings
   - Random: Completely random generation using current game's National Dex
 - `G` – Open the 'Supported Games' menu to switch current game
-- `R` – Reload the config file (after making any config changes while the app is running)
+- `R` – Reload the config file from disk (after making any config changes while the app is running)
 - `H` – Display help menu
 - `Q` – Quit the app
 

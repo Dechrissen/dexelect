@@ -13,10 +13,10 @@ Usage:
 
 Modes:
   Progression — Generated party adheres to logical game progression and config settings
-  Random — Generated party is completely random using current game's National Dex
+  Random — Generated party is completely random drawing from current game's National Pokedex
 
 Definitions:
-  Sphere – Broad chunk of game progression (e.g. Sphere 1 for Kanto is Pallet Town to Cerulean City)
+  Sphere – Broad chunk of game progression (e.g. Sphere 1 for Kanto spans Pallet Town to Cerulean City)
   Distribution – Breakdown of how many party members appear in each Sphere
   Lean – Semantic tag encoding the general trend in the Distribution (early_game_heavy / balanced / late_game_heavy)
   Spread – Semantic tag encoding the distance between all party members (clustered / mixed_spread / wide_spread)

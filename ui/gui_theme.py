@@ -18,9 +18,13 @@ C_MUTED     = "#b8b8b8"   # secondary / muted text
 C_BTN_TEXT  = "#0f1f14"   # dark text for use on green (accent) buttons
 C_SUCCESS   = "#6abf7b"   # same as accent for success messages
 C_WARNING   = "#c8a96e"   # muted amber — kept for warnings only
+C_TITLE     = "#d4a84b"   # muted gold — app title
 C_ENTRY_BG  = "#0e0e0e"   # input field background (slightly darker than C_BG)
+C_SELECT_BG = "#ffffff"   # text selection background
+C_SELECT_FG = "#000000"   # text selection foreground
 
-FONT_TITLE  = ("Roboto", 24, "bold")
+FONT_TITLE     = ("Roboto", 24, "bold")
+FONT_APP_TITLE = ("Roboto", 24, "bold")
 FONT_HEADER = ("Roboto", 15, "bold")
 FONT_BTN    = ("Roboto", 15)
 FONT_BODY   = ("Roboto", 13)
