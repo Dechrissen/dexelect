@@ -1,47 +1,24 @@
-# ==================================
-# Dexelect — Gen 2 configuration file
-# ==================================
-
-# ---------
-# Balancing
-# ---------
-# These lists reflect balancing modes which are ALLOWED in the output.
-
+require_one_sphere_one: true
 allowed_balancing:
   value: [balanced, early_game_heavy, late_game_heavy]
   options: [balanced, early_game_heavy, late_game_heavy]
-
 allowed_spreads:
   value: [clustered, wide_spread, mixed_spread]
   options: [clustered, wide_spread, mixed_spread]
-
 allowed_patterns:
   value: [single_cluster, dual_cluster, early_late_split, middle_only]
   options: [single_cluster, dual_cluster, early_late_split, middle_only]
-
-# ---------------
-# Pokémon details
-# ---------------
-
-# Whether to ensure that a random starter is present in the output party.
 force_starter: false
-
-# Whether to allow not fully evolved Pokémon in the output party.
 allow_not_fully_evolved: false
-
-# The highest evolution stage allowed among members of the output party.
-# options: int
 max_evo_stage: 3
-
-# Evolution methods allowed among members in the final output party.
 allowed_evo_methods:
-  none: true # i.e. Stage 1 Pokémon
+  none: true
   level-up: true
   moon_stone: true
-  fire_stone: true # acquire after showing Bill's grandfather certain Pokémon in Kanto
-  water_stone: true # acquire after showing Bill's grandfather certain Pokémon in Kanto
-  thunder_stone: true # acquire after showing Bill's grandfather certain Pokémon in Kanto
-  leaf_stone: true # acquire after showing Bill's grandfather certain Pokémon in Kanto
+  fire_stone: true
+  water_stone: true
+  thunder_stone: true
+  leaf_stone: true
   trade: false
   happiness: true
   trade_metal_coat: false
@@ -52,52 +29,23 @@ allowed_evo_methods:
   level-up_atk_greater_def: true
   level-up_def_greater_atk: true
   sun_stone: true
-
-# Whether to allow legendary Pokémon in the output party.
 allow_legendaries: false
-
-# Whether to allow duplicate species in the output party.
 allow_duplicate_species: false
-
-# A list of Pokémon species to blacklist from the output party.
-# values: a comma-separated list of Pokémon species (stage 1s), each in all caps
-# e.g. Mr. Mime is MR.MIME, Farfetch'd is FARFETCHD, Nidoran♂ is NIDORAN_M
 species_blacklist: []
-
-# Maximum and minimum base stat totals allowed for members of the output party.
-# note: use Gen 2-5 BST values (https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_base_stats_in_Generations_II-V)
-#TODO add suggestions here for general cutoffs that make sense for easy mode, hard mode, etc.
-# options: int or none
 bst_max: none
 bst_min: none
-
-
-# -----------------
-# Type restrictions
-# -----------------
-
-# Whether to allow dual-type Pokémon in the output party.
 allow_dual_type: true
-
-# For fine-tuning the type distribution across members of the output party.
-# options: no_overlap, all_share_one_type, anything_goes
 type_distribution:
   value: anything_goes
   options: [anything_goes, no_overlap, all_share_one_type]
-
-# A single type which will be required for ALL members in the final output party.
-# note: this setting only works when type_distribution = all_share_one_type
-# options: any type (fire, water, etc.) or none
 prescribed_type:
   value: none
-  options: ['none', 'normal', 'fire', 'water', 'grass', 'electric', 'flying', 'fighting', 'ice', 'psychic', 'ground', 'rock', 'poison', 'bug', 'dragon', 'ghost', 'steel', 'dark']
-
-
-# -------------
-# Move coverage
-# -------------
-
-# HMs to require in the output party's combined move pool.
+  options: [none, normal, fire, water, grass, electric, flying, fighting, ice, psychic,
+    ground, rock, poison, bug, dragon, ghost, steel, dark]
+type_blacklist:
+  value: [normal, water, ground, rock, bug]
+  options: [normal, fire, water, grass, electric, flying, fighting, ice, psychic,
+    ground, rock, poison, bug, dragon, ghost, steel, dark]
 ensure_hm_coverage:
   FLASH: false
   CUT: true
@@ -111,12 +59,6 @@ ensure_hm_coverage:
   WATERFALL: true
   ROCK_SMASH: false
   HEADBUTT: false
-
-# --------------------------------------------
-# Pokémon acquisition and progression settings
-# --------------------------------------------
-
-# Acquisition methods allowed among members of the output party, considering the enabled Spheres.
 allowed_acquisition_methods:
   starter: true
   walk: true

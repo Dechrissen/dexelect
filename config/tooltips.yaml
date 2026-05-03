@@ -4,7 +4,8 @@ spread: "Describes how tightly grouped the party's acquisition spheres are."
 pattern: "Describes the qualitative shape of the party across spheres."
 distribution: "A breakdown of the number of party members that appear in each sphere."
 
-# ---- Config options ----
+# ---- Config options (Config tab) ----
+require_one_sphere_one: "If enabled, at least one Pokémon in the party must be obtainable in Sphere 1."
 allowed_balancing: "Controls the allowed 'lean' values for the generated party. 'balanced' = median acquisition sphere near the game's midpoint. 'early_game_heavy' = biased toward early spheres. 'late_game_heavy' = biased toward late spheres."
 allowed_spreads: "Controls how tightly grouped the party's acquisition spheres are. 'clustered' = all members available within a narrow range. 'wide_spread' = members span most or all of the game. 'mixed_spread' = intermediate range."
 allowed_patterns: "Controls the qualitative shape of the party across spheres. 'single_cluster' = one contiguous group. 'dual_cluster' = two separate groups. 'early_late_split' = clusters at the start and end. 'middle_only' = all members in the middle portion of the game."
@@ -19,6 +20,7 @@ species_blacklist: "Comma-separated list of species (Stage 1) names to exclude f
 allowed_evo_methods: "Permitted evolution methods among Pokémon that may appear in the party. Evolution via unchecked methods will not be included among party members."
 allow_dual_type: "If enabled, dual-type Pokémon may appear in the party."
 type_distribution: "Controls type diversity across party members. 'anything_goes' = no restriction. 'no_overlap' = all members have distinct types. 'all_share_one_type' = all members share the prescribed type."
-prescribed_type: "The type all party members must share when type distribution is set to 'all_share_one_type'. Ignored otherwise."
+prescribed_type: "The type all party members must share when 'Type distribution' is set to 'all_share_one_type'. Ignored otherwise."
+type_blacklist: "Types to exclude from the generated party (types checked will not be included)."
 ensure_hm_coverage: "Set of HMs which must be learnable by at least one party member. Enabling an HM guarantees the party can use it in the field."
 allowed_acquisition_methods: "Permitted acquisition methods for party members. Pokémon acquired exclusively via unchecked methods will not be included in the pool."

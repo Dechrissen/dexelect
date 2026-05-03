@@ -118,7 +118,8 @@ def generate_final_party(all_pools: dict, all_pokemon: dict, config_data: dict, 
             'score_median': balance_stats['score_median'],
             'lean': balance_stats['lean'],
             'spread': balance_stats['spread'],
-            'pattern': balance_stats['pattern']
+            'pattern': balance_stats['pattern'],
+            'contains_at_least_one_sphere_one': balance_stats['contains_at_least_one_sphere_one']
         }
         return final_party_blob
     else:
@@ -157,6 +158,7 @@ def is_party_valid(party, is_party_full, config_data, meta_data) -> bool:
     allow_dual_type = config_data["allow_dual_type"]
     prescribed_type = config_data["prescribed_type"]["value"]
     type_distribution = config_data["type_distribution"]["value"]
+    type_blacklist = config_data["type_blacklist"]["value"]
     species_blacklist = config_data["species_blacklist"]
     allowed_evo_methods = [em for em in config_data["allowed_evo_methods"] if config_data["allowed_evo_methods"][em] == True]
     max_evo_stage = config_data["max_evo_stage"]
@@ -177,7 +179,7 @@ def is_party_valid(party, is_party_full, config_data, meta_data) -> bool:
         # check if any party Pokemon species are in the blacklist
         if any(mon.species_line in species_blacklist for mon in party):
             if DEBUG:
-                print("party", [mon.name for mon in party], "violates blacklist", species_blacklist)
+                print("party", [mon.name for mon in party], "violates species blacklist", species_blacklist)
             return False
 
     if type_distribution != 'anything_goes':
@@ -196,6 +198,13 @@ def is_party_valid(party, is_party_full, config_data, meta_data) -> bool:
         if (type_distribution == 'no_overlap') and not (len({t for mon in party for t in mon.types}) == sum(len(mon.types) for mon in party)):
             if DEBUG:
                 print("party",[mon.name for mon in party], "violates type distribution", type_distribution)
+            return False
+
+    if type_blacklist:
+        # check if any party Pokemon species have types which are present in the type blacklist
+        if any(any(t in type_blacklist for t in mon.types) for mon in party):
+            if DEBUG:
+                print("party", [mon.name for mon in party], "violates type blacklist", type_blacklist)
             return False
 
     if is_party_full:
@@ -433,6 +442,7 @@ def assign_balance_grade(party_with_acquisition_data, meta_data, config_data) ->
     - pattern: qualitative shape of party across spheres
                (early_late_split, middle_only, dual_cluster, single_cluster, None)
     - score_median: normalized median sphere (0=start of game, 1=end), for reference
+    - contains_at_least_one_sphere_one: boolean value indicating whether at least one Sphere 1 mon is in the party
     """
 
     lean_cutoffs = (0.30, 0.70)
@@ -450,7 +460,8 @@ def assign_balance_grade(party_with_acquisition_data, meta_data, config_data) ->
     total = sum(party_distribution.values())
     if total == 0 or total_spheres < 2:
         return {'party_distribution': party_distribution,
-                'score_median': None, 'lean': None, 'spread': None, 'pattern': None}
+                'score_median': None, 'lean': None, 'spread': None, 'pattern': None,
+                'contains_at_least_one_sphere_one': False}
 
     # ---------- Lean calculation ----------
     # Expand counts for median calculation
@@ -526,12 +537,18 @@ def assign_balance_grade(party_with_acquisition_data, meta_data, config_data) ->
     else:
         pattern = None                  # No distinct pattern
 
+    # set this boolean value to true if there is at least 1 sphere 1 mon in the party
+    contains_at_least_one_sphere_one = False
+    if any(member["earliest_pool"] == 1 for member in party_with_acquisition_data):
+        contains_at_least_one_sphere_one = True
+
     return {
         'party_distribution': party_distribution,
         'score_median': lean_score,
         'lean': lean,
         'spread': spread,
-        'pattern': pattern
+        'pattern': pattern,
+        'contains_at_least_one_sphere_one': contains_at_least_one_sphere_one
     }
 
 def validate_balance_grade(balance_stats, config_data) -> bool:
@@ -549,11 +566,13 @@ def validate_balance_grade(balance_stats, config_data) -> bool:
     allowed_balancing = [mode for mode in config_data['allowed_balancing']['value']]
     allowed_spreads = [mode for mode in config_data['allowed_spreads']['value']]
     allowed_patterns = [mode for mode in config_data['allowed_patterns']['value']]
+    require_one_sphere_one = config_data['require_one_sphere_one']
 
     # the assigned modes given to the party (from balance_stats) by assign_balance_grade
     assigned_balancing = balance_stats['lean']
     assigned_spread = balance_stats['spread']
     assigned_pattern = balance_stats['pattern']
+    contains_at_least_one_sphere_one = balance_stats['contains_at_least_one_sphere_one']
 
     if assigned_balancing not in allowed_balancing:
         if DEBUG:
@@ -566,6 +585,10 @@ def validate_balance_grade(balance_stats, config_data) -> bool:
     if assigned_pattern not in allowed_patterns:
         if DEBUG:
             print(f"FAIL (Balancing). Pattern '{assigned_pattern}' not in allowed_patterns {allowed_patterns}")
+        return False
+    if (require_one_sphere_one == True) and (contains_at_least_one_sphere_one == False):
+        if DEBUG:
+            print(f"FAIL (Balancing). Party does not contain at least one Sphere 1 Pokemon while require_one_sphere_one = true")
         return False
     return True
 
@@ -614,7 +637,8 @@ def generate_fully_randomized_party(all_pokemon: dict[str, 'Pokemon'], n: int = 
         'score_median': None,
         'lean': None,
         'spread': None,
-        'pattern': None
+        'pattern': None,
+        'contains_at_least_one_sphere_one': None
     }
 
     return final_party_blob

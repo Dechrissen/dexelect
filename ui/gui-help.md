@@ -18,6 +18,7 @@ From the left sidebar, you can:
 
 - Change Game
 - Change Mode
+- Set Party Size (1–6)
 - Hide accompanying details for generated teams
 
 To modify configuration options, navigate to the Config tab, make changes to your liking, and click "Save Config" before returning to the Generate tab.

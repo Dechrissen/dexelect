@@ -1,4 +1,5 @@
-game: Gold
+game: Red
 generation_mode: Progression
+party_size: 3
 show_acquisition_details: true
 show_balance_stats: true

@@ -36,15 +36,11 @@
 
 - add coverage tests for running generation for a few minutes and making sure certain % of pokemon get generated? gotta figure out what metric makes sense
 
-- add toggle options for "Show balance stats" and "Show acquisition details" in CLI UI?
-
 - add 'export to txt' option for saving teams, or do it automatically (last X teams generated in a file)
 
 - add some script that generates the config files for each game (creates the yaml) or something that resets it to the default (recommended) values before i push a release (or maybe have options in the UI to switch to certain presets, like "recommended", "hard", etc)
   - `config_gen1.default.yaml`
   - `config_gen1.hard.yaml`
-
-- add "types to exclude" config setting
 
 - add event support generally (gen 2/3)
   - might just be eon_ticket acquisition method toggle
@@ -64,9 +60,6 @@
 - add 'Milk Drink' as field moves (HMs) in Gen 2 and 3?
 - add 'Secret Power' as field move (HM) in gen 3?
 - "Sweet Scent" Gen 3?
-
-- add party size limit to config file options
-- add flag to check to "ensure_at_least_one_sphere_1_mon" is generated
 
 - add feature "only generate pokemon in Sphere X" (or should this only be accomplished by the sphere_modes in meta file?)
 
@@ -91,16 +84,17 @@
   - i guess this could also be used for coverage testing to make sure certain distributions are being met
   - also have e.g. `dexelect --generate` to print a generated team to the command line instantly and `dexelect --random`
   
-- Config setting: "at least one pokemon in each sphere" (or is this balanced basically?)
 
 - add bug report link / template
 
-- change sample_gui_output screenshot in readme
 - "report a bug" button in the GUI
 
 - wacky idea: "prescribed poke ball" option that displays the type of ball u should catch something in, like a ball png for the specific ball in the top right of the card. can be in the "Display" toggles. Would require some additional progression/config data because certain balls are not available till later in game.
 
-- Press Enter to generate in GUI as well? (then update the "Click Generate Party to begin" message)
 - Get the Gen 3 "? in circle" sprite for not-yet-generated party members
 
-- click something (spheres at bottom in Distribution?) to go to a page that lists all the maps in each sphere for current game
+- change "selected_sphere_mode"s in meta file to be numbered instead, so they can be selected from config file regardless of name (to allow customizing this setting)
+
+- add 'type_blacklist' to pytests
+- add new 'party_size' global config setting to pytests?
+

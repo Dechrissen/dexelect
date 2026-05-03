@@ -8,7 +8,7 @@ The purpose of this document is to provide inspiration for how to use _Dexelect_
 
 ## Async race
 - Multiple players play the same game
-- Everyone uses the same team generated
+- Everyone uses the same generated party
 - Defeat the Pokémon League, registering the generated party in the Hall of Fame
 - Reach the win condition with a faster IGT than anyone else
 

@@ -18,9 +18,10 @@ available to curate the output further.
 2. [Currently supported games](#currently-supported-games)
 3. [Installation](#installation)
 4. [Usage](#usage)
-5. [Contributing](#contributing)
+5. [Credits](#credits)
 6. [Support the app](#support-dexelect)
-7. [License](#license)
+7. [Contributing](#contributing)
+8. [License](#license)
 
 
 ## Introduction
@@ -101,14 +102,15 @@ Steps:
   - Modify settings in the 'Config' tab to fine-tune output
   
 > [!NOTE]
-> If you are running the standalone binary, the config files are in `/_internal/config` and they can still be modified in a text editor (but the 'Config' tab in the GUI is preferred).
+> If you are running the standalone binary, the config files are in `/_internal/config`. They can be modified in a text editor, but the 'Config' tab in the GUI is preferred.
 
 ### Using the CLI app (`python main.py --ui=cli`)
 - `ENTER` – Generate a party with the current settings
+- `G` – Open the 'Supported Games' menu to switch current game
 - `M` – Toggle the generation mode between 'Progression' and 'Random'
   - Progression: Considers game data, locations, progression, config settings
   - Random: Completely random generation using current game's National Dex
-- `G` – Open the 'Supported Games' menu to switch current game
+- `P` – Open the 'Set Party Size' menu to set party size (1–6)
 - `R` – Reload the config file from disk (after making any config changes while the app is running)
 - `H` – Display help menu
 - `Q` – Quit the app
@@ -118,9 +120,8 @@ Open `/config/config_gen1.yaml` (for example, for Generation 1 games). Modify va
 Save the file and then, if the app was running, use the `R` option in the app to reload.
 
 
-## Contributing
-
-If you'd like to add support for a missing game or romhack, see [`CONTRIBUTING.md`](/CONTRIBUTING.md).
+## Credits
+- [Quadrixis](https://github.com/Quadrixis), for assistance with progression data planning and testing
 
 
 ## Support Dexelect
@@ -130,6 +131,11 @@ Please support Dexelect development! The app is free and open-source, but you ca
 - Give this repository a Star :star:
 - [Join the Solus Discord](https://discord.gg/YTxu5uM7r6)
 - Share the app with someone who might be interested
+
+
+## Contributing
+
+If you'd like to add support for a missing game or romhack, see [`CONTRIBUTING.md`](/CONTRIBUTING.md).
 
 
 ## License

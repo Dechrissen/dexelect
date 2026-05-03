@@ -5,8 +5,9 @@ Dexelect — Progression-aware Pokemon team generator
 
 Usage:
   ENTER – Generate a party
-  M – Toggle the generation mode between 'Progression' and 'Random'
   G – Open the Supported Games menu to change the game mode
+  M – Toggle the generation mode between 'Progression' and 'Random'
+  P – Open the Set Party Size menu to set party size (1–6)
   R – Reload the current configuration file from disk (if changes were made while the app is running)
   H – Display this help
   Q – Quit the app

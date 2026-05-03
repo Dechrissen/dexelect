@@ -13,6 +13,7 @@ C_SIDEBAR   = "#141414"   # sidebar (subtle distinction from main)
 C_ACCENT    = "#6abf7b"   # soft green — sole accent colour
 C_ACCENT2   = "#2a3d2e"   # dark green — hover states, dividers, secondary fills
 C_ACCENT_DIM = "#1f2d22"  # very subtle green tint — secondary button faces
+C_ACCENT2_DIM = "#1a2419"  # dimmed dark green — disabled button faces
 C_TEXT      = "#e0e0e0"   # primary text (off-white, not harsh)
 C_MUTED     = "#b8b8b8"   # secondary / muted text
 C_BTN_TEXT  = "#0f1f14"   # dark text for use on green (accent) buttons
@@ -22,6 +23,7 @@ C_TITLE     = "#d4a84b"   # muted gold — app title
 C_ENTRY_BG  = "#0e0e0e"   # input field background (slightly darker than C_BG)
 C_SELECT_BG = "#ffffff"   # text selection background
 C_SELECT_FG = "#000000"   # text selection foreground
+C_DIM       = "#4a4a4a"   # heavily muted — inactive/disabled text
 
 FONT_TITLE     = ("Roboto", 24, "bold")
 FONT_APP_TITLE = ("Roboto", 24, "bold")

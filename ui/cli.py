@@ -59,6 +59,29 @@ def set_game(mappings):
             yaml.safe_dump(data, f)
         return True
 
+def set_party_size():
+    print_header()
+
+    print("Set Party Size")
+    print("--------------")
+
+    print("\n")
+    print("Enter a number (1–6).\n")
+
+    user = input("> ").strip().lower()
+
+    if user not in ['1', '2', '3', '4', '5', '6']:
+        return False
+    else:
+        selected_party_size = int(user)
+        with open(resource_path("config/global_settings.yaml"), "r") as f:
+            data = yaml.safe_load(f)
+        data["party_size"] = selected_party_size
+        with open(resource_path("config/global_settings.yaml"), "w") as f:
+            yaml.safe_dump(data, f)
+        return True
+
+
 def toggle_generation_mode(generation_mode):
     if generation_mode == 'Progression':
         new_generation_mode = 'Random'
@@ -91,7 +114,7 @@ def print_copyright():
             f"{RESET}"
         )
 
-def display_party(party_blob, config_data, global_settings, duration, game, generation_mode, config_file_path):
+def display_party(party_blob, config_data, global_settings, duration, game, generation_mode, config_file_path, party_size):
     # ANSI codes
     BRIGHT_GREEN = "\033[92m"
     BRIGHT_MAGENTA = "\033[95m"
@@ -108,9 +131,10 @@ def display_party(party_blob, config_data, global_settings, duration, game, gene
     def print_global_settings():
         # ---------------- PRINT SETTINGS ---------------------------------------------------------------------
         print(f"{BRIGHT_CYAN}---- SETTINGS ------------------{RESET}")
-        print(f"Game:\t {game}")
-        print(f"Mode:\t {generation_mode}")
-        print(f"Config:\t {config_file_path}")
+        print(f"Game:\t\t {game}")
+        print(f"Mode:\t\t {generation_mode}")
+        print(f"Party size:\t {party_size}")
+        print(f"Config:\t\t {config_file_path}")
         print("")
 
     print_header()
@@ -135,6 +159,11 @@ def display_party(party_blob, config_data, global_settings, duration, game, gene
 
     if party_blob == 'game_updated':
         print(f"{BRIGHT_GREEN}OK! Game updated.{RESET}\n")
+        print_global_settings()
+        return
+
+    if party_blob == 'party_size_updated':
+        print(f"{BRIGHT_GREEN}OK! Party size updated.{RESET}\n")
         print_global_settings()
         return
 
@@ -187,6 +216,8 @@ def display_party(party_blob, config_data, global_settings, duration, game, gene
                     f"(Sphere {earliest_pool})"
                 )
         print(f"{i}. {pokemon['party_member_obj'].name}" + prescription_details)
+    for i in range(len(sorted_party) + 1, 7):
+        print(f"{i}. —")
     # ---------------------------------------------------------------------------- END PRINT PARTY ----------
 
     if show_balance_stats:
@@ -216,6 +247,7 @@ def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_set
     duration = None
     generation_mode = global_settings['generation_mode']
     game = global_settings['game']
+    party_size = global_settings.get('party_size', 6)
     config_file_path = mappings[game]['config']
 
     while True:
@@ -227,11 +259,12 @@ def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_set
 
         mode = None
 
-        display_party(party_on_screen, config_data, global_settings, duration, game, generation_mode, config_file_path)
+        display_party(party_on_screen, config_data, global_settings, duration, game, generation_mode, config_file_path, party_size)
 
         print(f"Press {BRIGHT_CYAN}ENTER{RESET} to generate a party.")
-        print(f"{BRIGHT_CYAN}M{RESET} - Toggle [M]ode")
         print(f"{BRIGHT_CYAN}G{RESET} - Set [G]ame")
+        print(f"{BRIGHT_CYAN}M{RESET} - Toggle [M]ode")
+        print(f"{BRIGHT_CYAN}P{RESET} - Set [P]arty Size")
         print(f"{BRIGHT_CYAN}R{RESET} - [R]eload config from disk")
         print(f"{BRIGHT_CYAN}H{RESET} - [H]elp")
         print(f"{BRIGHT_CYAN}Q{RESET} - [Q]uit")
@@ -251,6 +284,8 @@ def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_set
             mode = "toggle_generation_mode"
         if user == "g":
             mode = "set_game"
+        if user == "p":
+            mode = "set_party_size"
         if user == "r":
             mode = "reload_config"
         if user == "h":
@@ -274,14 +309,27 @@ def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_set
             else:
                 party_on_screen = 'invalid_input'
                 continue
+
+        elif mode == 'set_party_size':
+            if set_party_size():
+                with open(resource_path("config/global_settings.yaml"), "r") as f:
+                    party_size = yaml.safe_load(f).get('party_size', 6)
+                party_on_screen = 'party_size_updated'
+                continue
+            else:
+                party_on_screen = 'invalid_input'
+                continue
+
         elif mode == 'toggle_generation_mode':
             generation_mode = toggle_generation_mode(generation_mode)
             party_on_screen = 'generation_mode_toggled'
             continue
+
         elif mode == 'reload_config':
             all_pools, all_pokemon, config_data, meta_data, mappings, global_settings = build_all_data_structures()
             party_on_screen = 'config_reloaded'
             continue
+
         elif mode == 'help':
             print_help()
             continue
@@ -291,14 +339,14 @@ def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_set
         if generation_mode == 'Random':
             print("Generating party...\n")
             start = time.time()
-            party_blob = generate_fully_randomized_party(all_pokemon, n=6)
+            party_blob = generate_fully_randomized_party(all_pokemon, n=party_size)
             end = time.time()
             duration = end - start
         elif generation_mode == 'Progression':
             print("Generating party...\n")
             start = time.time()
             party_blob = generate_final_party(
-                all_pools, all_pokemon, config_data, meta_data, n=6
+                all_pools, all_pokemon, config_data, meta_data, n=party_size
             )
             end = time.time()
             duration = end - start

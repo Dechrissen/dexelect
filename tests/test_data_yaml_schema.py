@@ -148,6 +148,7 @@ def test_meta_data_types(yaml_files):
 def test_config_required_fields(yaml_files):
     """Tests whether all required fields are present in a config YAML."""
     REQUIRED = {
+        "require_one_sphere_one",
         "allowed_balancing",
         "allowed_spreads",
         "allowed_patterns",
@@ -180,6 +181,7 @@ def test_config_data_types(yaml_files):
     for path, category in filter_yaml(yaml_files, "config"):
         config = load_yaml(path)
 
+        assert isinstance(config['require_one_sphere_one'], bool), f"{path}: 'require_one_sphere_one' must be a bool"
         assert isinstance(config['allowed_balancing']['value'], list), f"{path}: 'allowed_balancing' must be a list"
         assert isinstance(config['allowed_spreads']['value'], list), f"{path}: 'allowed_spreads' must be a list"
         assert isinstance(config['allowed_patterns']['value'], list), f"{path}: 'allowed_patterns' must be a list"
