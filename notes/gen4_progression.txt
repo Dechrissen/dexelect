@@ -1,0 +1,74 @@
+--------
+1: START
+--------
+twinleaf town (surf, fish)
+route 201 (walk)
+lake verity (walk, surf, fish, starter)
+route 219 (surf, fish)
+route 202 (walk)
+route 203 (walk, surf, fish)
+oreburgh gate 1F (walk)
+oreburgh gate B1F (walk, surf, fish)
+oreburgh city (trade-abra)
+oreburgh mine B1F (walk)
+oreburgh mine B2F (walk)
+route 207 (walk)
+ITEM: old_rod
+route 218 (walk, surf, fish)
+route 204 south (walk, surf, fish)
+ravaged path (walk, surf, fish)
+route 204 north (walk)
+floaroma meadow (honey_tree)
+route 205 south (walk, surf, fish, honey_tree)
+valley windworks (walk, surf, fish, honey_tree, static_encounter-drifloon)
+eterna forest (walk, honey_tree)
+old chateau (walk) <-- do we want to put national dex here as the 'key' to access rotom?
+route 205 north (walk, surf, fish, honey_tree)
+eterna city (surf, fish)
+ITEM: odd_keystone
+-------------
+2: ETERNA GYM
+-------------
+route 206 (walk, honey_tree)
+wayward cave 1F (walk)
+wayward cave B1F (walk)
+mt coronet south 1F (walk, surf, fish)
+route 208 (walk, surf, fish, honey_tree)
+hearthome city (gift-eevee, gift-happiny)
+route 211 west (walk)
+mt coronet north 1F 1R (walk)
+route 209 (walk, surf, fish, honey_tree, odd_keystone-spiritomb) <--- odd_keystone is NOT a limited acquisition method, just regular
+ITEM: good_rod
+lost tower 1F (walk)
+lost tower 2F (walk)
+lost tower 3F (walk)
+lost tower 4F (walk)
+lost tower 5F (walk)
+solaceon ruins (walk)
+route 212 north (walk, surf, fish, honey_tree)
+trophy garden (walk)
+route 212 south (walk, surf, fish, honey_tree) <-- is this potentially not accessible yet?
+route 210 south (walk, honey_tree)
+route 215 (walk, honey_tree)
+route 214 (walk, surf, fish, honey_tree)
+maniac tunnel (walk) <-- should just be geodude and hippopotas
+valor lakefront (walk)
+route 213 (walk, surf, fish, honey_tree)
+pastoria city (surf, fish)
+great marsh area 1/2 (walk, surf, fish)
+great marsh area 3/4 (walk, surf, fish)
+great marsh area 5 (walk) <-- only difference between 5 and 6 is Psyduck not in 5
+great marsh area 6 (walk, surf, fish)
+great marsh special area (binoculars) <-- pool of special daily random pokemon
+---------------
+3: PASTORIA GYM
+---------------
+
+
+-----
+LATER
+-----
+fuego ironworks above floaroma (need surf)
+lake valor
+ITEM: super_rod
+ITEM: surf

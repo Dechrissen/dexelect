@@ -275,6 +275,8 @@ class DexelectApp(ctk.CTk):
         # Sprite image refs (prevent GC of CTkImage objects while they're displayed)
         self._sprite_images = [None] * 6
 
+        self._config_note_label = None
+
         # Tooltip text keyed by config field name
         try:
             self.tooltips = read_yaml(TOOLTIPS_PATH) or {}
@@ -768,7 +770,7 @@ class DexelectApp(ctk.CTk):
           - Stats strip below the grid
         """
         parent.grid_columnconfigure(0, weight=1)
-        parent.grid_rowconfigure(1, weight=1, minsize=625)
+        parent.grid_rowconfigure(2, weight=1, minsize=625)
 
         # ---- Top bar ----
         top_bar = ctk.CTkFrame(parent, fg_color="transparent")
@@ -800,9 +802,21 @@ class DexelectApp(ctk.CTk):
         )
         self.status_label.grid(row=0, column=1, sticky="w")
 
+        # ---- Warning strip ----
+        self.warning_strip = ctk.CTkFrame(parent, fg_color="transparent")
+        self.warning_strip.grid(row=1, column=0, sticky="ew", padx=16, pady=(0, 4))
+        ctk.CTkLabel(
+            self.warning_strip,
+            text="⚠  Party sizes under 6 may affect the likelihood of satisfying HM coverage and balancing requirements.",
+            font=FONT_BODY,
+            text_color=C_WARNING,
+            anchor="w",
+        ).pack(side="left")
+        self.warning_strip.grid_remove()
+
         # ---- 3 × 2 card grid ----
         cards_outer = ctk.CTkFrame(parent, fg_color="transparent")
-        cards_outer.grid(row=1, column=0, sticky="nsew", padx=16, pady=(0, 8))
+        cards_outer.grid(row=2, column=0, sticky="nsew", padx=16, pady=(0, 8))
         cards_outer.grid_columnconfigure(0, weight=1)
         cards_outer.grid_columnconfigure(1, weight=1)
         for r in range(3):
@@ -817,7 +831,7 @@ class DexelectApp(ctk.CTk):
 
         # ---- Stats strip ----
         stats_frame = ctk.CTkFrame(parent, fg_color=C_PANEL, corner_radius=5)
-        stats_frame.grid(row=2, column=0, sticky="ew", padx=16, pady=(0, 16))
+        stats_frame.grid(row=3, column=0, sticky="ew", padx=16, pady=(0, 16))
         stats_frame.grid_columnconfigure(0, weight=1)
         stats_frame.grid_columnconfigure(1, weight=0)
 
@@ -973,6 +987,7 @@ class DexelectApp(ctk.CTk):
         scroll.grid_columnconfigure(0, weight=1)
         scroll.grid_columnconfigure(1, weight=1)
         self.config_scroll = scroll
+        scroll._parent_canvas.bind("<Configure>", self._on_config_note_resize)
 
         # Mouse-wheel scrolling: activate globally while cursor is inside the frame.
         # Using enter/leave avoids accumulating duplicate bindings on every rebuild.
@@ -1208,6 +1223,18 @@ class DexelectApp(ctk.CTk):
             self.config_vars[key] = entry
             row += 1
 
+        self._config_note_label = ctk.CTkLabel(
+            scroll,
+            text="Note: Overly-restrictive configuration settings may affect the likelihood of successfully generating a party.",
+            font=FONT_BODY,
+            text_color=C_MUTED,
+            anchor="w",
+            wraplength=scroll._parent_canvas.winfo_width() or 600,
+            justify="left",
+        )
+        self._config_note_label.grid(row=row, column=0, columnspan=2, padx=20, pady=(16, 4), sticky="w")
+        row += 1
+
         section_label("Party Balancing")
         bool_row("require_one_sphere_one", "Require at least one Pokémon in Sphere 1")
         multi_check_row("allowed_balancing", "Allowed balancing")
@@ -1269,6 +1296,7 @@ class DexelectApp(ctk.CTk):
         self.var_show_balance.set(bool(gs.get("show_balance_stats", True)))
         self.var_party_size.set(str(gs.get("party_size", 6)))
         self._update_party_size_text_colors()
+        self._update_warning_strip()
 
         self._populate_config_controls()
 
@@ -1305,6 +1333,17 @@ class DexelectApp(ctk.CTk):
     def _on_party_size_changed(self, value: str):
         self._patch_global_setting("party_size", int(value))
         self._update_party_size_text_colors()
+        self._update_warning_strip()
+
+    def _update_warning_strip(self):
+        if int(self.var_party_size.get()) < 6:
+            self.warning_strip.grid()
+        else:
+            self.warning_strip.grid_remove()
+
+    def _on_config_note_resize(self, event):
+        if self._config_note_label:
+            self._config_note_label.configure(wraplength=max(200, event.width - 40))
 
     def _update_party_size_text_colors(self):
         current = self.var_party_size.get()

@@ -71,15 +71,17 @@ See [`CONTRIBUTING.md`](/CONTRIBUTING.md) if you'd like to add support for a rom
 2. Extract it
 3. Run `dexelect.exe` on Windows, or the `dexelect` binary on Linux (e.g. with `./dexelect`)
 
-### Option 2: Command-line installation
+### Option 2: Build the standalone GUI binary
+
+Follow the [build instructions](/docs/BUILD.md).
+
+### Option 3: Command-line installation
 
 Prerequisites:
 - Python 3.10+
-- `pip`
-- (Optional) `venv`
 
 Steps:
-1. Clone this repository (or download the [latest release](https://github.com/Dechrissen/dexelect/releases/latest) 
+1. `git clone https://github.com/Dechrissen/dexelect.git` (or download the [latest release](https://github.com/Dechrissen/dexelect/releases/latest) 
    source code and extract it)
 2. `cd dexelect`
 3. (Optional) Create a virtual environment (`python -m venv .venv`)
@@ -121,7 +123,7 @@ Save the file and then, if the app was running, use the `R` option in the app to
 
 
 ## Credits
-- [Quadrixis](https://github.com/Quadrixis), for assistance with progression data planning and general testing
+- [Quadrixis](https://github.com/Quadrixis) – assistance with progression data planning and general testing
 
 
 ## Support Dexelect

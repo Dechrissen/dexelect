@@ -51,6 +51,7 @@
 - figure out if we need to handle stone availability in the config/meta files. If Flareon gets generated in party in 
   gen 2, it will assume a fire stone is available. is it? maybe back to the original idea of adding it to the 
   spheres list when it becomes available, then checking if stones are acquired by the time the pokemon is generated.
+    - same with other evo items
 
 - toggle for "gen 2 or gen 1 pokemon only" in gen 2 generation? and onward
   - or not a toggle, but a list of 'allowed generations' e.g. [1,2,3]
@@ -71,8 +72,6 @@
   
 - add `--help` to main.py
 
-- add instructions for building local Linux binary and testing to some TEST.md file
-
 - add Claude skill file which acts as instructions for Claude to help guide users when adding a new romhack from the command line (Claude code). e.g. it knows the structure of the pokedex and locations files, it knows the data it needs and where to get it (Serebii or something), and it knows how to add all that to the repo, but it asks user questions along the way, like "does this romhack have custom pokemon or can I use an existing pokedex file?". It needs context about whole project structure.
 
 - move to 1.0.0 after config file schemas / system is finished (so users can keep config files and it can be `.gitignore`ed in the repo)
@@ -84,7 +83,6 @@
   - i guess this could also be used for coverage testing to make sure certain distributions are being met
   - also have e.g. `dexelect --generate` to print a generated team to the command line instantly and `dexelect --random`
   
-
 - add bug report link / template
 
 - "report a bug" button in the GUI
@@ -93,8 +91,11 @@
 
 - Get the Gen 3 "? in circle" sprite for not-yet-generated party members
 
-- change "selected_sphere_mode"s in meta file to be numbered instead, so they can be selected from config file regardless of name (to allow customizing this setting)
+- New config option: change sphere mode
+  - change "selected_sphere_mode"s in meta file to be numbered instead, so they can be selected from config file regardless of name (to allow customizing this setting)
 
-- add general user warings about certain combinations of config settings resulting in no output
-  - HM coverage with small party sizes, and balance grade validation being hard to satisfy with small parties
+- add "open in pokemon db" links in GUI for pokemon info cards
 
+- add honey tree calcs - https://www.dragonflycave.com/sinnoh/honey-trees/
+
+- add a web ui option that can be selected via command line and open locally in browser, but also be the entry point for "standalone hosting" of the web app served on my site
