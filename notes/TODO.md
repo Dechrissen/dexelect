@@ -25,10 +25,7 @@
 - add Pool class
 - config should maybe be a Config class. This would make it easier to validate and pass along to functions
 
-- add HM coverage output
-  - list of HMs, check marks next to covered ones, or color them green
-  
-- other similar coverage bar graphs, etc. (type coverage distribution)
+- coverage bar graphs, etc. (type coverage distribution)
 
 - check every location from locations is in meta spheres list (also add unit test for this?)
 
@@ -53,11 +50,9 @@
   spheres list when it becomes available, then checking if stones are acquired by the time the pokemon is generated.
     - same with other evo items
 
-- toggle for "gen 2 or gen 1 pokemon only" in gen 2 generation? and onward
-  - or not a toggle, but a list of 'allowed generations' e.g. [1,2,3]
-  - will need to add a field for every pokemon in every pokedex file "gen_introduced"
-  - additional possibile field: "in_regional_dex" (bool)
 
+
+- actually remove these mostly useless ones from all games.
 - add 'Milk Drink' as field moves (HMs) in Gen 2 and 3?
 - add 'Secret Power' as field move (HM) in gen 3?
 - "Sweet Scent" Gen 3?
@@ -69,6 +64,7 @@
   - add to `/bin`?
   - PATH?
   - app icon which can be used by application launchers in Linux but also to replace the top left window icon in Windows
+  - maybe install an install.sh script to build the binary, create the /bin entry, put the icon in the right spot, and make the .desktop file
   
 - add `--help` to main.py
 
@@ -89,13 +85,14 @@
 
 - wacky idea: "prescribed poke ball" option that displays the type of ball u should catch something in, like a ball png for the specific ball in the top right of the card. can be in the "Display" toggles. Would require some additional progression/config data because certain balls are not available till later in game.
 
-- Get the Gen 3 "? in circle" sprite for not-yet-generated party members
-
 - New config option: change sphere mode
   - change "selected_sphere_mode"s in meta file to be numbered instead, so they can be selected from config file regardless of name (to allow customizing this setting)
-
-- add "open in pokemon db" links in GUI for pokemon info cards
 
 - add honey tree calcs - https://www.dragonflycave.com/sinnoh/honey-trees/
 
 - add a web ui option that can be selected via command line and open locally in browser, but also be the entry point for "standalone hosting" of the web app served on my site
+
+- toggle for "gen 2 or gen 1 pokemon only" in gen 2 generation? and onward
+  - or not a toggle, but a list of 'allowed generations' e.g. [1,2,3]
+  - will need to add a field for every pokemon in every pokedex file "gen_introduced"
+  - additional possibile field: "in_regional_dex" (bool)

@@ -44,7 +44,7 @@ from version import __version__
 
 from ui.gui_theme import (
     C_BG, C_PANEL, C_SIDEBAR, C_ACCENT, C_ACCENT2, C_ACCENT_DIM, C_ACCENT2_DIM,
-    C_TEXT, C_MUTED, C_BTN_TEXT, C_SUCCESS, C_WARNING, C_ENTRY_BG, C_TITLE, C_SELECT_BG, C_SELECT_FG, C_DIM,
+    C_TEXT, C_MUTED, C_BTN_TEXT, C_SUCCESS, C_WARNING, C_CARD, C_CARD_BORDER, C_ENTRY_BG, C_TITLE, C_SELECT_BG, C_SELECT_FG, C_DIM,
     FONT_TITLE, FONT_APP_TITLE, FONT_HEADER, FONT_BTN, FONT_BODY, FONT_SMALL, FONT_MONO, FONT_MONO_HEADER,
     TYPE_COLORS,
 )
@@ -79,7 +79,7 @@ def write_yaml(path: str, data: dict):
 # TOOLTIP
 # =============================================================================
 
-TOOLTIPS_PATH = "config/tooltips.yaml"
+TOOLTIPS_PATH = "ui/tooltips.yaml"
 
 class _Tooltip:
     """Lightweight hover tooltip rendered as an in-window frame.
@@ -246,9 +246,16 @@ class DexelectApp(ctk.CTk):
 
         # ---- Window setup ----
         self.title(f"Dexelect v{__version__}")
-        self.geometry("1100x750")
-        self.minsize(900, 860)
         self.configure(fg_color=C_BG)
+        sw, sh = self.winfo_screenwidth(), self.winfo_screenheight()
+        win_w = min(max(900,  int(sw * 0.85)), 1280)
+        win_h = min(max(860,  int(sh * 0.87)), 1050)
+        win_w = min(win_w, sw - 20)   # never wider than screen
+        win_h = min(win_h, sh - 60)   # leave room for taskbar/decorations
+        x = (sw - win_w) // 2
+        y = max(0, (sh - win_h) // 2)
+        self.geometry(f"{win_w}x{win_h}+{x}+{y}")
+        self.minsize(900, 760)
 
         # ---- App state ----
         self.all_pools       = all_pools
@@ -263,6 +270,7 @@ class DexelectApp(ctk.CTk):
         self.var_gen_mode     = tk.StringVar()
         self.var_show_acq     = tk.BooleanVar()
         self.var_show_balance = tk.BooleanVar()
+        self.var_show_hm      = tk.BooleanVar()
         self.var_party_size   = tk.StringVar()
 
         # Config tab variables — populated dynamically in _build_config_tab
@@ -276,6 +284,10 @@ class DexelectApp(ctk.CTk):
         self._sprite_images = [None] * 6
 
         self._config_note_label = None
+        self.hm_labels = {}
+        self._hm_strip_inner = None
+        self._hm_list_frame  = None
+        self._hm_dash_label  = None
 
         # Tooltip text keyed by config field name
         try:
@@ -456,6 +468,18 @@ class DexelectApp(ctk.CTk):
             checkmark_color=C_TEXT,
         ).grid(row=15, column=0, padx=24, pady=3, sticky="w")
 
+        ctk.CTkCheckBox(
+            sf,
+            text="HM coverage",
+            variable=self.var_show_hm,
+            command=self._on_show_hm_changed,
+            text_color=C_TEXT,
+            font=FONT_BODY,
+            fg_color=C_ACCENT,
+            hover_color=C_ACCENT2,
+            checkmark_color=C_TEXT,
+        ).grid(row=16, column=0, padx=24, pady=3, sticky="w")
+
         # ---- Copyright (pinned to bottom) ----
         footer = tk.Frame(sf, bg=C_SIDEBAR)
         footer.grid(row=99, column=0, padx=20, pady=20, sticky="sw")
@@ -556,7 +580,7 @@ class DexelectApp(ctk.CTk):
             self.main_frame, image=self._help_img_normal,
             bg=C_PANEL, cursor="hand2", bd=0,
         )
-        help_btn.place(relx=1.0, rely=0.0, anchor="ne", x=-20, y=38)
+        help_btn.place(relx=1.0, rely=0.0, anchor="ne", x=-40, y=38)
         help_btn.bind("<Button-1>", lambda e: self._toggle_help())
         help_btn.bind("<Enter>", lambda e: help_btn.configure(image=self._help_img_hover))
         help_btn.bind("<Leave>", lambda e: help_btn.configure(image=self._help_img_normal))
@@ -578,7 +602,7 @@ class DexelectApp(ctk.CTk):
         if self._sphere_map_overlay and self._sphere_map_overlay.winfo_exists():
             self._close_sphere_map()
         overlay = tk.Frame(self, bg=C_BG, highlightthickness=2,
-                           highlightbackground=C_ACCENT, highlightcolor=C_ACCENT)
+                           highlightbackground=C_CARD_BORDER, highlightcolor=C_CARD_BORDER)
         overlay.place(x=14, y=14, relwidth=1.0, relheight=1.0, width=-28, height=-28)
         overlay.lift()
         self._help_overlay = overlay
@@ -596,7 +620,7 @@ class DexelectApp(ctk.CTk):
         close.bind("<Leave>", lambda e: close.configure(fg=C_MUTED))
 
         # Separator
-        tk.Frame(overlay, bg=C_ACCENT, height=1).pack(fill="x")
+        tk.Frame(overlay, bg=C_CARD_BORDER, height=1).pack(fill="x")
 
         # Scrollable text area
         text = tk.Text(
@@ -675,7 +699,7 @@ class DexelectApp(ctk.CTk):
         if self._help_overlay and self._help_overlay.winfo_exists():
             self._close_help()
         overlay = tk.Frame(self, bg=C_BG, highlightthickness=2,
-                           highlightbackground=C_ACCENT, highlightcolor=C_ACCENT)
+                           highlightbackground=C_CARD_BORDER, highlightcolor=C_CARD_BORDER)
         overlay.place(x=14, y=14, relwidth=1.0, relheight=1.0, width=-28, height=-28)
         overlay.lift()
         self._sphere_map_overlay = overlay
@@ -692,7 +716,7 @@ class DexelectApp(ctk.CTk):
         close.bind("<Enter>", lambda e: close.configure(fg=C_TEXT))
         close.bind("<Leave>", lambda e: close.configure(fg=C_MUTED))
 
-        tk.Frame(overlay, bg=C_ACCENT, height=1).pack(fill="x")
+        tk.Frame(overlay, bg=C_CARD_BORDER, height=1).pack(fill="x")
 
         text = tk.Text(
             overlay, bg=C_BG, fg=C_MUTED,
@@ -724,7 +748,7 @@ class DexelectApp(ctk.CTk):
 
     def _render_sphere_map(self, text_widget):
         text_widget.tag_configure("mode",     font=FONT_BODY,               foreground=C_MUTED, spacing3=10)
-        text_widget.tag_configure("s_on",     font=("Roboto", 13, "bold"),  foreground=C_ACCENT, spacing1=8, spacing3=3)
+        text_widget.tag_configure("s_on",     font=("Roboto", 13, "bold"),  foreground=C_TEXT,   spacing1=8, spacing3=3)
         text_widget.tag_configure("s_off",    font=("Roboto", 13, "bold"),  foreground=C_DIM,    spacing1=8, spacing3=3)
         text_widget.tag_configure("map_on",   font=FONT_BODY,               foreground=C_TEXT)
         text_widget.tag_configure("map_off",  font=FONT_BODY,               foreground=C_DIM)
@@ -767,13 +791,86 @@ class DexelectApp(ctk.CTk):
         Generate tab layout:
           - Top bar: Generate button + status label
           - 3 × 2 grid of party-member cards
+          - HM coverage strip
           - Stats strip below the grid
+        All content lives in a canvas-backed inner frame so the stats and HM
+        strips are always reachable via scroll when the window is too short.
         """
         parent.grid_columnconfigure(0, weight=1)
-        parent.grid_rowconfigure(2, weight=1, minsize=625)
+        parent.grid_columnconfigure(1, weight=0)
+        parent.grid_rowconfigure(0, weight=1)
+
+        # ---- Canvas + scrollbar ----
+        # Use C_PANEL to match the tabview's own fg_color — any sub-pixel gap
+        # between the canvas edge and the tab frame then shows the same colour.
+        canvas = tk.Canvas(parent, bg=C_PANEL, highlightthickness=0, bd=0)
+        canvas.grid(row=0, column=0, sticky="nsew")
+        canvas.configure(yscrollincrement=1)
+
+        scrollbar = ctk.CTkScrollbar(parent, command=canvas.yview,
+                                      button_color=C_ACCENT2, button_hover_color=C_ACCENT)
+        scrollbar.grid(row=0, column=1, sticky="ns")
+
+        # Auto-hide: only show scrollbar when content exceeds canvas height.
+        def _yscroll_set(first, last):
+            if float(first) <= 0.0 and float(last) >= 1.0:
+                scrollbar.grid_remove()
+            else:
+                scrollbar.grid()
+            scrollbar.set(first, last)
+        canvas.configure(yscrollcommand=_yscroll_set)
+
+        # Inner frame: plain tk.Frame avoids CTkFrame rendering artefacts
+        # (CTkFrame uses an internal canvas that produces a faint background line).
+        gen_inner = tk.Frame(canvas, bg=C_PANEL)
+        inner_id = canvas.create_window((0, 0), window=gen_inner, anchor="nw")
+        gen_inner.grid_columnconfigure(0, weight=1)
+        gen_inner.grid_rowconfigure(2, weight=1, minsize=625)
+
+        # Cross-platform scroll — identical pattern to config tab
+        SCROLL_PX = 60
+
+        def _on_gen_scroll(event):
+            if event.num == 4:
+                canvas.yview_scroll(-SCROLL_PX, "units")
+            elif event.num == 5:
+                canvas.yview_scroll(SCROLL_PX, "units")
+            else:
+                canvas.yview_scroll(int(-event.delta / 120) * SCROLL_PX, "units")
+
+        def _enable_gen_scroll(e=None):
+            self.bind_all("<MouseWheel>", _on_gen_scroll)
+            self.bind_all("<Button-4>",   _on_gen_scroll)
+            self.bind_all("<Button-5>",   _on_gen_scroll)
+
+        def _disable_gen_scroll(e=None):
+            # canvas <Leave> fires whenever cursor moves to any child widget
+            # (cards, labels, etc.) — only truly disable when cursor has left
+            # the canvas bounds entirely.
+            cx, cy = canvas.winfo_rootx(), canvas.winfo_rooty()
+            if (cx <= self.winfo_pointerx() < cx + canvas.winfo_width() and
+                    cy <= self.winfo_pointery() < cy + canvas.winfo_height()):
+                return
+            self.unbind_all("<MouseWheel>")
+            self.unbind_all("<Button-4>")
+            self.unbind_all("<Button-5>")
+
+        canvas.bind("<Enter>", _enable_gen_scroll)
+        canvas.bind("<Leave>", _disable_gen_scroll)
+
+        def _on_gen_canvas_configure(event):
+            # Keep inner frame filling canvas width; expand height to fill when
+            # there is room, or hold minimum so scrollbar activates when too short.
+            gen_inner.update_idletasks()
+            content_h = gen_inner.winfo_reqheight()
+            new_h = max(event.height, content_h)
+            canvas.itemconfig(inner_id, width=event.width, height=new_h)
+            canvas.configure(scrollregion=(0, 0, event.width, new_h))
+
+        canvas.bind("<Configure>", _on_gen_canvas_configure)
 
         # ---- Top bar ----
-        top_bar = ctk.CTkFrame(parent, fg_color="transparent")
+        top_bar = ctk.CTkFrame(gen_inner, fg_color="transparent")
         top_bar.grid(row=0, column=0, sticky="ew", padx=16, pady=(24, 8))
         top_bar.grid_columnconfigure(1, weight=1)
 
@@ -803,7 +900,7 @@ class DexelectApp(ctk.CTk):
         self.status_label.grid(row=0, column=1, sticky="w")
 
         # ---- Warning strip ----
-        self.warning_strip = ctk.CTkFrame(parent, fg_color="transparent")
+        self.warning_strip = ctk.CTkFrame(gen_inner, fg_color="transparent")
         self.warning_strip.grid(row=1, column=0, sticky="ew", padx=16, pady=(0, 4))
         ctk.CTkLabel(
             self.warning_strip,
@@ -815,7 +912,7 @@ class DexelectApp(ctk.CTk):
         self.warning_strip.grid_remove()
 
         # ---- 3 × 2 card grid ----
-        cards_outer = ctk.CTkFrame(parent, fg_color="transparent")
+        cards_outer = ctk.CTkFrame(gen_inner, fg_color="transparent")
         cards_outer.grid(row=2, column=0, sticky="nsew", padx=16, pady=(0, 8))
         cards_outer.grid_columnconfigure(0, weight=1)
         cards_outer.grid_columnconfigure(1, weight=1)
@@ -829,9 +926,13 @@ class DexelectApp(ctk.CTk):
                 card["frame"].grid(row=r, column=c, padx=6, pady=6, sticky="nsew")
                 self.party_cards.append(card)
 
+        # ---- HM coverage strip ----
+        self.hm_strip_frame = ctk.CTkFrame(gen_inner, fg_color=C_PANEL, corner_radius=5)
+        self.hm_strip_frame.grid(row=3, column=0, sticky="ew", padx=16, pady=(0, 8))
+
         # ---- Stats strip ----
-        stats_frame = ctk.CTkFrame(parent, fg_color=C_PANEL, corner_radius=5)
-        stats_frame.grid(row=3, column=0, sticky="ew", padx=16, pady=(0, 16))
+        stats_frame = ctk.CTkFrame(gen_inner, fg_color=C_PANEL, corner_radius=5)
+        stats_frame.grid(row=4, column=0, sticky="ew", padx=16, pady=(0, 16))
         stats_frame.grid_columnconfigure(0, weight=1)
         stats_frame.grid_columnconfigure(1, weight=0)
 
@@ -885,10 +986,10 @@ class DexelectApp(ctk.CTk):
         """Build one empty party-member card; return updateable widget refs."""
         frame = ctk.CTkFrame(
             parent,
-            fg_color=C_PANEL,
+            fg_color=C_CARD,
             corner_radius=5,
             border_width=1,
-            border_color=C_ACCENT2,
+            border_color=C_CARD_BORDER,
         )
         frame.grid_columnconfigure(0, weight=0)
         frame.grid_columnconfigure(1, weight=1)
@@ -904,18 +1005,23 @@ class DexelectApp(ctk.CTk):
             frame,
             text="",
             image=None,
-            fg_color=C_ENTRY_BG,
+            fg_color="transparent",
             corner_radius=5,
             width=112,
             height=112,
         )
         sprite.grid(row=0, column=0, rowspan=4, padx=(8, 8), pady=(10, 0), sticky="nw")
 
-        name_lbl = ctk.CTkLabel(frame, text="Empty", font=FONT_MONO_HEADER, text_color=C_MUTED, anchor="w")
+        name_lbl = ctk.CTkLabel(frame, text="", font=FONT_MONO_HEADER, text_color=C_MUTED, anchor="w")
         name_lbl.grid(row=0, column=1, padx=(0, 10), pady=(4, 2), sticky="nw")
 
+        empty_lbl = ctk.CTkLabel(frame, text="Empty", font=FONT_MONO_HEADER,
+                                  text_color=C_MUTED, fg_color="transparent")
+        empty_lbl.place(relx=0.5, rely=0.5, anchor="center")
+        empty_lbl.lift()
+
         # plain tk.Frame avoids CTkFrame canvas overpainting the card border
-        types_frame = tk.Frame(frame, bg=C_PANEL)
+        types_frame = tk.Frame(frame, bg=C_CARD)
         types_frame.grid(row=1, column=1, padx=(0, 10), pady=(0, 2), sticky="nw")
 
         bst_lbl = ctk.CTkLabel(frame, text="", font=FONT_BODY, text_color=C_MUTED, anchor="nw")
@@ -932,22 +1038,77 @@ class DexelectApp(ctk.CTk):
         acq_lbl.grid(row=5, column=0, columnspan=2, padx=(14, 10), pady=(4, 8), sticky="nw")
 
         return {"frame": frame, "name": name_lbl, "acq": acq_lbl, "sep": sep, "sprite": sprite,
-                "types_frame": types_frame, "bst": bst_lbl}
+                "types_frame": types_frame, "bst": bst_lbl, "empty_lbl": empty_lbl}
+
+    def _build_hm_labels(self):
+        """Rebuild HM coverage labels for the current game. Called on startup and game change."""
+        if self._hm_strip_inner:
+            self._hm_strip_inner.destroy()
+        inner = tk.Frame(self.hm_strip_frame, bg=C_PANEL)
+        inner.pack(side="left", padx=16, pady=10)
+        self._hm_strip_inner = inner
+        self.hm_labels = {}
+        hdr = tk.Frame(inner, bg=C_PANEL)
+        hdr.pack(side="left", padx=(0, 16))
+        ctk.CTkLabel(hdr, text="HM Coverage", font=FONT_BODY, text_color=C_TEXT,
+                     fg_color=C_PANEL).pack(side="left")
+        tip = self.tooltips.get("hm_coverage", "")
+        if tip:
+            icon = _icon_canvas(hdr)
+            icon.pack(side="left", padx=(5, 0), anchor="center")
+            _Tooltip(icon, tip)
+
+        # Individual HM labels (shown when toggle on)
+        hm_list = tk.Frame(inner, bg=C_PANEL)
+        self._hm_list_frame = hm_list
+        for hm_name in self.config_data.get("ensure_hm_coverage", {}):
+            lbl = ctk.CTkLabel(hm_list, text=hm_name, font=FONT_MONO, text_color=C_MUTED, fg_color=C_PANEL)
+            lbl.pack(side="left", padx=(0, 12))
+            self.hm_labels[hm_name] = lbl
+
+        # Single dash (shown when toggle off)
+        self._hm_dash_label = ctk.CTkLabel(inner, text="—", font=FONT_MONO,
+                                            text_color=C_MUTED, fg_color=C_PANEL)
+
+    def _refresh_hm_labels(self, party_coverage):
+        """Update HM strip based on toggle state and optional coverage set.
+
+        party_coverage: set of covered HM names, or None (no party generated yet).
+        """
+        if not self.var_show_hm.get():
+            if self._hm_list_frame:
+                self._hm_list_frame.pack_forget()
+            if self._hm_dash_label:
+                self._hm_dash_label.pack(side="left")
+            return
+        if self._hm_dash_label:
+            self._hm_dash_label.pack_forget()
+        if self._hm_list_frame:
+            self._hm_list_frame.pack(side="left")
+        for hm_name, lbl in self.hm_labels.items():
+            covered = party_coverage is not None and hm_name in party_coverage
+            lbl.configure(text_color=C_ACCENT if covered else C_MUTED)
 
     def _clear_cards(self):
         """Reset all party cards to their empty placeholder state."""
         for i, card in enumerate(self.party_cards):
-            card["name"].configure(text="Empty", text_color=C_MUTED)
+            card["name"].configure(text="", text_color=C_MUTED, cursor="")
+            for w in (card["name"], card["name"]._label):
+                w.unbind("<Button-1>")
+                w.unbind("<Enter>")
+                w.unbind("<Leave>")
+            card["empty_lbl"].place(relx=0.5, rely=0.5, anchor="center")
+            card["empty_lbl"].lift()
             card["acq"].configure(text="")
             card["sep"].grid_remove()
             card["bst"].configure(text="")
-            card["frame"].configure(border_color=C_ACCENT2)
             card["sprite"].configure(image=None)
             self._sprite_images[i] = None
             for w in card["types_frame"].winfo_children():
                 w.destroy()
         for lbl in self.stat_labels.values():
             lbl.configure(text="—", text_color=C_MUTED)
+        self._refresh_hm_labels(party_coverage=None)
         self.last_party_blob = None
 
     def _render_type_badges(self, types_frame, types: list[str]):
@@ -956,11 +1117,11 @@ class DexelectApp(ctk.CTk):
             w.destroy()
         for col, type_name in enumerate(types):
             color = TYPE_COLORS.get(type_name.lower(), C_MUTED)
-            badge = tk.Frame(types_frame, bg=C_PANEL)
+            badge = tk.Frame(types_frame, bg=C_CARD)
             badge.grid(row=0, column=col, padx=(0, 6))
             tk.Frame(badge, width=12, height=12, bg=color).grid(row=0, column=0, padx=(0, 4))
             ctk.CTkLabel(badge, text=type_name.capitalize(), font=FONT_BODY,
-                         text_color=color, anchor="w", fg_color=C_PANEL).grid(row=0, column=1)
+                         text_color=color, anchor="w", fg_color=C_CARD).grid(row=0, column=1)
 
 
     # =========================================================================
@@ -1005,16 +1166,28 @@ class DexelectApp(ctk.CTk):
             else:                                     # Windows <MouseWheel> (delta=±120/notch)
                 canvas.yview_scroll(int(-event.delta / 120) * SCROLL_PX, "units")
 
-        scroll.bind("<Enter>", lambda e: [
-            self.bind_all("<MouseWheel>", _on_config_scroll),
-            self.bind_all("<Button-4>",   _on_config_scroll),
-            self.bind_all("<Button-5>",   _on_config_scroll),
-        ])
-        scroll.bind("<Leave>", lambda e: [
-            self.unbind_all("<MouseWheel>"),
-            self.unbind_all("<Button-4>"),
-            self.unbind_all("<Button-5>"),
-        ])
+        # scroll._parent_frame is the outer CTkFrame that contains both the
+        # _parent_canvas and the CTkScrollbar — binding here covers the full
+        # footprint (content area + scrollbar column).  Binding on `scroll`
+        # (the inner tk.Frame inside _parent_canvas) misses the scrollbar.
+        _pf = scroll._parent_frame
+
+        def _on_config_scroll_enter(e):
+            self.bind_all("<MouseWheel>", _on_config_scroll)
+            self.bind_all("<Button-4>",   _on_config_scroll)
+            self.bind_all("<Button-5>",   _on_config_scroll)
+
+        def _on_config_scroll_leave(e):
+            sx, sy = _pf.winfo_rootx(), _pf.winfo_rooty()
+            if (sx <= self.winfo_pointerx() < sx + _pf.winfo_width() and
+                    sy <= self.winfo_pointery() < sy + _pf.winfo_height()):
+                return
+            self.unbind_all("<MouseWheel>")
+            self.unbind_all("<Button-4>")
+            self.unbind_all("<Button-5>")
+
+        _pf.bind("<Enter>", _on_config_scroll_enter)
+        _pf.bind("<Leave>", _on_config_scroll_leave)
 
         # ---- Save button ----
         save_bar = ctk.CTkFrame(parent, fg_color="transparent", height=50)
@@ -1294,9 +1467,11 @@ class DexelectApp(ctk.CTk):
         self.var_gen_mode.set(gs.get("generation_mode", "Progression"))
         self.var_show_acq.set(bool(gs.get("show_acquisition_details", True)))
         self.var_show_balance.set(bool(gs.get("show_balance_stats", True)))
+        self.var_show_hm.set(bool(gs.get("show_hm_coverage", True)))
         self.var_party_size.set(str(gs.get("party_size", 6)))
         self._update_party_size_text_colors()
         self._update_warning_strip()
+        self._build_hm_labels()
 
         self._populate_config_controls()
 
@@ -1329,6 +1504,13 @@ class DexelectApp(ctk.CTk):
 
     def _on_show_balance_changed(self):
         self._patch_global_setting("show_balance_stats", self.var_show_balance.get())
+
+    def _on_show_hm_changed(self):
+        self._patch_global_setting("show_hm_coverage", self.var_show_hm.get())
+        if self.last_party_blob is not None:
+            self._populate_cards(self.last_party_blob)
+        else:
+            self._refresh_hm_labels(party_coverage=None)
 
     def _on_party_size_changed(self, value: str):
         self._patch_global_setting("party_size", int(value))
@@ -1497,7 +1679,13 @@ class DexelectApp(ctk.CTk):
             card = self.party_cards[i]
             mon_obj = pokemon["party_member_obj"]
             card["name"].configure(text=mon_obj.name, text_color=C_TEXT)
-            card["frame"].configure(border_color=C_ACCENT)
+            card["empty_lbl"].place_forget()
+            url = f"https://pokemondb.net/pokedex/{int(mon_obj.nat_dex_number)}"
+            card["name"].configure(cursor="hand2")
+            for w in (card["name"], card["name"]._label):
+                w.bind("<Button-1>", lambda e, u=url: webbrowser.open(u))
+                w.bind("<Enter>", lambda e, c=card: c["name"].configure(text_color=C_ACCENT))
+                w.bind("<Leave>", lambda e, c=card: c["name"].configure(text_color=C_TEXT))
             self._render_type_badges(card["types_frame"], mon_obj.types)
             card["bst"].configure(text=f"Base stat total: {mon_obj.base_stat_total}")
 
@@ -1505,11 +1693,11 @@ class DexelectApp(ctk.CTk):
             try:
                 pil_img = Image.open(sprite_path).resize((112, 112), Image.NEAREST)
                 ctk_img = ctk.CTkImage(light_image=pil_img, dark_image=pil_img, size=(112, 112))
-                self._sprite_images[i] = ctk_img
                 card["sprite"].configure(image=ctk_img)
+                self._sprite_images[i] = ctk_img
             except (FileNotFoundError, OSError):
-                self._sprite_images[i] = None
                 card["sprite"].configure(image=None)
+                self._sprite_images[i] = None
 
             if show_acq and pokemon["random_pool_entry_instance"] is not None:
                 prescribed    = pokemon["random_pool_entry_instance"]
@@ -1528,6 +1716,12 @@ class DexelectApp(ctk.CTk):
             else:
                 card["acq"].configure(text="")
                 card["sep"].grid_remove()
+
+        party_hm_coverage = set(
+            hm for m in party_blob["party_with_acquisition_data"]
+            for hm in m["party_member_obj"].hm_learnset
+        )
+        self._refresh_hm_labels(party_coverage=party_hm_coverage)
 
         if show_balance and party_blob.get("lean") is not None:
             self.stat_labels["lean"].configure(text=str(party_blob.get("lean", "—")), text_color=C_MUTED)

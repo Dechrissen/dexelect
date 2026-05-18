@@ -3,6 +3,7 @@ lean: "Describes the bias of party member acquisition with respect to the early 
 spread: "Describes how tightly grouped the party's acquisition spheres are."
 pattern: "Describes the qualitative shape of the party across spheres."
 distribution: "A breakdown of the number of party members that appear in each sphere."
+hm_coverage: "HMs learnable by at least one party member are highlighted."
 
 # ---- Config options (Config tab) ----
 require_one_sphere_one: "If enabled, at least one Pokémon in the party must be obtainable in Sphere 1."

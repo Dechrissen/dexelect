@@ -127,6 +127,7 @@ def display_party(party_blob, config_data, global_settings, duration, game, gene
 
     show_acquisition_details = global_settings['show_acquisition_details']
     show_balance_stats = global_settings['show_balance_stats']
+    show_hm_coverage = global_settings['show_hm_coverage']
 
     def print_global_settings():
         # ---------------- PRINT SETTINGS ---------------------------------------------------------------------
@@ -220,13 +221,30 @@ def display_party(party_blob, config_data, global_settings, duration, game, gene
         print(f"{i}. —")
     # ---------------------------------------------------------------------------- END PRINT PARTY ----------
 
-    if show_balance_stats:
+    if show_balance_stats or show_hm_coverage:
         print(f"\n{BRIGHT_YELLOW}---- STATS ---------------------{RESET}")
+
+    if show_balance_stats:
         print("Distribution:\t", [("Sphere " + str(sphere) + ": " + str(party_blob["party_distribution"][sphere])) for sphere in party_blob["party_distribution"]] if party_blob["party_distribution"] else None)
         #print("score_median:", party_blob["score_median"])
         print("Lean:\t\t", party_blob["lean"])
         print("Spread:\t\t", party_blob["spread"])
         print("Pattern:\t", party_blob["pattern"])
+
+    if show_hm_coverage:
+        hm_config = config_data.get("ensure_hm_coverage", {})
+        party_hm_coverage = set(
+            hm for m in party_blob["party_with_acquisition_data"]
+            for hm in m["party_member_obj"].hm_learnset
+        )
+        parts = []
+        for hm_name in hm_config:
+            if hm_name in party_hm_coverage:
+                parts.append(f"{BRIGHT_GREEN}✓{hm_name}{RESET}")
+            else:
+                parts.append(f"{BRIGHT_BLACK}{hm_name}{RESET}")
+        print("HM Coverage:\t", " ".join(parts))
+
     print()
 
     if duration:
