@@ -1,4 +1,4 @@
-# Dexelect — Progression-aware Party Generator
+# Dexelect — Progression-aware Pokémon Party Generator
 
 ## Overview
 
@@ -8,7 +8,7 @@ Output contains:
 
 1. The party, along with details such as types and base stat totals for each member
 2. The acquisition details for each member (i.e., how and where to obtain them in the game)
-3. Party balance stats (Lean, Spread, Pattern, Distribution) which describe the overall feasibility of assembling that party
+3. Party balance stats (Lean, Spread, Pattern, Distribution, HM Coverage) which describe the overall feasibility of assembling that party
 
 ## How to Use
 
@@ -21,7 +21,7 @@ From the left sidebar, you can:
 - Set Party Size (1–6)
 - Hide accompanying details for generated teams
 
-To modify configuration options, navigate to the Config tab, make changes to your liking, and click "Save Config" before returning to the Generate tab.
+To modify configuration options, navigate to the Config tab and make changes to your liking.
 
 ## Modes
 
@@ -48,9 +48,15 @@ The qualitative shape of the party across spheres (single_cluster / dual_cluster
 ### Distribution
 A breakdown of how many party members appear in each sphere.
 
+## Spheres
+
+Sphere modes can be changed in the Spheres tab. Enabled spheres are displayed beneath the selector depending on the active Sphere mode. Per-sphere location lists can be referenced here as well.
+
+Each game has its own available Sphere modes. The 'all' option enables all spheres for a given game, including postgame.
+
 ## Configuration
 
-Use the Config tab to view and edit settings for the currently selected game. Changes take effect after clicking "Save Config".
+Use the Config tab to view and edit settings for the currently selected game.
 
 The tool's output can be fine-tuned to your liking by tweaking values such as:
 

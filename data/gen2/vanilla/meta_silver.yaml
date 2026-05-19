@@ -333,6 +333,3 @@ sphere_generation_modes:
   no_mt_silver: [1,2,3,4,5,6] # beginning of game through end of Kanto, excluding Mt. Silver
   pre_kanto: [1,2,3,4] # beginning of game up to Elite Four (Johto only)
 
-# Selected Sphere Mode which defines the enabled Spheres for Pokémon availability.
-# This can be changed to any of the above modes. no_mt_silver is default/recommended.
-selected_sphere_mode: no_mt_silver

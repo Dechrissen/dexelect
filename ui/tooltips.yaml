@@ -1,3 +1,6 @@
+# ---- Spheres tab ----
+sphere_mode: "Controls enabled spheres. Each mode enables a different set of spheres; disabling later spheres restricts the pool to Pokémon available earlier in the game."
+
 # ---- Stats strip (Generate tab) ----
 lean: "Describes the bias of party member acquisition with respect to the early game or late game."
 spread: "Describes how tightly grouped the party's acquisition spheres are."

@@ -293,4 +293,3 @@ sphere_generation_modes:
   no_postgame: [1,2,3,4,5] # beginning of game through Victory Road, excluding postgame
   pre_victory_road: [1,2,3,4] # beginning of game up to Victory Road
 
-selected_sphere_mode: pre_victory_road

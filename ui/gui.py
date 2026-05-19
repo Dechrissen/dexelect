@@ -25,7 +25,6 @@
 
 import customtkinter as ctk
 import tkinter as tk
-from tkinter import messagebox
 import yaml
 import threading
 import time
@@ -55,6 +54,7 @@ from ui.gui_theme import (
 # =============================================================================
 
 GLOBAL_SETTINGS_PATH = "config/global_settings.yaml"
+GAME_SETTINGS_PATH   = "config/game_settings.yaml"
 
 def read_yaml(path: str) -> dict:
     with open(resource_path(path), "r", encoding="utf-8") as f:
@@ -272,9 +272,11 @@ class DexelectApp(ctk.CTk):
         self.var_show_balance = tk.BooleanVar()
         self.var_show_hm      = tk.BooleanVar()
         self.var_party_size   = tk.StringVar()
+        self.var_sphere_mode  = tk.StringVar()
 
         # Config tab variables — populated dynamically in _build_config_tab
-        self.config_vars = {}
+        self.config_vars    = {}
+        self._config_loading = False
 
         # Generation state
         self.is_generating   = False
@@ -307,7 +309,6 @@ class DexelectApp(ctk.CTk):
                   if self.generate_btn.cget("state") == "normal"
                   and self.tabview.get() == "Generate"
                   and not (self._help_overlay and self._help_overlay.winfo_exists())
-                  and not (self._sphere_map_overlay and self._sphere_map_overlay.winfo_exists())
                   else None)
 
 
@@ -446,7 +447,7 @@ class DexelectApp(ctk.CTk):
 
         ctk.CTkCheckBox(
             sf,
-            text="Acquisition details",
+            text="Acquisition Details",
             variable=self.var_show_acq,
             command=self._on_show_acq_changed,
             text_color=C_TEXT,
@@ -458,7 +459,7 @@ class DexelectApp(ctk.CTk):
 
         ctk.CTkCheckBox(
             sf,
-            text="Balance stats",
+            text="Balance Stats",
             variable=self.var_show_balance,
             command=self._on_show_balance_changed,
             text_color=C_TEXT,
@@ -470,7 +471,7 @@ class DexelectApp(ctk.CTk):
 
         ctk.CTkCheckBox(
             sf,
-            text="HM coverage",
+            text="HM Coverage",
             variable=self.var_show_hm,
             command=self._on_show_hm_changed,
             text_color=C_TEXT,
@@ -533,8 +534,9 @@ class DexelectApp(ctk.CTk):
 
     def _build_main(self):
         """
-        Right panel with two tabs:
+        Right panel with three tabs:
           - Generate : generate button, status, party results
+          - Spheres  : sphere mode selector + inline sphere map
           - Config   : all options from the active config YAML
         """
         self.tabview = ctk.CTkTabview(
@@ -551,6 +553,7 @@ class DexelectApp(ctk.CTk):
         )
         self.tabview.grid(row=0, column=0, sticky="nsew", padx=12, pady=12)
         self.tabview.add("Generate")
+        self.tabview.add("Spheres")
         self.tabview.add("Config")
 
         # Selected-tab text colour + remove font-glyph corner feathering + no gaps
@@ -560,6 +563,7 @@ class DexelectApp(ctk.CTk):
         for _btn in _btns.values():
             _btn._text_label.configure(padx=12)
         _btns["Generate"].configure(text_color=C_BTN_TEXT)
+        _btns["Spheres"].configure(text_color=C_TEXT)
         _btns["Config"].configure(text_color=C_TEXT)
 
         _orig_tab_cmd = self.tabview._segmented_button._command
@@ -571,6 +575,7 @@ class DexelectApp(ctk.CTk):
         self.tabview._segmented_button.configure(command=_tab_switch)
 
         self._build_gen_tab(self.tabview.tab("Generate"))
+        self._build_spheres_tab(self.tabview.tab("Spheres"))
         self._build_config_tab(self.tabview.tab("Config"))
 
         # ---- Help button (top-right corner, anchored inside tab strip) ----
@@ -585,8 +590,13 @@ class DexelectApp(ctk.CTk):
         help_btn.bind("<Enter>", lambda e: help_btn.configure(image=self._help_img_hover))
         help_btn.bind("<Leave>", lambda e: help_btn.configure(image=self._help_img_normal))
         self._help_overlay = None
-        self._sphere_map_overlay = None
 
+
+    def _switch_tab(self, val):
+        """Programmatically switch to a tab, keeping button text colours consistent."""
+        self.tabview.set(val)
+        for _n, _b in self.tabview._segmented_button._buttons_dict.items():
+            _b.configure(text_color=C_BTN_TEXT if _n == val else C_TEXT)
 
     # =========================================================================
     # HELP OVERLAY
@@ -599,8 +609,6 @@ class DexelectApp(ctk.CTk):
             self._show_help()
 
     def _show_help(self):
-        if self._sphere_map_overlay and self._sphere_map_overlay.winfo_exists():
-            self._close_sphere_map()
         overlay = tk.Frame(self, bg=C_BG, highlightthickness=2,
                            highlightbackground=C_CARD_BORDER, highlightcolor=C_CARD_BORDER)
         overlay.place(x=14, y=14, relwidth=1.0, relheight=1.0, width=-28, height=-28)
@@ -685,69 +693,7 @@ class DexelectApp(ctk.CTk):
                 text_widget.insert("end", line + "\n", "body")
 
 
-    # =========================================================================
-    # SPHERE MAP OVERLAY
-    # =========================================================================
-
-    def _toggle_sphere_map(self):
-        if self._sphere_map_overlay and self._sphere_map_overlay.winfo_exists():
-            self._close_sphere_map()
-        else:
-            self._show_sphere_map()
-
-    def _show_sphere_map(self):
-        if self._help_overlay and self._help_overlay.winfo_exists():
-            self._close_help()
-        overlay = tk.Frame(self, bg=C_BG, highlightthickness=2,
-                           highlightbackground=C_CARD_BORDER, highlightcolor=C_CARD_BORDER)
-        overlay.place(x=14, y=14, relwidth=1.0, relheight=1.0, width=-28, height=-28)
-        overlay.lift()
-        self._sphere_map_overlay = overlay
-
-        game = self.var_game.get()
-        title_bar = tk.Frame(overlay, bg=C_BG)
-        title_bar.pack(fill="x")
-        tk.Label(title_bar, text=f"Sphere Map — {game}", bg=C_BG, fg=C_TEXT,
-                 font=FONT_HEADER, padx=14, pady=8).pack(side="left")
-        close = tk.Label(title_bar, text="  ✕  ", bg=C_BG, fg=C_MUTED,
-                         font=("Roboto", 16), cursor="hand2")
-        close.pack(side="right")
-        close.bind("<Button-1>", lambda e: self._close_sphere_map())
-        close.bind("<Enter>", lambda e: close.configure(fg=C_TEXT))
-        close.bind("<Leave>", lambda e: close.configure(fg=C_MUTED))
-
-        tk.Frame(overlay, bg=C_CARD_BORDER, height=1).pack(fill="x")
-
-        text = tk.Text(
-            overlay, bg=C_BG, fg=C_MUTED,
-            font=FONT_BODY, wrap="word",
-            padx=20, pady=14,
-            relief="flat", highlightthickness=0,
-            selectbackground=C_SELECT_BG, selectforeground=C_SELECT_FG,
-            state="normal",
-        )
-        scrollbar = ctk.CTkScrollbar(overlay, command=text.yview,
-                                     fg_color=C_BG, button_color=C_ACCENT2,
-                                     button_hover_color=C_ACCENT)
-        text.configure(yscrollcommand=scrollbar.set)
-        scrollbar.pack(side="right", fill="y")
-        text.pack(side="left", fill="both", expand=True)
-
-        self._render_sphere_map(text)
-        text.configure(state="disabled")
-        self.bind("<Escape>", lambda e: self._close_sphere_map())
-
-    def _close_sphere_map(self):
-        if self._sphere_map_overlay:
-            try:
-                self._sphere_map_overlay.destroy()
-            except tk.TclError:
-                pass
-            self._sphere_map_overlay = None
-        self.unbind("<Escape>")
-
     def _render_sphere_map(self, text_widget):
-        text_widget.tag_configure("mode",     font=FONT_BODY,               foreground=C_MUTED, spacing3=10)
         text_widget.tag_configure("s_on",     font=("Roboto", 13, "bold"),  foreground=C_TEXT,   spacing1=8, spacing3=3)
         text_widget.tag_configure("s_off",    font=("Roboto", 13, "bold"),  foreground=C_DIM,    spacing1=8, spacing3=3)
         text_widget.tag_configure("map_on",   font=FONT_BODY,               foreground=C_TEXT)
@@ -762,25 +708,109 @@ class DexelectApp(ctk.CTk):
         sel_mode    = self.meta_data.get("selected_sphere_mode", "")
         active_nums = set(modes.get(sel_mode, []))
 
-        text_widget.insert("end", f"Mode: {sel_mode}\n", "mode")
-
         for sphere in spheres:
             num    = sphere["sphereNum"]
             active = num in active_nums
             sh = "s_on"    if active else "s_off"
             mh = "map_on"  if active else "map_off"
             ih = "item_on" if active else "item_off"
-            label = "" if active else "  (disabled)"
+            label = "  (enabled)" if active else "  (disabled)"
             text_widget.insert("end", f"Sphere {num}{label}\n", sh)
             for entry in sphere.get("contents", []):
                 name  = entry["name"]
                 etype = entry["type"]
                 if etype == "map":
-                    text_widget.insert("end", f"  · {name}\n", mh)
+                    text_widget.insert("end", f"      · {name}\n", mh)
                 else:
                     label = "item" if etype == "item" else "unlock"
-                    text_widget.insert("end", f"  · {name}  [{label}]\n", ih)
+                    text_widget.insert("end", f"      · {name}  [{label}]\n", ih)
 
+
+    # =========================================================================
+    # SPHERES TAB
+    # =========================================================================
+
+    def _build_spheres_tab(self, parent):
+        """
+        Spheres tab: sphere mode selector (auto-saves on change) + inline sphere map.
+        """
+        parent.grid_columnconfigure(0, weight=1)
+        parent.grid_rowconfigure(2, weight=1)
+
+        top = ctk.CTkFrame(parent, fg_color=C_PANEL, corner_radius=0)
+        top.grid(row=0, column=0, sticky="ew", padx=16, pady=(12, 8))
+
+        game_row = tk.Frame(top, bg=C_PANEL)
+        game_row.pack(side="top", anchor="w", padx=(4, 0), pady=(0, 8))
+        ctk.CTkLabel(game_row, text="Current game:", font=FONT_BODY, text_color=C_MUTED,
+                     fg_color=C_PANEL).pack(side="left")
+        self._spheres_game_label = ctk.CTkLabel(game_row, text="", font=FONT_BODY,
+                                                text_color=C_TEXT, fg_color=C_PANEL)
+        self._spheres_game_label.pack(side="left", padx=(6, 0))
+
+        mode_row = tk.Frame(top, bg=C_PANEL)
+        mode_row.pack(side="top", anchor="w", padx=(4, 0))
+        ctk.CTkLabel(mode_row, text="Sphere mode", font=FONT_BODY, text_color=C_TEXT,
+                     fg_color=C_PANEL).pack(side="left", padx=(0, 0))
+        tip = self.tooltips.get("sphere_mode", "")
+        if tip:
+            icon = _icon_canvas(mode_row)
+            icon.pack(side="left", padx=(5, 12), anchor="center")
+            _Tooltip(icon, tip)
+        self._spheres_mode_menu = ctk.CTkOptionMenu(
+            mode_row,
+            variable=self.var_sphere_mode,
+            values=[],
+            command=self._on_sphere_mode_changed,
+            fg_color=C_ENTRY_BG, button_color=C_ACCENT2,
+            button_hover_color=C_ACCENT, text_color=C_TEXT, font=FONT_MONO,
+            width=200,
+        )
+        self._spheres_mode_menu.pack(side="left")
+
+        ctk.CTkFrame(parent, height=1, fg_color=C_ACCENT2).grid(
+            row=1, column=0, sticky="ew")
+
+        map_frame = tk.Frame(parent, bg=C_BG)
+        map_frame.grid(row=2, column=0, sticky="nsew")
+
+        self._spheres_text = tk.Text(
+            map_frame, bg=C_BG, fg=C_MUTED,
+            font=FONT_BODY, wrap="word",
+            padx=20, pady=14,
+            relief="flat", highlightthickness=0,
+            selectbackground=C_SELECT_BG, selectforeground=C_SELECT_FG,
+        )
+        scrollbar = ctk.CTkScrollbar(map_frame, command=self._spheres_text.yview,
+                                     fg_color=C_BG, button_color=C_ACCENT2,
+                                     button_hover_color=C_ACCENT)
+        self._spheres_text.configure(yscrollcommand=scrollbar.set)
+        scrollbar.pack(side="right", fill="y")
+        self._spheres_text.pack(side="left", fill="both", expand=True)
+
+    def _refresh_spheres_tab(self):
+        """Update the game label, sphere mode dropdown options, and re-render the sphere map."""
+        self._spheres_game_label.configure(text=self.var_game.get())
+        modes = list(self.meta_data.get("sphere_generation_modes", {}).keys())
+        current = self.meta_data.get("selected_sphere_mode", modes[0] if modes else "")
+        self.var_sphere_mode.set(current)
+        self._spheres_mode_menu.configure(values=modes if modes else [current])
+        self._rerender_sphere_map()
+
+    def _rerender_sphere_map(self):
+        text = self._spheres_text
+        top, _ = text.yview()
+        text.configure(state="normal")
+        text.delete("1.0", "end")
+        self._render_sphere_map(text)
+        text.configure(state="disabled")
+        text.after_idle(lambda: text.yview_moveto(top))
+
+    def _on_sphere_mode_changed(self, mode: str):
+        """Auto-save sphere mode to game_settings.yaml and refresh the sphere map."""
+        self._patch_game_setting(self.var_game.get(), mode)
+        self.meta_data["selected_sphere_mode"] = mode
+        self._rerender_sphere_map()
 
     # =========================================================================
     # GENERATE TAB
@@ -970,12 +1000,18 @@ class DexelectApp(ctk.CTk):
         self._sphere_icon_hover  = _sphere_icon_image(C_TEXT,  C_PANEL)
         smap_btn = tk.Label(hdr, image=self._sphere_icon_normal, bg=C_PANEL, cursor="hand2", bd=0)
         smap_btn.pack(side="left", padx=(5, 0), anchor="center")
-        smap_btn.bind("<Button-1>", lambda e: self._toggle_sphere_map())
+        smap_btn.bind("<Button-1>", lambda e: self._switch_tab("Spheres"))
         smap_btn.bind("<Enter>", lambda e: smap_btn.configure(image=self._sphere_icon_hover))
         smap_btn.bind("<Leave>", lambda e: smap_btn.configure(image=self._sphere_icon_normal))
         dist_val = ctk.CTkLabel(right, text="—", font=FONT_MONO, text_color=C_MUTED, anchor="e")
         dist_val.grid(row=1, column=0, sticky="e")
         self.stat_labels["distribution"] = dist_val
+
+        self._stats_frame   = stats_frame
+        self._stats_left    = left
+        self._stats_right   = right
+        self._stats_wrapped = False
+        stats_frame.bind("<Configure>", lambda e: self._update_stats_layout())
 
 
     # =========================================================================
@@ -1127,14 +1163,39 @@ class DexelectApp(ctk.CTk):
             card["acq"].configure(text="")
             card["sep"].grid_remove()
             card["bst"].configure(text="")
-            card["sprite"].configure(image=None)
+            try:
+                card["sprite"].configure(image=None, cursor="")
+            except tk.TclError:
+                lbl = card["sprite"]._label
+                lbl.tk.call(lbl._w, "configure", "-image", "", "-cursor", "")
             self._sprite_images[i] = None
+            for w in (card["sprite"], card["sprite"]._label):
+                w.unbind("<Button-1>")
             for w in card["types_frame"].winfo_children():
                 w.destroy()
         for lbl in self.stat_labels.values():
             lbl.configure(text="—", text_color=C_MUTED)
         self._refresh_hm_labels(party_coverage=None)
         self.last_party_blob = None
+
+    def _update_stats_layout(self):
+        """Wrap the Distribution panel to a second row when there isn't enough horizontal room."""
+        sf = self._stats_frame
+        sf.update_idletasks()
+        available = sf.winfo_width()
+        if available <= 1:
+            return
+        left  = self._stats_left
+        right = self._stats_right
+        need  = left.winfo_reqwidth() + right.winfo_reqwidth() + 32  # 16 px padx each side
+        if available < need and not self._stats_wrapped:
+            self._stats_wrapped = True
+            left.grid(row=0, column=0, columnspan=2, padx=(16, 16), pady=(10, 4), sticky="w")
+            right.grid(row=1, column=0, columnspan=2, padx=(0, 16), pady=(4, 10), sticky="e")
+        elif available >= need and self._stats_wrapped:
+            self._stats_wrapped = False
+            left.grid(row=0, column=0, padx=(16, 0), pady=10, sticky="w")
+            right.grid(row=0, column=1, padx=(0, 16), pady=10, sticky="e")
 
     def _render_type_badges(self, types_frame, types: list[str]):
         """Render colored type badges (swatch + label) into the given frame."""
@@ -1214,26 +1275,17 @@ class DexelectApp(ctk.CTk):
         _pf.bind("<Enter>", _on_config_scroll_enter)
         _pf.bind("<Leave>", _on_config_scroll_leave)
 
-        # ---- Save button ----
-        save_bar = ctk.CTkFrame(parent, fg_color="transparent", height=50)
-        save_bar.grid(row=1, column=0, sticky="ew", padx=16, pady=(8, 10))
-        save_bar.grid_columnconfigure(1, weight=1)
+        tk.Frame(parent, height=1, bg=C_CARD_BORDER).grid(
+            row=1, column=0, sticky="ew")
 
-        ctk.CTkButton(
-            save_bar,
-            text="💾 Save Config",
-            command=self._save_config,
-            fg_color=C_ACCENT,
-            hover_color=C_ACCENT2,
-            text_color=C_BTN_TEXT,
-            font=FONT_BTN,
-            height=38,
-            width=160,
-        ).grid(row=0, column=0, padx=(0, 12))
+        # ---- Bottom bar ----
+        save_bar = ctk.CTkFrame(parent, fg_color="transparent", height=50)
+        save_bar.grid(row=2, column=0, sticky="ew", padx=16, pady=(8, 10))
+        save_bar.grid_columnconfigure(0, weight=1)
 
         self.config_status_label = ctk.CTkLabel(
             save_bar, text="", font=FONT_BODY, text_color=C_MUTED, anchor="w")
-        self.config_status_label.grid(row=0, column=1, sticky="w")
+        self.config_status_label.grid(row=0, column=0, sticky="w")
 
         ctk.CTkButton(
             save_bar,
@@ -1245,11 +1297,11 @@ class DexelectApp(ctk.CTk):
             font=FONT_BTN,
             height=38,
             width=160,
-        ).grid(row=0, column=2, padx=(0, 12))
+        ).grid(row=0, column=1, padx=(0, 12))
 
         self.config_file_label = ctk.CTkLabel(
             save_bar, text="", font=FONT_MONO, text_color=C_MUTED, anchor="e")
-        self.config_file_label.grid(row=0, column=3, sticky="e", padx=(0, 4))
+        self.config_file_label.grid(row=0, column=2, sticky="e", padx=(0, 4))
 
 
     def _populate_config_controls(self):
@@ -1257,6 +1309,7 @@ class DexelectApp(ctk.CTk):
         Build (or rebuild) all config widgets inside the scrollable config frame.
         Called on initial load and whenever the game changes.
         """
+        self._config_loading = True
         scroll = self.config_scroll
 
         game = self.var_game.get()
@@ -1295,6 +1348,7 @@ class DexelectApp(ctk.CTk):
         def bool_row(key, label):
             nonlocal row
             var = tk.BooleanVar(value=bool(cd.get(key, False)))
+            var.trace_add("write", lambda *_: self._autosave_config())
             self.config_vars[key] = var
             f = tk.Frame(scroll, bg=C_PANEL)
             ctk.CTkCheckBox(
@@ -1321,12 +1375,15 @@ class DexelectApp(ctk.CTk):
                 var = tk.StringVar(value=str(current_val if current_val is not None else ""))
             self.config_vars[key] = var
             label_with_tip(key, label).grid(row=row, column=0, padx=28, pady=4, sticky="w")
-            ctk.CTkEntry(
+            entry = ctk.CTkEntry(
                 scroll, textvariable=var, width=100,
                 fg_color=C_ENTRY_BG, text_color=C_TEXT,
                 border_color=C_ACCENT2, font=FONT_MONO,
                 placeholder_text="none" if nullable else "",
-            ).grid(row=row, column=1, padx=(0, 28), pady=4, sticky="w")
+            )
+            entry.grid(row=row, column=1, padx=(0, 28), pady=4, sticky="w")
+            entry.bind("<FocusOut>", lambda e: self._autosave_config())
+            entry.bind("<Return>",   lambda e: self._autosave_config())
             row += 1
 
         def multi_check_row(key, label, label_map=None):
@@ -1343,9 +1400,10 @@ class DexelectApp(ctk.CTk):
             options = field.get("options", []) or []
             label_with_tip(key, label).grid(row=row, column=0, columnspan=2, padx=28, pady=(6, 2), sticky="w")
             row += 1
-            var_dict = {"__list__": True}  # sentinel: _save_config writes value as a plain list
+            var_dict = {"__list__": True}  # sentinel: _autosave_config writes value as a plain list
             for option in options:
                 var = tk.BooleanVar(value=(option in current_values))
+                var.trace_add("write", lambda *_: self._autosave_config())
                 var_dict[option] = var
                 display = label_map.get(option, str(option)) if label_map else str(option)
                 ctk.CTkCheckBox(
@@ -1369,6 +1427,7 @@ class DexelectApp(ctk.CTk):
             var_dict = {}
             for option in options:
                 var = tk.BooleanVar(value=bool(current_dict.get(option, False)))
+                var.trace_add("write", lambda *_: self._autosave_config())
                 var_dict[option] = var
                 ctk.CTkCheckBox(
                     scroll, text=option, variable=var,
@@ -1393,6 +1452,7 @@ class DexelectApp(ctk.CTk):
             if options and current_val not in options:
                 current_val = options[0]
             var = tk.StringVar(value=current_val)
+            var.trace_add("write", lambda *_: self._autosave_config())
             self.config_vars[key] = var
             lbl = label_with_tip(key, label)
             lbl.grid(row=row, column=0, padx=28, pady=4, sticky="w")
@@ -1420,12 +1480,14 @@ class DexelectApp(ctk.CTk):
             if display_val:
                 entry.insert(0, display_val)
             entry.grid(row=row, column=1, padx=(0, 28), pady=4, sticky="w")
+            entry.bind("<FocusOut>", lambda e: self._autosave_config())
+            entry.bind("<Return>",   lambda e: self._autosave_config())
             self.config_vars[key] = entry
             row += 1
 
         self._config_note_label = ctk.CTkLabel(
             scroll,
-            text="Note: Overly-restrictive configuration settings may affect the likelihood of successfully generating a party.",
+            text="Note: Overly restrictive configuration settings may affect the likelihood of successfully generating a party. Some combinations of settings will not result in a valid party.",
             font=FONT_BODY,
             text_color=C_MUTED,
             anchor="w",
@@ -1449,7 +1511,7 @@ class DexelectApp(ctk.CTk):
         int_row("max_evo_stage", "Max evolution stage")
         int_row("bst_max", "BST maximum", nullable=True)
         int_row("bst_min", "BST minimum", nullable=True)
-        text_row("species_blacklist", "Species blacklist (comma-separated stage 1s)", placeholder="e.g. EEVEE, MAGMAR, NIDORAN_M")
+        text_row("species_blacklist", "Species blacklist (comma-separated stage 1s)", placeholder="e.g. EEVEE, MR.MIME, NIDORAN_M")
         multi_check_row("generation_filter", "Generation filter (empty = no filter)",
                         label_map={1: "Gen 1 (National Dex #1–151)",
                                    2: "Gen 2 (National Dex #152–251)",
@@ -1483,6 +1545,8 @@ class DexelectApp(ctk.CTk):
         acq_options = list(cd.get("allowed_acquisition_methods", {}).keys())
         nested_bool_row("allowed_acquisition_methods", "Allowed acquisition methods", acq_options)
 
+        self._config_loading = False
+
 
     # =========================================================================
     # POPULATE UI FROM LOADED STATE
@@ -1503,6 +1567,7 @@ class DexelectApp(ctk.CTk):
         self._update_party_size_text_colors()
         self._update_warning_strip()
         self._build_hm_labels()
+        self._refresh_spheres_tab()
 
         self._populate_config_controls()
 
@@ -1516,6 +1581,12 @@ class DexelectApp(ctk.CTk):
         gs = read_yaml(GLOBAL_SETTINGS_PATH)
         gs[key] = value
         write_yaml(GLOBAL_SETTINGS_PATH, gs)
+
+    def _patch_game_setting(self, game: str, sphere_mode: str):
+        """Read game_settings.yaml, update the sphere mode for the given game, and write it back."""
+        gs = read_yaml(GAME_SETTINGS_PATH) or {}
+        gs[game] = sphere_mode
+        write_yaml(GAME_SETTINGS_PATH, gs)
 
     def _on_game_changed(self, selected_game: str):
         self._patch_global_setting("game", selected_game)
@@ -1567,14 +1638,13 @@ class DexelectApp(ctk.CTk):
 
 
     # =========================================================================
-    # CONFIG SAVE
+    # CONFIG AUTO-SAVE
     # =========================================================================
 
-    def _save_config(self):
-        """
-        Read all config_vars, convert back to the correct Python types,
-        and write to the config YAML for the currently selected game.
-        """
+    def _autosave_config(self):
+        """Write all current config_vars to disk and refresh self.config_data in memory."""
+        if self._config_loading:
+            return
         game = self.var_game.get()
         config_path = self.mappings[game]["config"]
         data = read_yaml(config_path)
@@ -1613,12 +1683,12 @@ class DexelectApp(ctk.CTk):
                         data[key]["value"] = raw
 
         except (ValueError, TypeError) as e:
-            messagebox.showerror("Save Error", f"Invalid value in config:\n{e}")
+            self._set_config_status(f"Invalid value: {e}", color=C_WARNING)
             return
 
         write_yaml(config_path, data)
-        self._reload_data()
-        self._set_config_status("Config saved.", color=C_SUCCESS)
+        self.config_data = read_yaml(config_path)
+        self._set_config_status("Saved.", color=C_SUCCESS)
 
 
     # =========================================================================
@@ -1724,11 +1794,19 @@ class DexelectApp(ctk.CTk):
             try:
                 pil_img = Image.open(sprite_path).resize((112, 112), Image.NEAREST)
                 ctk_img = ctk.CTkImage(light_image=pil_img, dark_image=pil_img, size=(112, 112))
-                card["sprite"].configure(image=ctk_img)
+                card["sprite"].configure(image=ctk_img, cursor="hand2")
                 self._sprite_images[i] = ctk_img
+                for w in (card["sprite"], card["sprite"]._label):
+                    w.bind("<Button-1>", lambda e, u=url: webbrowser.open(u))
             except (FileNotFoundError, OSError):
-                card["sprite"].configure(image=None)
+                try:
+                    card["sprite"].configure(image=None, cursor="")
+                except tk.TclError:
+                    lbl = card["sprite"]._label
+                    lbl.tk.call(lbl._w, "configure", "-image", "", "-cursor", "")
                 self._sprite_images[i] = None
+                for w in (card["sprite"], card["sprite"]._label):
+                    w.unbind("<Button-1>")
 
             if show_acq and pokemon["random_pool_entry_instance"] is not None:
                 prescribed    = pokemon["random_pool_entry_instance"]
@@ -1768,6 +1846,7 @@ class DexelectApp(ctk.CTk):
         else:
             for lbl in self.stat_labels.values():
                 lbl.configure(text="—", text_color=C_MUTED)
+        self.after_idle(self._update_stats_layout)
 
 
     # =========================================================================

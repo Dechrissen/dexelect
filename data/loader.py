@@ -47,6 +47,15 @@ def build_all_data_structures():
     with open(resource_path(meta_file_path)) as m:
         meta_data = yaml.safe_load(m)
 
+    # inject selected sphere mode from game_settings.yaml into meta_data
+    with open(resource_path('config/game_settings.yaml')) as gs_f:
+        game_settings_data = yaml.safe_load(gs_f) or {}
+    sphere_mode = game_settings_data.get(game)
+    available_modes = meta_data.get('sphere_generation_modes', {})
+    if not sphere_mode or sphere_mode not in available_modes:
+        sphere_mode = next(iter(available_modes), None)
+    meta_data['selected_sphere_mode'] = sphere_mode
+
     # construct list of starting acquisition methods
     starting_acquisition_methods = []
     for method in meta_data['acquisition_methods']:

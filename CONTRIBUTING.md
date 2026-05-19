@@ -144,8 +144,7 @@ game:
 - `modal_species` to define sets of Pokémon from which only one is obtainable
 - `limited_acquisition_methods` to define acquisition methods that only work once per location per Pokémon
 - `acquisition_methods` to define all acquisition methods and which ones are default (start with at beginning of game)
-- `sphere_generation_modes` to define some named sets of spheres that can be toggled between in `selected_sphere_mode`
-- `selected_sphere_mode` to set the active (default/recommended) sphere generation mode
+- `sphere_generation_modes` to define some named sets of spheres (the active mode is selected per-game in `config/game_settings.yaml`)
 
 #### Config file
 

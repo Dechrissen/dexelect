@@ -221,6 +221,3 @@ sphere_generation_modes:
   no_cerulean_cave: [1,2,3,4,5] # beginning of game up to Route 23 and Victory Road, inclusive
   pre_victory_road: [1,2,3,4] # beginning of game up to Cinnabar Island
 
-# Selected Sphere Mode which defines the enabled Spheres for Pokémon availability.
-# This can be changed to any of the above modes. pre_victory_road is default/recommended.
-selected_sphere_mode: pre_victory_road

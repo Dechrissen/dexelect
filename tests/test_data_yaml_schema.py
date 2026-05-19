@@ -121,7 +121,6 @@ def test_meta_required_fields(yaml_files):
         "acquisition_methods",
         "spheres",
         "sphere_generation_modes",
-        "selected_sphere_mode"
     }
     for path, category in filter_yaml(yaml_files, "meta"):
         meta = load_yaml(path)
@@ -140,7 +139,6 @@ def test_meta_data_types(yaml_files):
         assert isinstance(meta['acquisition_methods'], list), f"{path}: 'acquisition_methods' must be a list"
         assert isinstance(meta['spheres'], list), f"{path}: 'spheres' must be a list"
         assert isinstance(meta['sphere_generation_modes'], dict), f"{path}: 'sphere_generation_modes' must be a dict"
-        assert isinstance(meta['selected_sphere_mode'], str), f"{path}: 'selected_sphere_mode' must be a str"
 
 
 # ================= CONFIG YAML TESTS =================

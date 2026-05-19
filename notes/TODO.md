@@ -85,9 +85,6 @@
 
 - wacky idea: "prescribed poke ball" option that displays the type of ball u should catch something in, like a ball png for the specific ball in the top right of the card. can be in the "Display" toggles. Would require some additional progression/config data because certain balls are not available till later in game.
 
-- New config option: change sphere mode
-  - change "selected_sphere_mode"s in meta file to be numbered instead, so they can be selected from config file regardless of name (to allow customizing this setting)
-
 - add honey tree calcs - https://www.dragonflycave.com/sinnoh/honey-trees/
 
 - add a web ui option that can be selected via command line and open locally in browser, but also be the entry point for "standalone hosting" of the web app served on my site

@@ -29,7 +29,7 @@ Dexelect generates (prescribes) a **progressively-sound** party for use in a pla
 challenge or simply for team inspiration. See the [suggested rulesets](/docs/RULESETS.md) for some ideas about how to use Dexelect.
 
 The app is **universal** in the sense that it maintains compatibility with most generations of Pokémon games, 
-_and_ with romhacks that might contain the following (as long as the relevant game data files are added):
+_and_ with romhacks that might contain the following:
 - New Pokémon
 - New locations 
 - Changes to existing game data (location data, evolution methods, etc.)
@@ -97,10 +97,12 @@ Steps:
 - The app is split into sidebar (left) and main window (right). Help option is at the top right.
 - Left sidebar:
   - The mode can be toggled between 'Progression' and 'Random'
-  - 'Acquisition details' and 'Balance stats' display can each be disabled
+  - Party size can be adjusted (1–6)
+  - 'Acquisition Details', 'Balance Stats', and 'HM Coverage' display can each be disabled
 - Main window:
-  - "Generate" and "Config" tabs at the top can be switched between
-  - Click "Generate Party" to generate a party
+  - 'Generate', 'Spheres', and 'Config' tabs at the top can be switched between
+  - Click 'Generate Party' (or press Enter) to generate a party
+  - Change sphere generation mode and view per-sphere location lists in the 'Spheres' tab
   - Modify settings in the 'Config' tab to fine-tune output
   
 > [!NOTE]

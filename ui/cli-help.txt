@@ -1,7 +1,7 @@
 Help
 ----
 
-Dexelect — Progression-aware Pokemon team generator
+Dexelect — Progression-aware Pokemon party generator
 
 Usage:
   ENTER – Generate a party
@@ -18,7 +18,7 @@ Modes:
 
 Definitions:
   Sphere – Broad chunk of game progression (e.g. Sphere 1 for Kanto spans Pallet Town to Cerulean City)
-  Distribution – Breakdown of how many party members appear in each Sphere
+  Distribution – Breakdown of how many party members appear in each sphere
   Lean – Semantic tag encoding the general trend in the Distribution (early_game_heavy / balanced / late_game_heavy)
   Spread – Semantic tag encoding the distance between all party members (clustered / mixed_spread / wide_spread)
   Pattern – Semantic tag encoding the pattern that the Distribution follows, if there is one (early_late_split, middle_only, dual_cluster, single_cluster)
