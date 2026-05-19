@@ -44,7 +44,7 @@ from version import __version__
 from ui.gui_theme import (
     C_BG, C_PANEL, C_SIDEBAR, C_ACCENT, C_ACCENT2, C_ACCENT_DIM, C_ACCENT2_DIM,
     C_TEXT, C_MUTED, C_BTN_TEXT, C_SUCCESS, C_WARNING, C_CARD, C_CARD_BORDER, C_ENTRY_BG, C_TITLE, C_SELECT_BG, C_SELECT_FG, C_DIM,
-    FONT_TITLE, FONT_APP_TITLE, FONT_HEADER, FONT_BTN, FONT_BODY, FONT_SMALL, FONT_MONO, FONT_MONO_HEADER,
+    FONT_TITLE, FONT_APP_TITLE, FONT_HEADER, FONT_SECTION_HEADER, FONT_BTN, FONT_BODY, FONT_SMALL, FONT_MONO, FONT_MONO_HEADER,
     TYPE_COLORS,
 )
 
@@ -459,9 +459,9 @@ class DexelectApp(ctk.CTk):
 
         ctk.CTkCheckBox(
             sf,
-            text="Balance Stats",
-            variable=self.var_show_balance,
-            command=self._on_show_balance_changed,
+            text="HM Coverage",
+            variable=self.var_show_hm,
+            command=self._on_show_hm_changed,
             text_color=C_TEXT,
             font=FONT_BODY,
             fg_color=C_ACCENT,
@@ -471,9 +471,9 @@ class DexelectApp(ctk.CTk):
 
         ctk.CTkCheckBox(
             sf,
-            text="HM Coverage",
-            variable=self.var_show_hm,
-            command=self._on_show_hm_changed,
+            text="Balance Stats",
+            variable=self.var_show_balance,
+            command=self._on_show_balance_changed,
             text_color=C_TEXT,
             font=FONT_BODY,
             fg_color=C_ACCENT,
@@ -646,6 +646,39 @@ class DexelectApp(ctk.CTk):
         scrollbar.pack(side="right", fill="y")
         text.pack(side="left", fill="both", expand=True)
 
+        SCROLL_LINES = 3
+
+        def _on_help_scroll(event):
+            if event.num == 4:
+                text.yview_scroll(-SCROLL_LINES, "units")
+            elif event.num == 5:
+                text.yview_scroll(SCROLL_LINES, "units")
+            else:
+                text.yview_scroll(int(-event.delta / 120) * SCROLL_LINES, "units")
+            return "break"
+
+        def _enable_help_scroll(e=None):
+            self.bind_all("<MouseWheel>", _on_help_scroll)
+            self.bind_all("<Button-4>",   _on_help_scroll)
+            self.bind_all("<Button-5>",   _on_help_scroll)
+
+        def _disable_help_scroll(e=None):
+            ox, oy = overlay.winfo_rootx(), overlay.winfo_rooty()
+            if (ox <= self.winfo_pointerx() < ox + overlay.winfo_width() and
+                    oy <= self.winfo_pointery() < oy + overlay.winfo_height()):
+                return
+            self.unbind_all("<MouseWheel>")
+            self.unbind_all("<Button-4>")
+            self.unbind_all("<Button-5>")
+
+        text.bind("<MouseWheel>", _on_help_scroll)
+        text.bind("<Button-4>",   _on_help_scroll)
+        text.bind("<Button-5>",   _on_help_scroll)
+        text.bind("<Enter>",      _enable_help_scroll)
+        text.bind("<Leave>",      _disable_help_scroll)
+        scrollbar.bind("<Enter>", _enable_help_scroll)
+        scrollbar.bind("<Leave>", _disable_help_scroll)
+
         self._render_help_text(text)
         text.configure(state="disabled")
 
@@ -788,6 +821,42 @@ class DexelectApp(ctk.CTk):
         scrollbar.pack(side="right", fill="y")
         self._spheres_text.pack(side="left", fill="both", expand=True)
 
+        SCROLL_LINES = 3
+
+        def _on_spheres_scroll(event):
+            t = self._spheres_text
+            if event.num == 4:
+                t.yview_scroll(-SCROLL_LINES, "units")
+            elif event.num == 5:
+                t.yview_scroll(SCROLL_LINES, "units")
+            else:
+                t.yview_scroll(int(-event.delta / 120) * SCROLL_LINES, "units")
+            return "break"
+
+        def _enable_spheres_scroll(e=None):
+            self.bind_all("<MouseWheel>", _on_spheres_scroll)
+            self.bind_all("<Button-4>",   _on_spheres_scroll)
+            self.bind_all("<Button-5>",   _on_spheres_scroll)
+
+        def _disable_spheres_scroll(e=None):
+            mx, my = map_frame.winfo_rootx(), map_frame.winfo_rooty()
+            if (mx <= self.winfo_pointerx() < mx + map_frame.winfo_width() and
+                    my <= self.winfo_pointery() < my + map_frame.winfo_height()):
+                return
+            self.unbind_all("<MouseWheel>")
+            self.unbind_all("<Button-4>")
+            self.unbind_all("<Button-5>")
+
+        # Widget-level bindings prevent native double-scroll on Windows.
+        self._spheres_text.bind("<MouseWheel>", _on_spheres_scroll)
+        self._spheres_text.bind("<Button-4>",   _on_spheres_scroll)
+        self._spheres_text.bind("<Button-5>",   _on_spheres_scroll)
+        # Container Enter/Leave activates bind_all so scrollbar hover also scrolls.
+        self._spheres_text.bind("<Enter>", _enable_spheres_scroll)
+        self._spheres_text.bind("<Leave>", _disable_spheres_scroll)
+        scrollbar.bind("<Enter>",          _enable_spheres_scroll)
+        scrollbar.bind("<Leave>",          _disable_spheres_scroll)
+
     def _refresh_spheres_tab(self):
         """Update the game label, sphere mode dropdown options, and re-render the sphere map."""
         self._spheres_game_label.configure(text=self.var_game.get())
@@ -874,19 +943,19 @@ class DexelectApp(ctk.CTk):
             self.bind_all("<Button-5>",   _on_gen_scroll)
 
         def _disable_gen_scroll(e=None):
-            # canvas <Leave> fires whenever cursor moves to any child widget
-            # (cards, labels, etc.) — only truly disable when cursor has left
-            # the canvas bounds entirely.
-            cx, cy = canvas.winfo_rootx(), canvas.winfo_rooty()
-            if (cx <= self.winfo_pointerx() < cx + canvas.winfo_width() and
-                    cy <= self.winfo_pointery() < cy + canvas.winfo_height()):
+            # Only truly disable when cursor has left the tab area (canvas + scrollbar).
+            px, py = parent.winfo_rootx(), parent.winfo_rooty()
+            if (px <= self.winfo_pointerx() < px + parent.winfo_width() and
+                    py <= self.winfo_pointery() < py + parent.winfo_height()):
                 return
             self.unbind_all("<MouseWheel>")
             self.unbind_all("<Button-4>")
             self.unbind_all("<Button-5>")
 
-        canvas.bind("<Enter>", _enable_gen_scroll)
-        canvas.bind("<Leave>", _disable_gen_scroll)
+        canvas.bind("<Enter>",    _enable_gen_scroll)
+        canvas.bind("<Leave>",    _disable_gen_scroll)
+        scrollbar.bind("<Enter>", _enable_gen_scroll)
+        scrollbar.bind("<Leave>", _disable_gen_scroll)
 
         def _on_gen_canvas_configure(event):
             # Keep inner frame filling canvas width; expand height to fill when
@@ -934,7 +1003,7 @@ class DexelectApp(ctk.CTk):
         self.warning_strip.grid(row=1, column=0, sticky="ew", padx=16, pady=(0, 4))
         ctk.CTkLabel(
             self.warning_strip,
-            text="⚠  Party sizes under 6 may affect the likelihood of satisfying HM coverage and balancing requirements.",
+            text="Party sizes under 6 may affect the likelihood of satisfying HM coverage and balancing requirements.",
             font=FONT_BODY,
             text_color=C_WARNING,
             anchor="w",
@@ -1103,9 +1172,10 @@ class DexelectApp(ctk.CTk):
             self.hm_labels[hm_name] = lbl
         hm_list.bind("<Configure>", lambda e: self._reflow_hm_list())
 
-        # Single dash (shown when toggle off)
+        # Single dash (shown when toggle off or no party generated yet)
         self._hm_dash_label = ctk.CTkLabel(inner, text="—", font=FONT_MONO,
                                             text_color=C_MUTED, fg_color=C_PANEL)
+        self._refresh_hm_labels(party_coverage=None)
 
     def _reflow_hm_list(self):
         """Position HM labels in a wrapping flow; adjusts frame height to fit all rows."""
@@ -1135,7 +1205,7 @@ class DexelectApp(ctk.CTk):
 
         party_coverage: set of covered HM names, or None (no party generated yet).
         """
-        if not self.var_show_hm.get():
+        if not self.var_show_hm.get() or party_coverage is None:
             if self._hm_list_frame:
                 self._hm_list_frame.pack_forget()
             if self._hm_dash_label:
@@ -1338,7 +1408,7 @@ class DexelectApp(ctk.CTk):
         def section_label(text):
             nonlocal row
             ctk.CTkLabel(
-                scroll, text=text, font=FONT_HEADER, text_color=C_ACCENT, anchor="w"
+                scroll, text=text, font=FONT_SECTION_HEADER, text_color=C_ACCENT, anchor="w"
             ).grid(row=row, column=0, columnspan=2, padx=20, pady=(20, 4), sticky="w")
             row += 1
             ctk.CTkFrame(scroll, height=1, fg_color=C_ACCENT2).grid(
@@ -1606,6 +1676,13 @@ class DexelectApp(ctk.CTk):
 
     def _on_show_balance_changed(self):
         self._patch_global_setting("show_balance_stats", self.var_show_balance.get())
+        if self.last_party_blob is not None:
+            self._populate_cards(self.last_party_blob)
+        else:
+            is_random = self.var_gen_mode.get() == "Random"
+            placeholder = "N/A" if (is_random and self.var_show_balance.get()) else "—"
+            for lbl in self.stat_labels.values():
+                lbl.configure(text=placeholder, text_color=C_MUTED)
 
     def _on_show_hm_changed(self):
         self._patch_global_setting("show_hm_coverage", self.var_show_hm.get())
@@ -1764,6 +1841,7 @@ class DexelectApp(ctk.CTk):
         """Fill the 6 party-member cards and stats strip from party_blob."""
         show_acq     = self.var_show_acq.get()
         show_balance = self.var_show_balance.get()
+        is_random    = self.var_gen_mode.get() == "Random"
 
         game = self.var_game.get()
         sprite_dir = resource_path(self.mappings[game]["sprites"])
@@ -1808,7 +1886,10 @@ class DexelectApp(ctk.CTk):
                 for w in (card["sprite"], card["sprite"]._label):
                     w.unbind("<Button-1>")
 
-            if show_acq and pokemon["random_pool_entry_instance"] is not None:
+            if is_random and show_acq:
+                card["acq"].configure(text="N/A")
+                card["sep"].grid_remove()
+            elif show_acq and pokemon["random_pool_entry_instance"] is not None:
                 prescribed    = pokemon["random_pool_entry_instance"]
                 method        = prescribed["acquisition_method"]
                 location      = prescribed["acquiring_location"]
@@ -1816,9 +1897,10 @@ class DexelectApp(ctk.CTk):
                 earliest_pool = pokemon["earliest_pool"]
                 card["acq"].configure(
                     text=(
-                        f"Acquire as {earliest_form.name}\n"
-                        f"via {method} at {location}\n"
-                        f"(Sphere {earliest_pool})."
+                        f"Acquire as: {earliest_form.name}\n"
+                        f"Method: {method}\n"
+                        f"Location: {location}\n"
+                        f"Sphere: {earliest_pool}"
                     )
                 )
                 card["sep"].grid()
@@ -1832,7 +1914,7 @@ class DexelectApp(ctk.CTk):
         )
         self._refresh_hm_labels(party_coverage=party_hm_coverage)
 
-        if show_balance and party_blob.get("lean") is not None:
+        if not is_random and show_balance and party_blob.get("lean") is not None:
             self.stat_labels["lean"].configure(text=str(party_blob.get("lean", "—")), text_color=C_MUTED)
             self.stat_labels["spread"].configure(text=str(party_blob.get("spread", "—")), text_color=C_MUTED)
             pattern = party_blob.get("pattern")
@@ -1844,8 +1926,9 @@ class DexelectApp(ctk.CTk):
             else:
                 self.stat_labels["distribution"].configure(text="—", text_color=C_MUTED)
         else:
+            placeholder = "N/A" if (is_random and show_balance) else "—"
             for lbl in self.stat_labels.values():
-                lbl.configure(text="—", text_color=C_MUTED)
+                lbl.configure(text=placeholder, text_color=C_MUTED)
         self.after_idle(self._update_stats_layout)
 
 

@@ -25,7 +25,7 @@ available to curate the output further.
 
 
 ## Introduction
-Dexelect generates (prescribes) a **progressively-sound** party for use in a playthrough — either to introduce an element of 
+Dexelect generates (prescribes) a **progressively sound** party for use in a playthrough — either to introduce an element of 
 challenge or simply for team inspiration. See the [suggested rulesets](/docs/RULESETS.md) for some ideas about how to use Dexelect.
 
 The app is **universal** in the sense that it maintains compatibility with most generations of Pokémon games, 
@@ -98,7 +98,7 @@ Steps:
 - Left sidebar:
   - The mode can be toggled between 'Progression' and 'Random'
   - Party size can be adjusted (1–6)
-  - 'Acquisition Details', 'Balance Stats', and 'HM Coverage' display can each be disabled
+  - 'Acquisition Details', 'HM Coverage', and 'Balance Stats' display can each be toggled on or off
 - Main window:
   - 'Generate', 'Spheres', and 'Config' tabs at the top can be switched between
   - Click 'Generate Party' (or press Enter) to generate a party

@@ -29,12 +29,13 @@ C_DIM       = "#4a4a4a"   # heavily muted — inactive/disabled text
 
 FONT_TITLE     = ("Roboto", 24, "bold")
 FONT_APP_TITLE = ("Roboto", 24, "bold")
-FONT_HEADER = ("Roboto", 15, "bold")
+FONT_HEADER         = ("Roboto", 15, "bold")
+FONT_SECTION_HEADER = ("Roboto", 17, "bold")
 FONT_BTN    = ("Roboto", 15)
 FONT_BODY   = ("Roboto", 13)
 FONT_SMALL  = ("Roboto", 11)
 FONT_MONO        = ("Courier New", 13)
-FONT_MONO_HEADER = ("Courier New", 15, "bold")
+FONT_MONO_HEADER = ("Courier New", 17, "bold")
 
 TYPE_COLORS = {
     "normal":   "#9a9a78",
