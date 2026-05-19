@@ -33,8 +33,6 @@
 
 - add coverage tests for running generation for a few minutes and making sure certain % of pokemon get generated? gotta figure out what metric makes sense
 
-- add 'export to txt' option for saving teams, or do it automatically (last X teams generated in a file)
-
 - add some script that generates the config files for each game (creates the yaml) or something that resets it to the default (recommended) values before i push a release (or maybe have options in the UI to switch to certain presets, like "recommended", "hard", etc)
   - `config_gen1.default.yaml`
   - `config_gen1.hard.yaml`
@@ -79,7 +77,7 @@
   - i guess this could also be used for coverage testing to make sure certain distributions are being met
   - also have e.g. `dexelect --generate` to print a generated team to the command line instantly and `dexelect --random`
   
-- add bug report link / template
+- add bug report link / template to repo
 
 - "report a bug" button in the GUI
 
@@ -88,3 +86,7 @@
 - add honey tree calcs - https://www.dragonflycave.com/sinnoh/honey-trees/
 
 - add a web ui option that can be selected via command line and open locally in browser, but also be the entry point for "standalone hosting" of the web app served on my site
+
+- DEBUG stuff:
+  - have debug details be output to a file
+  - have party be output regularly even if it doesnt fail so we can see the party in debug

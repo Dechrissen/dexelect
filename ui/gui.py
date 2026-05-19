@@ -25,11 +25,14 @@
 
 import customtkinter as ctk
 import tkinter as tk
+from tkinter import filedialog
 import yaml
 import threading
 import time
 import os
+import re
 import webbrowser
+from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont, ImageTk
 from core import generate_final_party, generate_fully_randomized_party
 from data.loader import build_all_data_structures
@@ -480,6 +483,24 @@ class DexelectApp(ctk.CTk):
             hover_color=C_ACCENT2,
             checkmark_color=C_TEXT,
         ).grid(row=16, column=0, padx=24, pady=3, sticky="w")
+
+        # ---- Export ----
+        ctk.CTkFrame(sf, height=1, fg_color=C_ACCENT2).grid(
+            row=17, column=0, padx=16, pady=(16, 0), sticky="ew")
+
+        self.export_btn = ctk.CTkButton(
+            sf,
+            text="Export Party",
+            command=self._export_party,
+            fg_color=C_ACCENT_DIM,
+            hover_color=C_ACCENT2,
+            text_color=C_TEXT,
+            font=FONT_BTN,
+            height=36,
+            corner_radius=5,
+            state="disabled",
+        )
+        self.export_btn.grid(row=18, column=0, padx=20, pady=(12, 0), sticky="ew")
 
         # ---- Copyright (pinned to bottom) ----
         footer = tk.Frame(sf, bg=C_SIDEBAR)
@@ -1247,6 +1268,7 @@ class DexelectApp(ctk.CTk):
             lbl.configure(text="—", text_color=C_MUTED)
         self._refresh_hm_labels(party_coverage=None)
         self.last_party_blob = None
+        self.export_btn.configure(state="disabled")
 
     def _update_stats_layout(self):
         """Wrap the Distribution panel to a second row when there isn't enough horizontal room."""
@@ -1830,6 +1852,7 @@ class DexelectApp(ctk.CTk):
 
         self._set_status(f"Done. (Took {duration:.2f}s)", color=C_SUCCESS)
         self.last_party_blob = party_blob
+        self.export_btn.configure(state="normal")
         self._populate_cards(party_blob)
 
 
@@ -1931,6 +1954,107 @@ class DexelectApp(ctk.CTk):
                 lbl.configure(text=placeholder, text_color=C_MUTED)
         self.after_idle(self._update_stats_layout)
 
+
+    # =========================================================================
+    # EXPORT
+    # =========================================================================
+
+    def _export_party(self):
+        if self.last_party_blob is None:
+            return
+
+        game      = self.var_game.get()
+        mode      = self.var_gen_mode.get()
+        blob      = self.last_party_blob
+        is_random = (mode == "Random")
+
+        # --- Party list ---
+        def sort_key(p):
+            prescribed = p["random_pool_entry_instance"]
+            method = prescribed["acquisition_method"] if prescribed else None
+            earliest_pool = p.get("earliest_pool", 9999) or 9999
+            return (0 if method == "starter" else 1, earliest_pool)
+
+        sorted_party = sorted(blob["party_with_acquisition_data"], key=sort_key)
+        party_lines = []
+        for i, member in enumerate(sorted_party, 1):
+            mon   = member["party_member_obj"]
+            entry = member["random_pool_entry_instance"]
+            if is_random or entry is None:
+                party_lines.append(f"{i}. {mon.name}")
+            else:
+                form     = member["earliest_form"].name
+                method   = entry["acquisition_method"]
+                location = entry["acquiring_location"]
+                pool     = member["earliest_pool"]
+                party_lines.append(
+                    f"{i}. {mon.name} — Acquire as {form} via {method} at {location} (Sphere {pool})"
+                )
+        party_str = "\n".join(party_lines)
+
+        # --- HM Coverage ---
+        hm_set = set(
+            hm for m in blob["party_with_acquisition_data"]
+            for hm in m["party_member_obj"].hm_learnset
+        )
+        hm_str = ", ".join(sorted(hm_set)) if hm_set else "—"
+
+        # --- Balance Stats ---
+        if not is_random and blob.get("lean") is not None:
+            dist     = blob.get("party_distribution") or {}
+            dist_str = "  ".join(f"S{s}: {dist[s]}" for s in dist) if dist else "—"
+            pattern  = blob.get("pattern") or "—"
+            balance_str = (
+                f"Lean:         {blob.get('lean', '—')}\n"
+                f"Spread:       {blob.get('spread', '—')}\n"
+                f"Pattern:      {pattern}\n"
+                f"Distribution: {dist_str}"
+            )
+        else:
+            balance_str = "N/A"
+
+        # --- Render template ---
+        template_path = resource_path("ui/export_template.txt")
+        with open(template_path, "r", encoding="utf-8") as f:
+            template = f.read()
+
+        ctx = {
+            "game":          game,
+            "mode":          mode,
+            "party":         party_str,
+            "hm_coverage":   hm_str,
+            "balance_stats": balance_str,
+            "version":       __version__,
+            "timestamp":     datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        }
+
+        def _render(tmpl, context):
+            return re.sub(
+                r"\{\{\s*(\w+)\s*\}\}",
+                lambda m: str(context.get(m.group(1).strip(), m.group(0))),
+                tmpl,
+            )
+
+        output = _render(template, ctx)
+
+        # --- Save dialog ---
+        ts       = datetime.now().strftime("%Y%m%d_%H%M%S")
+        game_slug = re.sub(r"[^\w]+", "_", game.lower()).strip("_")
+        default_name = f"dexelect_generated_party_{game_slug}_{ts}.txt"
+
+        path = filedialog.asksaveasfilename(
+            defaultextension=".txt",
+            filetypes=[("Text files", "*.txt"), ("All files", "*.*")],
+            initialfile=default_name,
+            title="Export Party",
+        )
+        if not path:
+            return
+
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(output)
+
+        self._set_status(f"Party exported to {os.path.basename(path)}", color=C_SUCCESS)
 
     # =========================================================================
     # STATUS LABEL HELPERS

@@ -101,9 +101,7 @@
 - add a region map (the one from the game) with a heatmap style overlay (or just dots) that shows where your party is 
   acquired :)
 
-- DEBUG stuff:
-  - have debug details be output to a file
-  - have party be output regularly even if it doesnt fail so we can see the party in debug
+
 
 
 ## final unit tests/checks

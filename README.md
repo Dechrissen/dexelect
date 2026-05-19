@@ -1,4 +1,4 @@
-# Dexelect – Progression-aware Party Generator
+# Dexelect – Progression-aware Pokémon Party Generator
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Q5Q311GBFF)
 
@@ -28,11 +28,12 @@ available to curate the output further.
 Dexelect generates (prescribes) a **progressively sound** party for use in a playthrough — either to introduce an element of 
 challenge or simply for team inspiration. See the [suggested rulesets](/docs/RULESETS.md) for some ideas about how to use Dexelect.
 
-The app is **universal** in the sense that it maintains compatibility with most generations of Pokémon games, 
-_and_ with romhacks that might contain the following:
-- New Pokémon
-- New locations 
-- Changes to existing game data (location data, evolution methods, etc.)
+The app is **universal** in that it maintains compatibility with most generations of Pokémon games, 
+_and_ with romhacks that contain changes to game data, such as:
+
+- Pokémon
+- Evolution methods
+- Locations
 
 See [`CONTRIBUTING.md`](/CONTRIBUTING.md) if you'd like to add support for a romhack.
 
@@ -99,6 +100,7 @@ Steps:
   - The mode can be toggled between 'Progression' and 'Random'
   - Party size can be adjusted (1–6)
   - 'Acquisition Details', 'HM Coverage', and 'Balance Stats' display can each be toggled on or off
+  - 'Export Party' button exports party to `.txt` file
 - Main window:
   - 'Generate', 'Spheres', and 'Config' tabs at the top can be switched between
   - Click 'Generate Party' (or press Enter) to generate a party

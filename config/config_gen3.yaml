@@ -1,4 +1,4 @@
-require_one_sphere_one: false
+require_one_sphere_one: true
 allowed_balancing:
   value: [balanced, early_game_heavy, late_game_heavy]
   options: [balanced, early_game_heavy, late_game_heavy]
