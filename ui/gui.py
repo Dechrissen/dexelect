@@ -242,6 +242,8 @@ def _sphere_icon_image(color_hex: str, bg_hex: str, size: int = 15) -> ImageTk.P
 # MAIN APP CLASS
 # =============================================================================
 
+SPRITE_MAX = 112  # sprite size (px) — matches original sprite dimensions
+
 class DexelectApp(ctk.CTk):
 
     def __init__(self, all_pools, all_pokemon, config_data, meta_data, mappings, global_settings):
@@ -252,13 +254,13 @@ class DexelectApp(ctk.CTk):
         self.configure(fg_color=C_BG)
         sw, sh = self.winfo_screenwidth(), self.winfo_screenheight()
         win_w = min(max(900,  int(sw * 0.85)), 1280)
-        win_h = min(max(860,  int(sh * 0.87)), 1050)
+        win_h = min(max(620,  int(sh * 0.72)), 1050)
         win_w = min(win_w, sw - 20)   # never wider than screen
         win_h = min(win_h, sh - 60)   # leave room for taskbar/decorations
         x = (sw - win_w) // 2
         y = max(0, (sh - win_h) // 2)
         self.geometry(f"{win_w}x{win_h}+{x}+{y}")
-        self.minsize(900, 760)
+        self.minsize(900, 620)
 
         # ---- App state ----
         self.all_pools       = all_pools
@@ -945,7 +947,7 @@ class DexelectApp(ctk.CTk):
         gen_inner = tk.Frame(canvas, bg=C_PANEL)
         inner_id = canvas.create_window((0, 0), window=gen_inner, anchor="nw")
         gen_inner.grid_columnconfigure(0, weight=1)
-        gen_inner.grid_rowconfigure(2, weight=1, minsize=625)
+        gen_inner.grid_rowconfigure(2, weight=1)
 
         # Cross-platform scroll — identical pattern to config tab
         SCROLL_PX = 60
@@ -979,19 +981,42 @@ class DexelectApp(ctk.CTk):
         scrollbar.bind("<Leave>", _disable_gen_scroll)
 
         def _on_gen_canvas_configure(event):
-            # Keep inner frame filling canvas width; expand height to fill when
-            # there is room, or hold minimum so scrollbar activates when too short.
+            # Row 2 (cards_outer) has weight=1 and absorbs extra height when the
+            # window is large.  The scroll region equals gen_inner's natural height,
+            # clamped up to the canvas height so the cards section fills the space.
+            canvas.itemconfig(inner_id, width=event.width)
             gen_inner.update_idletasks()
             content_h = gen_inner.winfo_reqheight()
             new_h = max(event.height, content_h)
-            canvas.itemconfig(inner_id, width=event.width, height=new_h)
+            canvas.itemconfig(inner_id, height=new_h)
             canvas.configure(scrollregion=(0, 0, event.width, new_h))
 
         canvas.bind("<Configure>", _on_gen_canvas_configure)
 
+        def _refit_gen_height():
+            """Re-evaluate gen_inner height when HM/stats panels change size."""
+            gen_inner.update_idletasks()
+            content_h = gen_inner.winfo_reqheight()
+            cw = canvas.winfo_width()
+            ch = canvas.winfo_height()
+            new_h = max(ch, content_h)
+            canvas.itemconfig(inner_id, height=new_h)
+            canvas.configure(scrollregion=(0, 0, cw, new_h))
+        self._refit_gen_height = _refit_gen_height
+
+        def _seed_gen_height():
+            gen_inner.update_idletasks()
+            h = gen_inner.winfo_reqheight()
+            cw, ch = canvas.winfo_width(), canvas.winfo_height()
+            if cw > 1 and ch > 1 and h > 1:
+                new_h = max(ch, h)
+                canvas.itemconfig(inner_id, width=cw, height=new_h)
+                canvas.configure(scrollregion=(0, 0, cw, new_h))
+        self.after(50, _seed_gen_height)
+
         # ---- Top bar ----
         top_bar = ctk.CTkFrame(gen_inner, fg_color="transparent")
-        top_bar.grid(row=0, column=0, sticky="ew", padx=16, pady=(24, 8))
+        top_bar.grid(row=0, column=0, sticky="ew", padx=16, pady=(16, 8))
         top_bar.grid_columnconfigure(1, weight=1)
 
         self.generate_btn = ctk.CTkButton(
@@ -1002,7 +1027,7 @@ class DexelectApp(ctk.CTk):
             hover_color=C_ACCENT2,
             text_color=C_BTN_TEXT,
             font=FONT_BTN,
-            height=42,
+            height=36,
             width=180,
             corner_radius=5,
         )
@@ -1033,12 +1058,14 @@ class DexelectApp(ctk.CTk):
 
         # ---- 3 × 2 card grid ----
         cards_outer = ctk.CTkFrame(gen_inner, fg_color="transparent")
-        cards_outer.grid(row=2, column=0, sticky="nsew", padx=16, pady=(0, 8))
-        cards_outer.grid_columnconfigure(0, weight=1)
-        cards_outer.grid_columnconfigure(1, weight=1)
+        cards_outer.grid(row=2, column=0, sticky="nsew", padx=16, pady=(0, 4))
+        cards_outer.grid_columnconfigure(0, weight=1, uniform="cards")
+        cards_outer.grid_columnconfigure(1, weight=1, uniform="cards")
         for r in range(3):
-            cards_outer.grid_rowconfigure(r, weight=1, minsize=195)
+            cards_outer.grid_rowconfigure(r, weight=1)
 
+        self._cards_outer = cards_outer
+        self._gen_canvas  = canvas
         self.party_cards = []
         for r in range(3):
             for c in range(2):
@@ -1048,13 +1075,14 @@ class DexelectApp(ctk.CTk):
 
         # ---- HM coverage strip ----
         self.hm_strip_frame = ctk.CTkFrame(gen_inner, fg_color=C_PANEL, corner_radius=5)
-        self.hm_strip_frame.grid(row=3, column=0, sticky="ew", padx=16, pady=(0, 8))
+        self.hm_strip_frame.grid(row=3, column=0, sticky="ew", padx=16, pady=(0, 4))
 
         # ---- Stats strip ----
         stats_frame = ctk.CTkFrame(gen_inner, fg_color=C_PANEL, corner_radius=5)
-        stats_frame.grid(row=4, column=0, sticky="ew", padx=16, pady=(0, 16))
+        stats_frame.grid(row=4, column=0, sticky="ew", padx=16, pady=(0, 8))
         stats_frame.grid_columnconfigure(0, weight=1)
         stats_frame.grid_columnconfigure(1, weight=0)
+
 
         left = ctk.CTkFrame(stats_frame, fg_color=C_PANEL, corner_radius=0)
         left.grid(row=0, column=0, padx=(16, 0), pady=10, sticky="w")
@@ -1122,10 +1150,11 @@ class DexelectApp(ctk.CTk):
         frame.grid_rowconfigure(0, weight=0)   # name
         frame.grid_rowconfigure(1, weight=0)   # types
         frame.grid_rowconfigure(2, weight=0)   # bst
-        frame.grid_rowconfigure(3, weight=1)   # spacer (fills sprite column height)
+        frame.grid_rowconfigure(3, weight=1, minsize=30)  # spacer — keeps acq row below sprite bottom
         frame.grid_rowconfigure(4, weight=0)   # separator
         frame.grid_rowconfigure(5, weight=0)   # acq (full width)
-        frame.grid_propagate(False)
+        # No grid_propagate(False): the card's winfo_reqheight() must reflect
+        # its content so the scroll region grows to fit when a party is loaded.
 
         sprite = ctk.CTkLabel(
             frame,
@@ -1133,8 +1162,8 @@ class DexelectApp(ctk.CTk):
             image=None,
             fg_color="transparent",
             corner_radius=5,
-            width=112,
-            height=112,
+            width=80,
+            height=80,
         )
         sprite.grid(row=0, column=0, rowspan=4, padx=(8, 8), pady=(10, 0), sticky="nw")
 
@@ -1171,7 +1200,7 @@ class DexelectApp(ctk.CTk):
         if self._hm_strip_inner:
             self._hm_strip_inner.destroy()
         inner = tk.Frame(self.hm_strip_frame, bg=C_PANEL)
-        inner.pack(fill="both", expand=True, padx=16, pady=10)
+        inner.pack(fill="x", padx=16, pady=10)
         self._hm_strip_inner = inner
         self.hm_labels = {}
         hdr = tk.Frame(inner, bg=C_PANEL)
@@ -1187,6 +1216,7 @@ class DexelectApp(ctk.CTk):
         # Individual HM labels (shown when toggle on); labels are positioned via
         # place() in _reflow_hm_list so they wrap to a new row when space is tight.
         hm_list = tk.Frame(inner, bg=C_PANEL)
+        hm_list.pack_propagate(False)
         self._hm_list_frame = hm_list
         for hm_name in self.config_data.get("ensure_hm_coverage", {}):
             lbl = ctk.CTkLabel(hm_list, text=hm_name, font=FONT_MONO, text_color=C_MUTED, fg_color=C_PANEL)
@@ -1219,7 +1249,10 @@ class DexelectApp(ctk.CTk):
             lbl.place(x=x, y=y)
             x += w + PAD_X
             row_h = max(row_h, h)
-        frame.configure(height=max(1, y + row_h))
+        new_h = max(1, y + row_h)
+        if frame.winfo_height() != new_h:
+            frame.configure(height=new_h)
+            self.after_idle(self._refit_gen_height)
 
     def _refresh_hm_labels(self, party_coverage):
         """Update HM strip based on toggle state and optional coverage set.
@@ -1238,8 +1271,7 @@ class DexelectApp(ctk.CTk):
             self._hm_list_frame.pack(side="top", fill="x")
             self._reflow_hm_list()
         for hm_name, lbl in self.hm_labels.items():
-            covered = party_coverage is not None and hm_name in party_coverage
-            lbl.configure(text_color=C_ACCENT if covered else C_MUTED)
+            lbl.configure(text_color=C_ACCENT if hm_name in party_coverage else C_MUTED)
 
     def _clear_cards(self):
         """Reset all party cards to their empty placeholder state."""
@@ -1259,6 +1291,7 @@ class DexelectApp(ctk.CTk):
             except tk.TclError:
                 lbl = card["sprite"]._label
                 lbl.tk.call(lbl._w, "configure", "-image", "", "-cursor", "")
+            card["sprite"].configure(width=SPRITE_MAX, height=SPRITE_MAX)
             self._sprite_images[i] = None
             for w in (card["sprite"], card["sprite"]._label):
                 w.unbind("<Button-1>")
@@ -1269,6 +1302,7 @@ class DexelectApp(ctk.CTk):
         self._refresh_hm_labels(party_coverage=None)
         self.last_party_blob = None
         self.export_btn.configure(state="disabled")
+        self.after_idle(self._refit_gen_height)
 
     def _update_stats_layout(self):
         """Wrap the Distribution panel to a second row when there isn't enough horizontal room."""
@@ -1284,10 +1318,12 @@ class DexelectApp(ctk.CTk):
             self._stats_wrapped = True
             left.grid(row=0, column=0, columnspan=2, padx=(16, 16), pady=(10, 4), sticky="w")
             right.grid(row=1, column=0, columnspan=2, padx=(0, 16), pady=(4, 10), sticky="e")
+            self.after_idle(self._refit_gen_height)
         elif available >= need and self._stats_wrapped:
             self._stats_wrapped = False
             left.grid(row=0, column=0, padx=(16, 0), pady=10, sticky="w")
             right.grid(row=0, column=1, padx=(0, 16), pady=10, sticky="e")
+            self.after_idle(self._refit_gen_height)
 
     def _render_type_badges(self, types_frame, types: list[str]):
         """Render colored type badges (swatch + label) into the given frame."""
@@ -1381,7 +1417,7 @@ class DexelectApp(ctk.CTk):
 
         ctk.CTkButton(
             save_bar,
-            text="Reload from disk",
+            text="Reload from Disk",
             command=self._on_reload_from_disk,
             fg_color=C_ACCENT_DIM,
             hover_color=C_ACCENT2,
@@ -1732,8 +1768,6 @@ class DexelectApp(ctk.CTk):
         current = self.var_party_size.get()
         for val, btn in self.party_size_btn._buttons_dict.items():
             btn.configure(text_color=C_BTN_TEXT if val == current else C_TEXT)
-        if self.last_party_blob is not None:
-            self._populate_cards(self.last_party_blob)
 
 
     # =========================================================================
@@ -1794,6 +1828,38 @@ class DexelectApp(ctk.CTk):
     # PARTY GENERATION
     # =========================================================================
 
+    def _cover_cards(self):
+        """Overlay each card with a blank card-shaped cover to hide the clear/repopulate flash.
+
+        Placed as a sibling inside cards_outer (not inside the card itself) so its
+        transparent corners reveal the cards_outer background (C_PANEL) exactly as the
+        real card does, avoiding any sharp-corner mismatch.
+        """
+        self._cards_outer.update_idletasks()
+        for card in self.party_cards:
+            frame = card["frame"]
+            ov = ctk.CTkFrame(
+                self._cards_outer,
+                fg_color=C_CARD,
+                corner_radius=5,
+                border_width=1,
+                border_color=C_CARD_BORDER,
+                width=frame.winfo_width(),
+                height=frame.winfo_height(),
+            )
+            ov.place(x=frame.winfo_x(), y=frame.winfo_y())
+            ov.lift()
+            card["_overlay"] = ov
+
+    def _uncover_cards(self):
+        for card in self.party_cards:
+            ov = card.pop("_overlay", None)
+            if ov:
+                try:
+                    ov.destroy()
+                except tk.TclError:
+                    pass
+
     def _run_generation(self):
         """Kick off party generation in a background thread so the GUI stays responsive."""
         if self.is_generating:
@@ -1801,8 +1867,12 @@ class DexelectApp(ctk.CTk):
 
         self.is_generating = True
         self.generate_btn.configure(state="disabled")
-        self._clear_cards()
+        self._cover_cards()
+        # Give tkinter one paint cycle to render the overlay before clearing cards.
+        self.after(20, self._begin_generation)
 
+    def _begin_generation(self):
+        self._clear_cards()
         thread = threading.Thread(target=self._generation_worker, daemon=True)
         thread.start()
         self._animate_status(2)
@@ -1844,16 +1914,20 @@ class DexelectApp(ctk.CTk):
 
         if error:
             self._set_status(f"Error: {error}", color=C_WARNING)
+            self.after_idle(self._uncover_cards)
             return
 
         if party_blob is None:
             self._set_status("Could not generate a party. Try adjusting settings.", color=C_WARNING)
+            self.after_idle(self._uncover_cards)
             return
 
-        self._set_status(f"Done. (Took {duration:.2f}s)", color=C_SUCCESS)
+        self._set_status(f"Party generated in {duration:.2f}s.", color=C_SUCCESS)
         self.last_party_blob = party_blob
         self.export_btn.configure(state="normal")
         self._populate_cards(party_blob)
+        self.after_idle(self._uncover_cards)
+        self.after_idle(self._refit_gen_height)
 
 
     # =========================================================================
@@ -1893,9 +1967,10 @@ class DexelectApp(ctk.CTk):
 
             sprite_path = os.path.join(sprite_dir, f"{mon_obj.nat_dex_number}.png")
             try:
-                pil_img = Image.open(sprite_path).resize((112, 112), Image.NEAREST)
-                ctk_img = ctk.CTkImage(light_image=pil_img, dark_image=pil_img, size=(112, 112))
-                card["sprite"].configure(image=ctk_img, cursor="hand2")
+                pil_img = Image.open(sprite_path)
+                resized = pil_img.resize((SPRITE_MAX, SPRITE_MAX), Image.NEAREST)
+                ctk_img = ctk.CTkImage(light_image=resized, dark_image=resized, size=(SPRITE_MAX, SPRITE_MAX))
+                card["sprite"].configure(image=ctk_img, cursor="hand2", width=SPRITE_MAX, height=SPRITE_MAX)
                 self._sprite_images[i] = ctk_img
                 for w in (card["sprite"], card["sprite"]._label):
                     w.bind("<Button-1>", lambda e, u=url: webbrowser.open(u))

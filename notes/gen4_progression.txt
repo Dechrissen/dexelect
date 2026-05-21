@@ -12,9 +12,8 @@ oreburgh gate B1F (walk, surf, fish)
 oreburgh city (trade-abra)
 oreburgh mine B1F (walk)
 oreburgh mine B2F (walk)
-route 207 (walk)
+route 207 (walk, honey_tree)
 ITEM: old_rod
-route 218 (walk, surf, fish)
 route 204 south (walk, surf, fish)
 ravaged path (walk, surf, fish)
 route 204 north (walk)
@@ -22,10 +21,11 @@ floaroma meadow (honey_tree)
 route 205 south (walk, surf, fish, honey_tree)
 valley windworks (walk, surf, fish, honey_tree, static_encounter-drifloon)
 eterna forest (walk, honey_tree)
-old chateau (walk) <-- do we want to put national dex here as the 'key' to access rotom?
+old chateau (walk)
 route 205 north (walk, surf, fish, honey_tree)
-eterna city (surf, fish)
+eterna city (surf, fish, trade-chatot)
 ITEM: odd_keystone
+oreburgh mining museum (fossil_restore)
 -------------
 2: ETERNA GYM
 -------------
@@ -63,12 +63,89 @@ great marsh special area (binoculars) <-- pool of special daily random pokemon
 ---------------
 3: PASTORIA GYM
 ---------------
-
-
------
-LATER
------
-fuego ironworks above floaroma (need surf)
-lake valor
-ITEM: super_rod
+route 210 north (walk, surf, fish, honey_tree)
+celestic town (surf, fish)
 ITEM: surf
+route 220 (surf, fish)
+route 221 (walk, surf, fish, honey_tree)
+fuego ironworks (walk, surf, fish, honey_tree)
+route 211 east (walk, honey_tree)
+route 218 (walk, surf, fish, honey_tree)
+iron island exterior (surf, fish)
+iron island interior 1F (walk)
+iron island interior B1F (walk)
+iron island interior B2F (walk, gift-riolu)
+iron island interior B3F (walk)
+mt coronet north B1F (walk, surf, fish) <-- feebas is here with all rods, treat it as a normal encounter
+mt coronet north 1F 2R (walk)
+route 216 (walk)
+route 217 (walk)
+acuity lakefront (walk)
+lake acuity (walk, surf, fish)
+snowpoint city (trade-haunter)
+----------------
+4: SNOWPOINT GYM
+----------------
+mt coronet 2F (walk)
+mt coronet 3F (walk)
+mt coronet 4F 1R (walk, surf, fish)
+mt coronet 4F 2R (walk)
+mt coronet 4F 3R (walk)
+mt coronet 5F (walk)
+mt coronet 6F (walk)
+mt coronet tunnel room (walk)
+mt coronet mountain side (walk)
+spear pillar (static_encounter-dialga/palkia) <-- DIAMOND/PEARL
+lake valor (walk, surf, fish)
+lake valor cavern (static_encounter-azelf)
+lake acuity cavern (static_encounter-uxie)
+lake verity cavern (roaming-mesprit)
+route 222 (walk, surf, fish, honey_tree)
+sunyshore city (surf, fish)
+route 223 (surf, fish)
+-------
+ENDGAME
+-------
+victory road 1F (walk)
+victory road 2F (walk)
+victory road B1F (walk, surf, fish)
+pokemon league (surf, fish)
+--------
+POSTGAME
+--------
+victory road 1F back 2 (walk, surf, fish)
+victory road 1F back 1 (walk)
+victory road 1F back 3 (walk)
+route 224 (walk, surf, fish)
+sendoff spring (walk, surf, fish)
+turnback cave section 1 (walk)
+turnback cave section 2 (walk)
+turnback cave section 3 (walk)
+turnback cave section 4 (static_encounter-giratina)
+old chateau TV (static_encounter-rotom)
+snowpoint temple 1F (walk)
+snowpoint temple B1F (walk)
+snowpoint temple B2F (walk)
+snowpoint temple B3F (walk)
+snowpoint temple B4F (walk)
+snowpoint temple B5F (walk, static_encounter-regigigas)
+ITEM: super_rod
+route 225 (walk, surf, fish)
+route 226 (walk, surf, fish, trade-magikarp)
+route 227 (walk, surf, fish)
+stark mountain entrance (walk)
+stark mountain interior (walk)
+stark mountain outside (walk)
+stark mountain inner cave (static_encounter-heatran)
+route 228 (walk, surf, fish)
+route 229 (walk, surf, fish)
+route 230 (walk, surf, fish)
+resort area (surf, fish)
+full moon island (roaming-cresselia)
+
+----
+TODO
+----
+figure out how to handle fossils since you can get all of them after national dex
+could do a new acquisition method 'repeatable_fossil_restore' or something, then add that ITEM to postgame sphere
+and just add it to the mining museum with the main 'fossil_restore'

@@ -87,6 +87,8 @@
 
 - add a web ui option that can be selected via command line and open locally in browser, but also be the entry point for "standalone hosting" of the web app served on my site
 
+- add mac binary
+
 - DEBUG stuff:
   - have debug details be output to a file
   - have party be output regularly even if it doesnt fail so we can see the party in debug

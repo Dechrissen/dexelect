@@ -35,7 +35,7 @@ FONT_BTN    = ("Roboto", 15)
 FONT_BODY   = ("Roboto", 13)
 FONT_SMALL  = ("Roboto", 11)
 FONT_MONO        = ("Courier New", 13)
-FONT_MONO_HEADER = ("Courier New", 17, "bold")
+FONT_MONO_HEADER = ("Courier New", 15, "bold")
 
 TYPE_COLORS = {
     "normal":   "#9a9a78",

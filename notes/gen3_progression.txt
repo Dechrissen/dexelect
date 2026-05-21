@@ -50,7 +50,7 @@ new mauville entrance (walk)
 new mauville basement (walk, static_encounter-voltorb)
 route 118 (walk, surf, fish)
 ITEM: good_rod
-route 119 (walk, surf, fish) <---- feebas is here, treat is as a normal wild pokemon via surf
+route 119 (walk, surf, fish) <---- feebas is here, treat is as a normal wild pokemon
 weather institute (gift-castform)
 fortree city (trade-skitty)
 route 120 (walk, surf, fish, devon_scope)
