@@ -1492,7 +1492,6 @@
   base_stat_total: 415
   hm_learnset:
   - FLASH
-  - SOFTBOILED
   - STRENGTH
   - TELEPORT
   evolution_method_required: none
@@ -1986,7 +1985,6 @@
   - DIG
   - FLASH
   - FLY
-  - SOFTBOILED
   - STRENGTH
   - SURF
   - TELEPORT

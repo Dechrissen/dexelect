@@ -29,8 +29,8 @@ def test_pokedex_required_fields(yaml_files):
 
 def test_pokedex_data_types(yaml_files):
     """Tests whether all data types are valid for each Pokemon."""
-    valid_hms = {'CUT', 'FLASH', 'SURF', 'STRENGTH', 'FLY', 'DIG', 'TELEPORT', 'SOFTBOILED',
-                 'WATERFALL', 'WHIRLPOOL', 'ROCK_SMASH', 'DIVE', 'HEADBUTT'}
+    valid_hms = {'CUT', 'FLASH', 'SURF', 'STRENGTH', 'FLY', 'DIG', 'TELEPORT',
+                 'WATERFALL', 'WHIRLPOOL', 'ROCK_SMASH', 'DIVE'}
     valid_types = {'normal', 'fire', 'water', 'grass', 'electric', 'flying', 'fighting',
                    'ice', 'psychic', 'ground', 'rock', 'poison', 'bug', 'dragon', 'ghost',
                    'steel', 'dark'}

@@ -54,11 +54,9 @@ ensure_hm_coverage:
   SURF: true
   DIG: false
   TELEPORT: false
-  SOFTBOILED: false
   WHIRLPOOL: true
   WATERFALL: true
   ROCK_SMASH: false
-  HEADBUTT: false
 allowed_acquisition_methods:
   starter: true
   walk: true

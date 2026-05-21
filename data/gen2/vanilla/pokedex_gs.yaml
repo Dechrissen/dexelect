@@ -11,7 +11,6 @@
   hm_learnset:
   - CUT
   - FLASH
-  - HEADBUTT
   evolution_method_required: none
 - name: IVYSAUR
   nat_dex_number: '002'
@@ -26,7 +25,6 @@
   hm_learnset:
   - CUT
   - FLASH
-  - HEADBUTT
   evolution_method_required: level-up
 - name: VENUSAUR
   nat_dex_number: '003'
@@ -41,7 +39,6 @@
   hm_learnset:
   - CUT
   - FLASH
-  - HEADBUTT
   evolution_method_required: level-up
 - name: CHARMANDER
   nat_dex_number: '004'
@@ -55,7 +52,6 @@
   hm_learnset:
   - CUT
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -71,7 +67,6 @@
   hm_learnset:
   - CUT
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -89,7 +84,6 @@
   - CUT
   - DIG
   - FLY
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -104,7 +98,6 @@
   base_stat_total: 314
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -122,7 +115,6 @@
   base_stat_total: 405
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -140,7 +132,6 @@
   base_stat_total: 530
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -269,7 +260,6 @@
   base_stat_total: 253
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   evolution_method_required: none
 - name: RATICATE
@@ -284,7 +274,6 @@
   hm_learnset:
   - CUT
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -325,7 +314,6 @@
   base_stat_total: 288
   hm_learnset:
   - DIG
-  - HEADBUTT
   - STRENGTH
   evolution_method_required: none
 - name: ARBOK
@@ -339,7 +327,6 @@
   base_stat_total: 438
   hm_learnset:
   - DIG
-  - HEADBUTT
   - STRENGTH
   evolution_method_required: level-up
 - name: PIKACHU
@@ -353,7 +340,6 @@
   base_stat_total: 320
   hm_learnset:
   - FLASH
-  - HEADBUTT
   - STRENGTH
   evolution_method_required: happiness
 - name: RAICHU
@@ -367,7 +353,6 @@
   base_stat_total: 485
   hm_learnset:
   - FLASH
-  - HEADBUTT
   - STRENGTH
   evolution_method_required: thunder_stone
 - name: SANDSHREW
@@ -382,7 +367,6 @@
   hm_learnset:
   - CUT
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -398,7 +382,6 @@
   hm_learnset:
   - CUT
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -411,8 +394,7 @@
   - poison
   is_legendary: false
   base_stat_total: 275
-  hm_learnset:
-  - HEADBUTT
+  hm_learnset: []
   evolution_method_required: none
 - name: NIDORINA
   nat_dex_number: '030'
@@ -424,7 +406,6 @@
   is_legendary: false
   base_stat_total: 365
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -439,7 +420,6 @@
   is_legendary: false
   base_stat_total: 505
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -453,8 +433,7 @@
   - poison
   is_legendary: false
   base_stat_total: 273
-  hm_learnset:
-  - HEADBUTT
+  hm_learnset: []
   evolution_method_required: none
 - name: NIDORINO
   nat_dex_number: '033'
@@ -466,7 +445,6 @@
   is_legendary: false
   base_stat_total: 365
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -481,7 +459,6 @@
   is_legendary: false
   base_stat_total: 505
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -497,7 +474,6 @@
   base_stat_total: 323
   hm_learnset:
   - FLASH
-  - HEADBUTT
   - STRENGTH
   evolution_method_required: happiness
 - name: CLEFABLE
@@ -511,7 +487,6 @@
   base_stat_total: 483
   hm_learnset:
   - FLASH
-  - HEADBUTT
   - STRENGTH
   evolution_method_required: moon_stone
 - name: VULPIX
@@ -525,7 +500,6 @@
   base_stat_total: 299
   hm_learnset:
   - DIG
-  - HEADBUTT
   evolution_method_required: none
 - name: NINETALES
   nat_dex_number: '038'
@@ -538,7 +512,6 @@
   base_stat_total: 505
   hm_learnset:
   - DIG
-  - HEADBUTT
   evolution_method_required: fire_stone
 - name: JIGGLYPUFF
   nat_dex_number: '039'
@@ -551,7 +524,6 @@
   base_stat_total: 270
   hm_learnset:
   - FLASH
-  - HEADBUTT
   - STRENGTH
   evolution_method_required: happiness
 - name: WIGGLYTUFF
@@ -565,7 +537,6 @@
   base_stat_total: 435
   hm_learnset:
   - FLASH
-  - HEADBUTT
   - STRENGTH
   evolution_method_required: moon_stone
 - name: ZUBAT
@@ -580,7 +551,6 @@
   base_stat_total: 245
   hm_learnset:
   - FLY
-  - HEADBUTT
   evolution_method_required: none
 - name: GOLBAT
   nat_dex_number: '042'
@@ -594,7 +564,6 @@
   base_stat_total: 455
   hm_learnset:
   - FLY
-  - HEADBUTT
   evolution_method_required: level-up
 - name: ODDISH
   nat_dex_number: '043'
@@ -682,7 +651,6 @@
   base_stat_total: 305
   hm_learnset:
   - FLASH
-  - HEADBUTT
   evolution_method_required: none
 - name: VENOMOTH
   nat_dex_number: '049'
@@ -734,8 +702,7 @@
   - normal
   is_legendary: false
   base_stat_total: 290
-  hm_learnset:
-  - HEADBUTT
+  hm_learnset: []
   evolution_method_required: none
 - name: PERSIAN
   nat_dex_number: '053'
@@ -746,8 +713,7 @@
   - normal
   is_legendary: false
   base_stat_total: 440
-  hm_learnset:
-  - HEADBUTT
+  hm_learnset: []
   evolution_method_required: level-up
 - name: PSYDUCK
   nat_dex_number: '054'
@@ -761,7 +727,6 @@
   hm_learnset:
   - DIG
   - FLASH
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -780,7 +745,6 @@
   hm_learnset:
   - DIG
   - FLASH
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -798,7 +762,6 @@
   base_stat_total: 305
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -813,7 +776,6 @@
   base_stat_total: 455
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -828,7 +790,6 @@
   base_stat_total: 350
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   evolution_method_required: none
 - name: ARCANINE
@@ -842,7 +803,6 @@
   base_stat_total: 555
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   evolution_method_required: fire_stone
 - name: POLIWAG
@@ -855,7 +815,6 @@
   is_legendary: false
   base_stat_total: 300
   hm_learnset:
-  - HEADBUTT
   - SURF
   - WATERFALL
   - WHIRLPOOL
@@ -870,7 +829,6 @@
   is_legendary: false
   base_stat_total: 385
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -888,7 +846,6 @@
   is_legendary: false
   base_stat_total: 510
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -906,7 +863,6 @@
   base_stat_total: 310
   hm_learnset:
   - FLASH
-  - HEADBUTT
   - TELEPORT
   evolution_method_required: none
 - name: KADABRA
@@ -921,7 +877,6 @@
   hm_learnset:
   - DIG
   - FLASH
-  - HEADBUTT
   - TELEPORT
   evolution_method_required: level-up
 - name: ALAKAZAM
@@ -936,7 +891,6 @@
   hm_learnset:
   - DIG
   - FLASH
-  - HEADBUTT
   - TELEPORT
   evolution_method_required: trade
 - name: MACHOP
@@ -950,7 +904,6 @@
   base_stat_total: 305
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -965,7 +918,6 @@
   base_stat_total: 405
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -980,7 +932,6 @@
   base_stat_total: 505
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: trade
@@ -1068,7 +1019,6 @@
   base_stat_total: 300
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -1084,7 +1034,6 @@
   base_stat_total: 390
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -1100,7 +1049,6 @@
   base_stat_total: 495
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: trade
@@ -1113,8 +1061,7 @@
   - fire
   is_legendary: false
   base_stat_total: 410
-  hm_learnset:
-  - HEADBUTT
+  hm_learnset: []
   evolution_method_required: none
 - name: RAPIDASH
   nat_dex_number: '078'
@@ -1125,8 +1072,7 @@
   - fire
   is_legendary: false
   base_stat_total: 500
-  hm_learnset:
-  - HEADBUTT
+  hm_learnset: []
   evolution_method_required: level-up
 - name: SLOWPOKE
   nat_dex_number: '079'
@@ -1141,7 +1087,6 @@
   hm_learnset:
   - DIG
   - FLASH
-  - HEADBUTT
   - STRENGTH
   - SURF
   evolution_method_required: none
@@ -1158,7 +1103,6 @@
   hm_learnset:
   - DIG
   - FLASH
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -1202,7 +1146,6 @@
   hm_learnset:
   - CUT
   - FLY
-  - HEADBUTT
   evolution_method_required: none
 - name: DODUO
   nat_dex_number: '084'
@@ -1240,7 +1183,6 @@
   is_legendary: false
   base_stat_total: 325
   hm_learnset:
-  - HEADBUTT
   - SURF
   - WATERFALL
   - WHIRLPOOL
@@ -1256,7 +1198,6 @@
   is_legendary: false
   base_stat_total: 475
   hm_learnset:
-  - HEADBUTT
   - SURF
   - WATERFALL
   - WHIRLPOOL
@@ -1270,8 +1211,7 @@
   - poison
   is_legendary: false
   base_stat_total: 325
-  hm_learnset:
-  - HEADBUTT
+  hm_learnset: []
   evolution_method_required: none
 - name: MUK
   nat_dex_number: '089'
@@ -1282,8 +1222,7 @@
   - poison
   is_legendary: false
   base_stat_total: 500
-  hm_learnset:
-  - HEADBUTT
+  hm_learnset: []
   evolution_method_required: level-up
 - name: SHELLDER
   nat_dex_number: '090'
@@ -1322,8 +1261,7 @@
   - poison
   is_legendary: false
   base_stat_total: 310
-  hm_learnset:
-  - HEADBUTT
+  hm_learnset: []
   evolution_method_required: none
 - name: HAUNTER
   nat_dex_number: '093'
@@ -1335,8 +1273,7 @@
   - poison
   is_legendary: false
   base_stat_total: 405
-  hm_learnset:
-  - HEADBUTT
+  hm_learnset: []
   evolution_method_required: level-up
 - name: GENGAR
   nat_dex_number: '094'
@@ -1349,7 +1286,6 @@
   is_legendary: false
   base_stat_total: 500
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: trade
@@ -1365,7 +1301,6 @@
   base_stat_total: 385
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -1380,7 +1315,6 @@
   base_stat_total: 328
   hm_learnset:
   - FLASH
-  - HEADBUTT
   evolution_method_required: none
 - name: HYPNO
   nat_dex_number: '097'
@@ -1393,7 +1327,6 @@
   base_stat_total: 483
   hm_learnset:
   - FLASH
-  - HEADBUTT
   evolution_method_required: level-up
 - name: KRABBY
   nat_dex_number: '098'
@@ -1438,7 +1371,6 @@
   base_stat_total: 330
   hm_learnset:
   - FLASH
-  - HEADBUTT
   evolution_method_required: none
 - name: ELECTRODE
   nat_dex_number: '101'
@@ -1451,7 +1383,6 @@
   base_stat_total: 480
   hm_learnset:
   - FLASH
-  - HEADBUTT
   evolution_method_required: level-up
 - name: EXEGGCUTE
   nat_dex_number: '102'
@@ -1479,7 +1410,6 @@
   base_stat_total: 520
   hm_learnset:
   - FLASH
-  - HEADBUTT
   - STRENGTH
   evolution_method_required: leaf_stone
 - name: CUBONE
@@ -1493,7 +1423,6 @@
   base_stat_total: 320
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -1508,7 +1437,6 @@
   base_stat_total: 425
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -1522,7 +1450,6 @@
   is_legendary: false
   base_stat_total: 455
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up_atk_greater_def
@@ -1536,7 +1463,6 @@
   is_legendary: false
   base_stat_total: 455
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up_def_greater_atk
@@ -1551,7 +1477,6 @@
   base_stat_total: 385
   hm_learnset:
   - CUT
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -1565,8 +1490,7 @@
   - poison
   is_legendary: false
   base_stat_total: 340
-  hm_learnset:
-  - HEADBUTT
+  hm_learnset: []
   evolution_method_required: none
 - name: WEEZING
   nat_dex_number: '110'
@@ -1577,8 +1501,7 @@
   - poison
   is_legendary: false
   base_stat_total: 490
-  hm_learnset:
-  - HEADBUTT
+  hm_learnset: []
   evolution_method_required: level-up
 - name: RHYHORN
   nat_dex_number: '111'
@@ -1592,7 +1515,6 @@
   base_stat_total: 345
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -1608,7 +1530,6 @@
   base_stat_total: 485
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -1624,10 +1545,8 @@
   base_stat_total: 450
   hm_learnset:
   - FLASH
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
-  - SOFTBOILED
   evolution_method_required: none
 - name: TANGELA
   nat_dex_number: '114'
@@ -1641,7 +1560,6 @@
   hm_learnset:
   - CUT
   - FLASH
-  - HEADBUTT
   evolution_method_required: none
 - name: KANGASKHAN
   nat_dex_number: '115'
@@ -1653,7 +1571,6 @@
   is_legendary: false
   base_stat_total: 490
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -1668,7 +1585,6 @@
   is_legendary: false
   base_stat_total: 295
   hm_learnset:
-  - HEADBUTT
   - SURF
   - WATERFALL
   - WHIRLPOOL
@@ -1683,7 +1599,6 @@
   is_legendary: false
   base_stat_total: 440
   hm_learnset:
-  - HEADBUTT
   - SURF
   - WATERFALL
   - WHIRLPOOL
@@ -1756,7 +1671,6 @@
   base_stat_total: 460
   hm_learnset:
   - FLASH
-  - HEADBUTT
   evolution_method_required: none
 - name: SCYTHER
   nat_dex_number: '123'
@@ -1770,7 +1684,6 @@
   base_stat_total: 500
   hm_learnset:
   - CUT
-  - HEADBUTT
   - ROCK_SMASH
   evolution_method_required: none
 - name: JYNX
@@ -1783,8 +1696,7 @@
   - psychic
   is_legendary: false
   base_stat_total: 455
-  hm_learnset:
-  - HEADBUTT
+  hm_learnset: []
   evolution_method_required: level-up
 - name: ELECTABUZZ
   nat_dex_number: '125'
@@ -1797,7 +1709,6 @@
   base_stat_total: 490
   hm_learnset:
   - FLASH
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -1811,7 +1722,6 @@
   is_legendary: false
   base_stat_total: 495
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -1826,7 +1736,6 @@
   base_stat_total: 500
   hm_learnset:
   - CUT
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -1840,7 +1749,6 @@
   is_legendary: false
   base_stat_total: 490
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -1870,7 +1778,6 @@
   is_legendary: false
   base_stat_total: 540
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -1888,7 +1795,6 @@
   is_legendary: false
   base_stat_total: 535
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -1914,8 +1820,7 @@
   - normal
   is_legendary: false
   base_stat_total: 325
-  hm_learnset:
-  - HEADBUTT
+  hm_learnset: []
   evolution_method_required: none
 - name: VAPOREON
   nat_dex_number: '134'
@@ -1927,7 +1832,6 @@
   is_legendary: false
   base_stat_total: 525
   hm_learnset:
-  - HEADBUTT
   - SURF
   - WATERFALL
   - WHIRLPOOL
@@ -1943,7 +1847,6 @@
   base_stat_total: 525
   hm_learnset:
   - FLASH
-  - HEADBUTT
   evolution_method_required: thunder_stone
 - name: FLAREON
   nat_dex_number: '136'
@@ -1954,8 +1857,7 @@
   - fire
   is_legendary: false
   base_stat_total: 525
-  hm_learnset:
-  - HEADBUTT
+  hm_learnset: []
   evolution_method_required: fire_stone
 - name: PORYGON
   nat_dex_number: '137'
@@ -1980,7 +1882,6 @@
   is_legendary: false
   base_stat_total: 355
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - SURF
   - WHIRLPOOL
@@ -1996,7 +1897,6 @@
   is_legendary: false
   base_stat_total: 495
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - SURF
   - WHIRLPOOL
@@ -2026,7 +1926,6 @@
   base_stat_total: 495
   hm_learnset:
   - CUT
-  - HEADBUTT
   - ROCK_SMASH
   - SURF
   - WHIRLPOOL
@@ -2043,7 +1942,6 @@
   base_stat_total: 515
   hm_learnset:
   - FLY
-  - HEADBUTT
   - ROCK_SMASH
   evolution_method_required: none
 - name: SNORLAX
@@ -2056,7 +1954,6 @@
   is_legendary: false
   base_stat_total: 540
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -2114,7 +2011,6 @@
   is_legendary: false
   base_stat_total: 300
   hm_learnset:
-  - HEADBUTT
   - SURF
   - WATERFALL
   evolution_method_required: none
@@ -2128,7 +2024,6 @@
   is_legendary: false
   base_stat_total: 420
   hm_learnset:
-  - HEADBUTT
   - SURF
   - WATERFALL
   evolution_method_required: level-up
@@ -2144,7 +2039,6 @@
   base_stat_total: 600
   hm_learnset:
   - FLY
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -2162,7 +2056,6 @@
   base_stat_total: 680
   hm_learnset:
   - FLASH
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -2180,7 +2073,6 @@
   - DIG
   - FLASH
   - FLY
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -2199,7 +2091,6 @@
   hm_learnset:
   - CUT
   - FLASH
-  - HEADBUTT
   evolution_method_required: none
 - name: BAYLEEF
   nat_dex_number: '153'
@@ -2213,7 +2104,6 @@
   hm_learnset:
   - CUT
   - FLASH
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -2229,7 +2119,6 @@
   hm_learnset:
   - CUT
   - FLASH
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -2245,7 +2134,6 @@
   hm_learnset:
   - CUT
   - DIG
-  - HEADBUTT
   evolution_method_required: none
 - name: QUILAVA
   nat_dex_number: '156'
@@ -2259,7 +2147,6 @@
   hm_learnset:
   - CUT
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -2275,7 +2162,6 @@
   hm_learnset:
   - CUT
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -2291,7 +2177,6 @@
   hm_learnset:
   - CUT
   - DIG
-  - HEADBUTT
   - SURF
   - WHIRLPOOL
   evolution_method_required: none
@@ -2307,7 +2192,6 @@
   hm_learnset:
   - CUT
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -2325,7 +2209,6 @@
   hm_learnset:
   - CUT
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -2343,7 +2226,6 @@
   hm_learnset:
   - CUT
   - DIG
-  - HEADBUTT
   - SURF
   evolution_method_required: none
 - name: FURRET
@@ -2358,7 +2240,6 @@
   hm_learnset:
   - CUT
   - DIG
-  - HEADBUTT
   - STRENGTH
   - SURF
   evolution_method_required: level-up
@@ -2403,7 +2284,6 @@
   hm_learnset:
   - DIG
   - FLASH
-  - HEADBUTT
   evolution_method_required: none
 - name: LEDIAN
   nat_dex_number: '166'
@@ -2418,7 +2298,6 @@
   hm_learnset:
   - DIG
   - FLASH
-  - HEADBUTT
   evolution_method_required: level-up
 - name: SPINARAK
   nat_dex_number: '167'
@@ -2504,7 +2383,6 @@
   base_stat_total: 205
   hm_learnset:
   - FLASH
-  - HEADBUTT
   evolution_method_required: none
 - name: CLEFFA
   nat_dex_number: '173'
@@ -2517,7 +2395,6 @@
   base_stat_total: 218
   hm_learnset:
   - FLASH
-  - HEADBUTT
   evolution_method_required: none
 - name: IGGLYBUFF
   nat_dex_number: '174'
@@ -2530,7 +2407,6 @@
   base_stat_total: 210
   hm_learnset:
   - FLASH
-  - HEADBUTT
   evolution_method_required: none
 - name: TOGEPI
   nat_dex_number: '175'
@@ -2543,7 +2419,6 @@
   base_stat_total: 245
   hm_learnset:
   - FLASH
-  - HEADBUTT
   - ROCK_SMASH
   evolution_method_required: none
 - name: TOGETIC
@@ -2559,7 +2434,6 @@
   hm_learnset:
   - FLASH
   - FLY
-  - HEADBUTT
   - ROCK_SMASH
   evolution_method_required: happiness
 - name: NATU
@@ -2602,7 +2476,6 @@
   base_stat_total: 280
   hm_learnset:
   - FLASH
-  - HEADBUTT
   evolution_method_required: none
 - name: FLAAFFY
   nat_dex_number: '180'
@@ -2615,7 +2488,6 @@
   base_stat_total: 365
   hm_learnset:
   - FLASH
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -2630,7 +2502,6 @@
   base_stat_total: 500
   hm_learnset:
   - FLASH
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -2657,7 +2528,6 @@
   is_legendary: false
   base_stat_total: 250
   hm_learnset:
-  - HEADBUTT
   - SURF
   - WATERFALL
   - WHIRLPOOL
@@ -2672,7 +2542,6 @@
   is_legendary: false
   base_stat_total: 410
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -2690,7 +2559,6 @@
   base_stat_total: 410
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -2704,7 +2572,6 @@
   is_legendary: false
   base_stat_total: 500
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -2723,7 +2590,6 @@
   base_stat_total: 250
   hm_learnset:
   - FLASH
-  - HEADBUTT
   evolution_method_required: none
 - name: SKIPLOOM
   nat_dex_number: '188'
@@ -2737,7 +2603,6 @@
   base_stat_total: 340
   hm_learnset:
   - FLASH
-  - HEADBUTT
   evolution_method_required: level-up
 - name: JUMPLUFF
   nat_dex_number: '189'
@@ -2751,7 +2616,6 @@
   base_stat_total: 450
   hm_learnset:
   - FLASH
-  - HEADBUTT
   evolution_method_required: level-up
 - name: AIPOM
   nat_dex_number: '190'
@@ -2764,7 +2628,6 @@
   base_stat_total: 360
   hm_learnset:
   - CUT
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -2806,7 +2669,6 @@
   base_stat_total: 390
   hm_learnset:
   - FLASH
-  - HEADBUTT
   evolution_method_required: none
 - name: WOOPER
   nat_dex_number: '194'
@@ -2821,7 +2683,6 @@
   hm_learnset:
   - DIG
   - FLASH
-  - HEADBUTT
   - ROCK_SMASH
   - SURF
   - WHIRLPOOL
@@ -2839,7 +2700,6 @@
   hm_learnset:
   - DIG
   - FLASH
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -2857,7 +2717,6 @@
   hm_learnset:
   - CUT
   - FLASH
-  - HEADBUTT
   evolution_method_required: happiness
 - name: UMBREON
   nat_dex_number: '197'
@@ -2871,7 +2730,6 @@
   hm_learnset:
   - CUT
   - FLASH
-  - HEADBUTT
   evolution_method_required: happiness
 - name: MURKROW
   nat_dex_number: '198'
@@ -2899,7 +2757,6 @@
   hm_learnset:
   - DIG
   - FLASH
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -2916,7 +2773,6 @@
   base_stat_total: 435
   hm_learnset:
   - FLASH
-  - HEADBUTT
   evolution_method_required: none
 - name: UNOWN
   nat_dex_number: '201'
@@ -2953,7 +2809,6 @@
   is_legendary: false
   base_stat_total: 455
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -2967,7 +2822,6 @@
   is_legendary: false
   base_stat_total: 290
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -2982,7 +2836,6 @@
   is_legendary: false
   base_stat_total: 465
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -2997,7 +2850,6 @@
   base_stat_total: 415
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -3013,7 +2865,6 @@
   base_stat_total: 430
   hm_learnset:
   - CUT
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -3030,7 +2881,6 @@
   hm_learnset:
   - CUT
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: trade_metal_coat
@@ -3044,7 +2894,6 @@
   is_legendary: false
   base_stat_total: 300
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -3058,7 +2907,6 @@
   is_legendary: false
   base_stat_total: 450
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -3073,7 +2921,6 @@
   is_legendary: false
   base_stat_total: 430
   hm_learnset:
-  - HEADBUTT
   - SURF
   - WATERFALL
   - WHIRLPOOL
@@ -3090,7 +2937,6 @@
   base_stat_total: 500
   hm_learnset:
   - CUT
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: trade_metal_coat
@@ -3107,7 +2953,6 @@
   hm_learnset:
   - DIG
   - FLASH
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -3123,7 +2968,6 @@
   base_stat_total: 500
   hm_learnset:
   - CUT
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -3140,7 +2984,6 @@
   hm_learnset:
   - CUT
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -3157,7 +3000,6 @@
   hm_learnset:
   - CUT
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -3173,7 +3015,6 @@
   hm_learnset:
   - CUT
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -3214,7 +3055,6 @@
   is_legendary: false
   base_stat_total: 250
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -3229,7 +3069,6 @@
   is_legendary: false
   base_stat_total: 450
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -3244,7 +3083,6 @@
   is_legendary: false
   base_stat_total: 380
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -3288,7 +3126,6 @@
   base_stat_total: 330
   hm_learnset:
   - FLY
-  - HEADBUTT
   evolution_method_required: none
 - name: MANTINE
   nat_dex_number: '226'
@@ -3301,7 +3138,6 @@
   is_legendary: false
   base_stat_total: 465
   hm_learnset:
-  - HEADBUTT
   - SURF
   - WATERFALL
   - WHIRLPOOL
@@ -3331,7 +3167,6 @@
   is_legendary: false
   base_stat_total: 330
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   evolution_method_required: none
 - name: HOUNDOOM
@@ -3345,7 +3180,6 @@
   is_legendary: false
   base_stat_total: 500
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -3360,7 +3194,6 @@
   is_legendary: false
   base_stat_total: 540
   hm_learnset:
-  - HEADBUTT
   - SURF
   - WATERFALL
   - WHIRLPOOL
@@ -3375,7 +3208,6 @@
   is_legendary: false
   base_stat_total: 330
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -3389,7 +3221,6 @@
   is_legendary: false
   base_stat_total: 500
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up
@@ -3416,7 +3247,6 @@
   base_stat_total: 465
   hm_learnset:
   - FLASH
-  - HEADBUTT
   evolution_method_required: none
 - name: SMEARGLE
   nat_dex_number: '235'
@@ -3439,7 +3269,6 @@
   is_legendary: false
   base_stat_total: 210
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -3454,7 +3283,6 @@
   base_stat_total: 455
   hm_learnset:
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: level-up_atk_equal_def
@@ -3470,7 +3298,6 @@
   base_stat_total: 305
   hm_learnset:
   - FLASH
-  - HEADBUTT
   evolution_method_required: none
 - name: ELEKID
   nat_dex_number: '239'
@@ -3483,7 +3310,6 @@
   base_stat_total: 360
   hm_learnset:
   - FLASH
-  - HEADBUTT
   evolution_method_required: none
 - name: MAGBY
   nat_dex_number: '240'
@@ -3494,8 +3320,7 @@
   - fire
   is_legendary: false
   base_stat_total: 365
-  hm_learnset:
-  - HEADBUTT
+  hm_learnset: []
   evolution_method_required: none
 - name: MILTANK
   nat_dex_number: '241'
@@ -3507,7 +3332,6 @@
   is_legendary: false
   base_stat_total: 490
   hm_learnset:
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -3523,10 +3347,8 @@
   base_stat_total: 540
   hm_learnset:
   - FLASH
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
-  - SOFTBOILED
   evolution_method_required: happiness
 - name: RAIKOU
   nat_dex_number: '243'
@@ -3541,7 +3363,6 @@
   - CUT
   - DIG
   - FLASH
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -3558,7 +3379,6 @@
   - CUT
   - DIG
   - FLASH
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   evolution_method_required: none
@@ -3574,7 +3394,6 @@
   hm_learnset:
   - CUT
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - SURF
   - WATERFALL
@@ -3592,7 +3411,6 @@
   base_stat_total: 300
   hm_learnset:
   - DIG
-  - HEADBUTT
   evolution_method_required: none
 - name: PUPITAR
   nat_dex_number: '247'
@@ -3606,7 +3424,6 @@
   base_stat_total: 410
   hm_learnset:
   - DIG
-  - HEADBUTT
   evolution_method_required: level-up
 - name: TYRANITAR
   nat_dex_number: '248'
@@ -3621,7 +3438,6 @@
   hm_learnset:
   - CUT
   - DIG
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -3638,7 +3454,6 @@
   base_stat_total: 680
   hm_learnset:
   - FLY
-  - HEADBUTT
   - ROCK_SMASH
   - STRENGTH
   - SURF
@@ -3659,7 +3474,6 @@
   - FLY
   - FLASH
   - STRENGTH
-  - HEADBUTT
   - ROCK_SMASH
   evolution_method_required: none
 - name: CELEBI

@@ -49,11 +49,6 @@
     - same with other evo items
 
 
-- actually remove these mostly useless ones from all games.
-- add 'Milk Drink' as field moves (HMs) in Gen 2 and 3?
-- add 'Secret Power' as field move (HM) in gen 3?
-- "Sweet Scent" Gen 3?
-
 - add feature "only generate pokemon in Sphere X" (or should this only be accomplished by the sphere_modes in meta file?)
 
 - add to AUR somehow, or add some instructions in README for "how to install on Linux so it can run from launchers like wofi, etc.".

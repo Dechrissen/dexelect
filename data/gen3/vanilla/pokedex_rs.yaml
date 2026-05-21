@@ -1501,7 +1501,6 @@
   hm_learnset:
   - FLASH
   - ROCK_SMASH
-  - SOFTBOILED
   - STRENGTH
   evolution_method_required: none
 - name: TANGELA
@@ -2026,7 +2025,6 @@
   - FLASH
   - FLY
   - ROCK_SMASH
-  - SOFTBOILED
   - STRENGTH
   - SURF
   - TELEPORT
@@ -3271,7 +3269,6 @@
   hm_learnset:
   - FLASH
   - ROCK_SMASH
-  - SOFTBOILED
   - STRENGTH
   evolution_method_required: happiness
 - name: RAIKOU

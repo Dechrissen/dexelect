@@ -45,7 +45,6 @@ ensure_hm_coverage:
   SURF: true
   DIG: false
   TELEPORT: false
-  SOFTBOILED: false
 allowed_acquisition_methods:
   starter: true
   walk: true
