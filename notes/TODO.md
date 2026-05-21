@@ -72,10 +72,6 @@
   - i guess this could also be used for coverage testing to make sure certain distributions are being met
   - also have e.g. `dexelect --generate` to print a generated team to the command line instantly and `dexelect --random`
   
-- add bug report link / template to repo
-
-- "report a bug" button in the GUI
-
 - wacky idea: "prescribed poke ball" option that displays the type of ball u should catch something in, like a ball png for the specific ball in the top right of the card. can be in the "Display" toggles. Would require some additional progression/config data because certain balls are not available till later in game.
 
 - add honey tree calcs - https://www.dragonflycave.com/sinnoh/honey-trees/

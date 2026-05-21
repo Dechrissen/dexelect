@@ -260,7 +260,6 @@ class DexelectApp(ctk.CTk):
         x = (sw - win_w) // 2
         y = max(0, (sh - win_h) // 2)
         self.geometry(f"{win_w}x{win_h}+{x}+{y}")
-        self.minsize(900, 620)
 
         # ---- App state ----
         self.all_pools       = all_pools
@@ -310,6 +309,8 @@ class DexelectApp(ctk.CTk):
         # ---- Populate UI from loaded data ----
         self._populate_ui_from_state()
 
+        self.after(0, self._update_min_size)
+
         self.bind("<Return>", lambda e: self._run_generation()
                   if self.generate_btn.cget("state") == "normal"
                   and self.tabview.get() == "Generate"
@@ -341,6 +342,15 @@ class DexelectApp(ctk.CTk):
     # =========================================================================
     # LAYOUT SKELETON
     # =========================================================================
+
+    def _update_min_size(self):
+        self.update_idletasks()
+        min_h = (self.export_btn.winfo_y()
+                 + self.export_btn.winfo_height()
+                 + 20                                       # footer top padding
+                 + self._sidebar_footer.winfo_reqheight()
+                 + 20)                                      # footer bottom padding
+        self.minsize(900, min_h)
 
     def _build_layout(self):
         self.grid_columnconfigure(0, weight=0)
@@ -505,7 +515,8 @@ class DexelectApp(ctk.CTk):
         self.export_btn.grid(row=18, column=0, padx=20, pady=(12, 0), sticky="ew")
 
         # ---- Copyright (pinned to bottom) ----
-        footer = tk.Frame(sf, bg=C_SIDEBAR)
+        self._sidebar_footer = tk.Frame(sf, bg=C_SIDEBAR)
+        footer = self._sidebar_footer
         footer.grid(row=99, column=0, padx=20, pady=20, sticky="sw")
         sf.grid_rowconfigure(99, weight=1)
 
@@ -549,6 +560,22 @@ class DexelectApp(ctk.CTk):
         gh_lbl.bind("<Button-1>", lambda e: webbrowser.open("https://github.com/Dechrissen/dexelect"))
         gh_lbl.bind("<Enter>", lambda e: gh_lbl.configure(text_color=C_TEXT))
         gh_lbl.bind("<Leave>", lambda e: gh_lbl.configure(text_color=C_ACCENT))
+
+        ctk.CTkLabel(links, text="·", font=FONT_BODY, text_color=C_MUTED,
+                     fg_color=C_SIDEBAR).pack(side="left", padx=(4, 4))
+
+        bug_lbl = ctk.CTkLabel(
+            links,
+            text="Report a Bug",
+            font=FONT_BODY,
+            text_color=C_ACCENT,
+            fg_color=C_SIDEBAR,
+            cursor="hand2",
+        )
+        bug_lbl.pack(side="left")
+        bug_lbl.bind("<Button-1>", lambda e: webbrowser.open("https://github.com/Dechrissen/dexelect/issues/new?labels=bug"))
+        bug_lbl.bind("<Enter>", lambda e: bug_lbl.configure(text_color=C_TEXT))
+        bug_lbl.bind("<Leave>", lambda e: bug_lbl.configure(text_color=C_ACCENT))
 
 
     # =========================================================================
