@@ -10,6 +10,8 @@ datas = [
     ('config',         'config'),
     ('data',           'data'),
     ('assets/sprites', 'assets/sprites'),
+    ('assets/icons',   'assets/icons'),
+    ('assets/logo',    'assets/logo'),
     ('ui/gui-help.md',         'ui'),
     ('ui/tooltips.yaml',       'ui'),
     ('ui/export_template.txt', 'ui'),
@@ -38,6 +40,7 @@ exe = EXE(
     strip=False,
     upx=True,
     console=False,
+    icon='assets/icons/dexelect.ico',
 )
 
 coll = COLLECT(

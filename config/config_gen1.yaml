@@ -38,11 +38,11 @@ type_blacklist:
   options: [normal, fire, water, grass, electric, flying, fighting, ice, psychic,
     ground, rock, poison, bug, dragon, ghost]
 ensure_hm_coverage:
-  FLASH: false
   CUT: true
-  STRENGTH: true
   FLY: true
   SURF: true
+  STRENGTH: true
+  FLASH: false
   DIG: false
   TELEPORT: false
 allowed_acquisition_methods:

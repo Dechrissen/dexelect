@@ -1,6 +1,5 @@
 # TODO
 
-- make a README logo / app icon for Linux and Windows top left window icon
 - add to itch.io
 
 - add support for:
@@ -83,3 +82,5 @@
 - DEBUG stuff:
   - have debug details be output to a file
   - have party be output regularly even if it doesnt fail so we can see the party in debug
+
+- improve debug logging

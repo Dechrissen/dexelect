@@ -1,15 +1,23 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo/dexelect-logo-white.png">
+    <source media="(prefers-color-scheme: light)" srcset="assets/logo/dexelect-logo-black.png">
+    <img alt="Dexelect" src="assets/logo/dexelect-logo-black.png" width="400">
+  </picture>
+</p>
+
 # Dexelect – Progression-aware Pokémon Party Generator
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Q5Q311GBFF)
 
 > "Dex" (Pokédex) + "elect" / "select" — a tool that elects Pokémon to be used in the player's party
 
-A tool for generating (prescribing) a random, progression-aware party of Pokémon for use in a challenge playthrough. 
+Dexelect is a tool for generating (prescribing) a random, progression-aware party of Pokémon for use in a challenge playthrough. 
 Pokémon availability and game progression are respected in the final output, and customization options are 
 available to curate the output further.
 
 <p align="center">
-  <img src="screenshots/sample-gui-output.png">
+  <img alt="Dexelect GUI sample output" src="screenshots/sample-gui-output.png">
 </p>
 
 
@@ -66,30 +74,25 @@ See [`CONTRIBUTING.md`](/CONTRIBUTING.md) if you'd like to add support for a rom
 
 ## Installation
 
-### Option 1: Download the pre-built GUI executable (Windows/Linux)
+### Option 1: Download (Windows/Linux)
 
-1. Download `dexelect-<version>-<platform>.zip` from the [latest release](https://github.com/Dechrissen/dexelect/releases/latest) 
-2. Extract it
-3. Run `dexelect.exe` on Windows, or the `dexelect` binary on Linux (e.g. with `./dexelect`)
+1. Download and extract `dexelect-<version>-<platform>.zip` from the [latest release](https://github.com/Dechrissen/dexelect/releases/latest)
+2. Run `dexelect.exe` on Windows, or `./dexelect` on Linux
+3. **Linux only** (optional): After extracting, run `./install.sh` to register Dexelect with your app launcher — you can then delete the downloaded folder. To update, repeat these steps with the new version (the old one will be overwritten).
 
-### Option 2: Build the standalone GUI binary
+### Option 2: Build the binary (Windows/Linux)
 
 Follow the [build instructions](/docs/BUILD.md).
 
-### Option 3: Command-line installation
+### Option 3: Run from source
 
-Prerequisites:
-- Python 3.10+
+Requires Python 3.10+.
 
-Steps:
-1. `git clone https://github.com/Dechrissen/dexelect.git` (or download the [latest release](https://github.com/Dechrissen/dexelect/releases/latest) 
-   source code and extract it)
+1. `git clone https://github.com/Dechrissen/dexelect.git`
 2. `cd dexelect`
-3. (Optional) Create a virtual environment (`python -m venv .venv`)
-4. (Optional) Activate the virtual environment  (`source .venv/bin/activate`)
-5. Install dependencies (`pip install -r requirements.txt`)
-6. (Optional) If you want sprites to display in the GUI, run `python main.py --fetch_sprites`
-7. Run `python main.py` for the GUI (for the CLI UI, run `python main.py --ui=cli`)
+3. `pip install -r requirements.txt` (virtual environment recommended)
+4. (Optional) `python main.py --fetch-sprites` to enable sprite display in the GUI
+5. `python main.py`
 
 
 ## Usage

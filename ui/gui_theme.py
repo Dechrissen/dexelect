@@ -4,20 +4,20 @@
 import customtkinter as ctk
 
 ctk.set_appearance_mode("dark")
-ctk.set_default_color_theme("green")
+ctk.set_default_color_theme("blue")
 
-# Colour palette — dark minimal, single soft green accent
+# Colour palette — dark minimal, single soft blue accent (matches app icon gradient)
 C_BG        = "#111111"   # near-black main background
 C_PANEL     = "#171717"   # slightly lifted panel background
 C_SIDEBAR   = "#141414"   # sidebar (subtle distinction from main)
-C_ACCENT    = "#6abf7b"   # soft green — sole accent colour
-C_ACCENT2   = "#2a3d2e"   # dark green — hover states, dividers, secondary fills
-C_ACCENT_DIM = "#1f2d22"  # very subtle green tint — secondary button faces
-C_ACCENT2_DIM = "#1a2419"  # dimmed dark green — disabled button faces
+C_ACCENT    = "#40b3d9"   # soft blue — sole accent colour
+C_ACCENT2   = "#1c3040"   # dark blue — hover states, dividers, secondary fills
+C_ACCENT_DIM = "#152535"  # very subtle blue tint — secondary button faces
+C_ACCENT2_DIM = "#101e2a"  # dimmed dark blue — disabled button faces
 C_TEXT      = "#e0e0e0"   # primary text (off-white, not harsh)
 C_MUTED     = "#b8b8b8"   # secondary / muted text
-C_BTN_TEXT  = "#0f1f14"   # dark text for use on green (accent) buttons
-C_SUCCESS   = "#6abf7b"   # same as accent for success messages
+C_BTN_TEXT  = "#071828"   # dark text for use on blue (accent) buttons
+C_SUCCESS   = "#40b3d9"   # same as accent for success messages
 C_WARNING   = "#c8a96e"   # muted amber — kept for warnings only
 C_TITLE     = "#d4a84b"   # muted gold — app title
 C_CARD      = "#222222"   # card face background (lifted above C_PANEL)

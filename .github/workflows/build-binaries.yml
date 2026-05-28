@@ -31,6 +31,9 @@ jobs:
         id: get_version
         run: echo "VERSION=$(python -c 'import version; print(version.__version__)')" >> $GITHUB_ENV
 
+      - name: Bundle install script
+        run: cp scripts/install.sh dist/dexelect/install.sh
+
       - name: Rename output folder
         run: mv dist/dexelect dist/dexelect-v${{ env.VERSION }}-linux-x86_64
 

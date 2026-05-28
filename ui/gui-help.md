@@ -20,6 +20,7 @@ From the left sidebar, you can:
 - Change Mode
 - Set Party Size (1–6)
 - Hide accompanying details for generated teams
+- Export party to text file
 
 To modify configuration options, navigate to the Config tab and make changes to your liking.
 

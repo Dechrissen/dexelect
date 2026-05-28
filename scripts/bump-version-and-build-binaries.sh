@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+cd "$(dirname "$0")/.."
 
 # ------------------------------------------------------------------------------------------
 # This script simply creates a new tag for the current version and pushes it to GitHub,

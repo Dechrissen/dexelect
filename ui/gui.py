@@ -31,6 +31,7 @@ import threading
 import time
 import os
 import re
+import sys
 import webbrowser
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont, ImageTk
@@ -261,6 +262,21 @@ class DexelectApp(ctk.CTk):
         y = max(0, (sh - win_h) // 2)
         self.geometry(f"{win_w}x{win_h}+{x}+{y}")
 
+        # ---- App icon ----
+        _icon_sizes = [16, 32, 38, 64, 128, 256]
+        _icon_imgs = []
+        for _s in _icon_sizes:
+            _p = resource_path(f"assets/icons/{_s}.png")
+            if os.path.exists(_p):
+                _icon_imgs.append(ImageTk.PhotoImage(Image.open(_p)))
+        if _icon_imgs:
+            self.wm_iconphoto(True, *_icon_imgs)
+            self._icon_imgs = _icon_imgs  # prevent GC
+        if sys.platform == "win32":
+            _ico = resource_path("assets/icons/dexelect.ico")
+            if os.path.exists(_ico):
+                self.iconbitmap(_ico)
+
         # ---- App state ----
         self.all_pools       = all_pools
         self.all_pokemon     = all_pokemon
@@ -384,8 +400,20 @@ class DexelectApp(ctk.CTk):
         sf.grid_columnconfigure(0, weight=1)
 
         # ---- Title ----
-        ctk.CTkLabel(sf, text="Dexelect", font=FONT_APP_TITLE, text_color=C_TITLE).grid(
-            row=0, column=0, padx=20, pady=(24, 2), sticky="w")
+        _logo_path = resource_path("assets/logo/dexelect-logo-white.png")
+        if os.path.exists(_logo_path):
+            _logo_src = Image.open(_logo_path)
+            _logo_display_w = 190
+            _logo_display_h = round(_logo_display_w * _logo_src.height / _logo_src.width)
+            self._logo_ctk = ctk.CTkImage(
+                light_image=_logo_src, dark_image=_logo_src,
+                size=(_logo_display_w, _logo_display_h),
+            )
+            ctk.CTkLabel(sf, image=self._logo_ctk, text="").grid(
+                row=0, column=0, padx=20, pady=(24, 2), sticky="w")
+        else:
+            ctk.CTkLabel(sf, text="Dexelect", font=FONT_APP_TITLE, text_color=C_TITLE).grid(
+                row=0, column=0, padx=20, pady=(24, 2), sticky="w")
         ctk.CTkLabel(sf, text=f"v{__version__}", font=FONT_MONO, text_color=C_TEXT).grid(
             row=1, column=0, padx=20, pady=(0, 20), sticky="w")
 
@@ -2095,11 +2123,19 @@ class DexelectApp(ctk.CTk):
         party_str = "\n".join(party_lines)
 
         # --- HM Coverage ---
+        hm_config = self.config_data.get("ensure_hm_coverage", {})
         hm_set = set(
             hm for m in blob["party_with_acquisition_data"]
             for hm in m["party_member_obj"].hm_learnset
         )
-        hm_str = ", ".join(sorted(hm_set)) if hm_set else "—"
+        if hm_config:
+            hm_parts = [
+                f"{hm}(Y)" if hm in hm_set else f"{hm}(N)"
+                for hm in hm_config
+            ]
+            hm_str = "  ".join(hm_parts)
+        else:
+            hm_str = "—"
 
         # --- Balance Stats ---
         if not is_random and blob.get("lean") is not None:
