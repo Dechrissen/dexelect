@@ -1,6 +1,3 @@
-# Copyright 2025 Derek Andersen
-# https://derekandersen.net
-
 import customtkinter as ctk
 
 ctk.set_appearance_mode("dark")

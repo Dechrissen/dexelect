@@ -6,34 +6,48 @@
   </picture>
 </p>
 
-# Dexelect – Progression-aware Pokémon Party Generator
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Q5Q311GBFF)
-
-> "Dex" (Pokédex) + "elect" / "select" — a tool that elects Pokémon to be used in the player's party
-
-Dexelect is a tool for generating (prescribing) a random, progression-aware party of Pokémon for use in a challenge playthrough. 
-Pokémon availability and game progression are respected in the final output, and customization options are 
-available to curate the output further.
+<p align="center">
+<i>Dex (as in Pokédex) + elect / select = Dexelect</i>
+</p>
 
 <p align="center">
-  <img alt="Dexelect GUI sample output" src="screenshots/sample-gui-output.png">
+  <a href='https://ko-fi.com/Q5Q311GBFF' target='_blank'><img height='32' style='border:0px;height:32px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </br>
+  <a href="https://github.com/Dechrissen/dexelect/blob/master/LICENSE"><img
+  alt="MIT License"
+  src="https://img.shields.io/badge/license-MIT-orange"></a>
+  <a href="https://github.com/Dechrissen/dexelect/releases/latest"><img
+  alt="Download Dexelect"
+  src="https://img.shields.io/badge/download-latest-green"></a>
+  <a href="https://discord.gg/YTxu5uM7r6"><img
+  alt="Solus Discord server"
+  src="https://img.shields.io/discord/1346293888318443520?label=discord&logo=discord&logoColor=white&color=blue"></a>
+  
+  
 </p>
 
 
-## Table of contents
+
+# Dexelect – Progression-aware Party Generator
+
+Dexelect is a tool for generating (prescribing) a random, progression-faithful party of Pokémon for use in a challenge playthrough. Customization options are available to curate the output party further.
+
+<p align="center">
+  <img alt="Dexelect GUI sample output" src="screenshots/sample-gui-output.png" width="80%">
+</p>
+
+
+## Table of Contents
 1. [Introduction](#introduction)
 2. [Currently supported games](#currently-supported-games)
 3. [Installation](#installation)
 4. [Usage](#usage)
 5. [Credits](#credits)
 6. [Support the app](#support-dexelect)
-7. [Contributing](#contributing)
-8. [License](#license)
 
 
 ## Introduction
-Dexelect generates (prescribes) a **progressively sound** party for use in a playthrough — either to introduce an element of 
+Dexelect generates (prescribes) a **progression-faithful** party for use in a playthrough — either to introduce an element of 
 challenge or simply for team inspiration. See the [suggested rulesets](/docs/RULESETS.md) for some ideas about how to use Dexelect.
 
 The app is **universal** in that it maintains compatibility with most generations of Pokémon games, 
@@ -84,7 +98,7 @@ See [`CONTRIBUTING.md`](/CONTRIBUTING.md) if you'd like to add support for a rom
 
 Follow the [build instructions](/docs/BUILD.md).
 
-### Option 3: Run from source
+### Option 3: Run from source (terminal)
 
 Requires Python 3.10+.
 
@@ -97,7 +111,7 @@ Requires Python 3.10+.
 
 ## Usage
 
-### Using the GUI (`python main.py --ui=gui`)
+### Using the GUI
 - The app is split into sidebar (left) and main window (right). Help option is at the top right.
 - Left sidebar:
   - The mode can be toggled between 'Progression' and 'Random'
@@ -125,12 +139,12 @@ Requires Python 3.10+.
 - `Q` – Quit the app
 
 #### Modifying config settings for the CLI app
-Open `/config/config_gen1.yaml` (for example, for Generation 1 games). Modify values according to your preferences. 
+Open `/config/config_gen1.yaml` (for Gen 1 games for instance). Modify values according to your preferences. 
 Save the file and then, if the app was running, use the `R` option in the app to reload.
 
 
 ## Credits
-- [Quadrixis](https://github.com/Quadrixis) – assistance with progression data planning and general testing
+- [Quadrixis](https://github.com/Quadrixis) – assistance with progression data planning and app testing
 
 
 ## Support Dexelect
@@ -138,7 +152,7 @@ Save the file and then, if the app was running, use the `R` option in the app to
 Please support Dexelect development! The app is free and open-source, but you can support it in these ways:
 - [Donate on Ko-fi](https://ko-fi.com/Q5Q311GBFF)
 - Give this repository a Star :star:
-- [Join the Solus Discord](https://discord.gg/YTxu5uM7r6)
+- Join the [Discord](https://discord.gg/YTxu5uM7r6)
 - Share the app with someone who might be interested
 
 
@@ -149,4 +163,10 @@ If you'd like to add support for a missing game or romhack, see [`CONTRIBUTING.m
 
 ## License
 
-Dexelect is licensed under the MIT License. See [`LICENSE`](/LICENSE) for full details.
+Dexelect is licensed under the MIT License (see [`LICENSE`](/LICENSE)).
+
+## Disclaimer on LLM usage
+
+The core code in this project (i.e., `core.py` logic and functions, data file format, data structures, classes) was not designed nor written by an LLM.
+
+The GUI wrapper was created using LLMs; as such the one file that was exclusively authored by an LLM in this project is `/ui/gui.py`. Development work on this project is sometimes carried out utilizing LLMs for certain tedious tasks such as data file creation / formatting (the `.yaml` files in `/data`).

@@ -1,4 +1,4 @@
-# Copyright 2025 Derek Andersen
+# Copyright 2026 Derek Andersen
 # https://derekandersen.net
 # https://github.com/Dechrissen/
 

@@ -19,7 +19,7 @@ From the left sidebar, you can:
 - Change Game
 - Change Mode
 - Set Party Size (1–6)
-- Hide accompanying details for generated teams
+- Hide accompanying details for generated parties
 - Export party to text file
 
 To modify configuration options, navigate to the Config tab and make changes to your liking.
@@ -51,9 +51,9 @@ A breakdown of how many party members appear in each sphere.
 
 ## Spheres
 
-Sphere modes can be changed in the Spheres tab. Enabled spheres are displayed beneath the selector depending on the active Sphere mode. Per-sphere location lists can be referenced here as well.
+Sphere modes can be changed in the Spheres tab. Enabled spheres (which vary depending on the active Sphere mode) are displayed in this tab.
 
-Each game has its own available Sphere modes. The 'all' option enables all spheres for a given game, including postgame.
+Each game has its own set of available Sphere modes. The 'all' option enables all spheres for a given game, including endgame and postgame (for typical usage, you'd probably want to keep these spheres disabled).
 
 ## Configuration
 
@@ -63,13 +63,13 @@ The tool's output can be fine-tuned to your liking by tweaking values such as:
 
 - Party balancing
 - Pokémon details (types, stat totals, etc.)
-- Allow acquisition methods (walk, surf, rod, etc.)
+- Allowed acquisition methods (walk, surf, rod, etc.)
 
 Hover over the tooltips in the Config tab for an explanation of each config field.
 
 ## Tips & Suggestions
 
-Dexelect can be used to "prescribe" a party to be used in challenge playthroughs. Depending on the restrictiveness of your configuration settings, the output party could be quite challenging to use in-game.
+Dexelect intended usage is to "prescribe" a party to be used in challenge playthroughs. Depending on the restrictiveness of your configuration settings, the output party could be quite challenging to use in-game.
 
 ### Challenge run
 Generate a party with difficult configuration settings, and challenge yourself to enter the Hall of Fame using only that party.
@@ -77,6 +77,6 @@ Generate a party with difficult configuration settings, and challenge yourself t
 ### Race with friends
 Generate a party and race your friends (using the same party) to finish the game. In-game time (IGT) can be used to determine a victor.
 
-### General team inspiration
-To introduce variety to your playthroughs, Dexelect can be used to generate a team for you that you might not otherwise assmeble on your own.
+### General party inspiration
+To introduce variety to your playthroughs, Dexelect can be used to generate a party which you might not otherwise assemble on your own.
 

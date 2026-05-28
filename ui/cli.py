@@ -1,4 +1,4 @@
-# Copyright 2025 Derek Andersen
+# Copyright 2026 Derek Andersen
 # https://derekandersen.net
 # https://github.com/Dechrissen/
 
@@ -109,7 +109,7 @@ def print_copyright():
     RESET = "\033[0m"
     print(
             f"{BRIGHT_BLACK}"
-            "Copyright 2025 Derek Andersen (derekandersen.net). Licensed under the MIT License.\n"
+            "Copyright 2026 Derek Andersen (derekandersen.net). Licensed under the MIT License.\n"
             "Support this software: https://ko-fi.com/dechrissen"
             f"{RESET}"
         )

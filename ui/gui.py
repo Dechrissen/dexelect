@@ -1,4 +1,4 @@
-# Copyright 2025 Derek Andersen
+# Copyright 2026 Derek Andersen
 # https://derekandersen.net
 # https://github.com/Dechrissen/
 
@@ -550,7 +550,7 @@ class DexelectApp(ctk.CTk):
 
         ctk.CTkLabel(
             footer,
-            text="© 2025 Derek Andersen",
+            text="© 2026 Derek Andersen",
             font=FONT_BODY,
             text_color=C_MUTED,
             justify="left",
@@ -1694,7 +1694,7 @@ class DexelectApp(ctk.CTk):
         int_row("max_evo_stage", "Max evolution stage")
         int_row("bst_max", "BST maximum", nullable=True)
         int_row("bst_min", "BST minimum", nullable=True)
-        text_row("species_blacklist", "Species blacklist (comma-separated stage 1s)", placeholder="e.g. EEVEE, MR.MIME, NIDORAN_M")
+        text_row("species_blacklist", "Species blacklist (comma-separated Stage 1s)", placeholder="e.g. EEVEE, MR.MIME, NIDORAN_M")
         multi_check_row("generation_filter", "Generation filter (empty = no filter)",
                         label_map={1: "Gen 1 (National Dex #1–151)",
                                    2: "Gen 2 (National Dex #152–251)",
