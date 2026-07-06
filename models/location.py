@@ -25,7 +25,11 @@ class Location:
                  go_goggles: list[str] = None,
                  devon_scope: list[str] = None,
                  sealed_chamber_puzzle: list[str] = None,
-                 mirage_island: list[str] = None):
+                 mirage_island: list[str] = None,
+                 # gen 4 methods ...
+                 honey_tree: list[str] = None,
+                 binoculars: list[str] = None,
+                 odd_keystone: list[str] = None):
         ### acquisition methods ###
         self.name = name # str
         self.starter = starter  # list[str]
@@ -53,4 +57,8 @@ class Location:
         self.devon_scope = devon_scope # list[str]
         self.sealed_chamber_puzzle = sealed_chamber_puzzle # list[str]
         self.mirage_island = mirage_island # list[str]
+        # gen 4 methods ...
+        self.honey_tree = honey_tree # list[str]
+        self.binoculars = binoculars # list[str]
+        self.odd_keystone = odd_keystone # list[str]
 

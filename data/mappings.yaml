@@ -41,6 +41,20 @@ Sapphire:
   config: 'config/config_gen3.yaml'
   sprites: 'assets/sprites/gen3'
 
+Diamond:
+  meta: 'data/gen4/vanilla/meta_dp.yaml'
+  pokedex: 'data/gen4/vanilla/pokedex_dp.yaml'
+  locations: 'data/gen4/vanilla/locations_diamond.yaml'
+  config: 'config/config_gen4.yaml'
+  sprites: 'assets/sprites/gen4'
+
+Pearl:
+  meta: 'data/gen4/vanilla/meta_dp.yaml'
+  pokedex: 'data/gen4/vanilla/pokedex_dp.yaml'
+  locations: 'data/gen4/vanilla/locations_pearl.yaml'
+  config: 'config/config_gen4.yaml'
+  sprites: 'assets/sprites/gen4'
+
 ### romhacks ###
 Solus RGB:
   meta: 'data/gen1/romhacks/meta_solusrgb.yaml'

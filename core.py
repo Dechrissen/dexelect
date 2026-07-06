@@ -10,10 +10,10 @@ import random
 #DEBUG = True
 DEBUG = False
 
-GEN_RANGES = {1: (1, 151), 2: (152, 251), 3: (252, 386)}
+GEN_RANGES = {1: (1, 151), 2: (152, 251), 3: (252, 386), 4: (387, 493)}
 
 def generate_final_party(all_pools: dict, all_pokemon: dict, config_data: dict, meta_data: dict, n: int = 6,
-                         retry: int = 0, max_retries: int = 300, max_iterations: int = 10000):
+                         retry: int = 0, max_retries: int = 300, max_iterations: int = 20000):
     """
     Generates a final party of Pokemon.
 
@@ -742,7 +742,11 @@ def construct_full_location_set(location_data) -> dict[str, Location]:
             go_goggles=cur_loc["go_goggles"] if "go_goggles" in cur_loc else None,
             devon_scope=cur_loc["devon_scope"] if "devon_scope" in cur_loc else None,
             sealed_chamber_puzzle=cur_loc["sealed_chamber_puzzle"] if "sealed_chamber_puzzle" in cur_loc else None,
-            mirage_island=cur_loc["mirage_island"] if "mirage_island" in cur_loc else None
+            mirage_island=cur_loc["mirage_island"] if "mirage_island" in cur_loc else None,
+            # gen 4 methods ...
+            honey_tree=cur_loc["honey_tree"] if "honey_tree" in cur_loc else None,
+            binoculars=cur_loc["binoculars"] if "binoculars" in cur_loc else None,
+            odd_keystone=cur_loc["odd_keystone"] if "odd_keystone" in cur_loc else None
         )
 
         # add current loc's Location object to dict

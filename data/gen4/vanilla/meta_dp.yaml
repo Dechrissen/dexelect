@@ -1,0 +1,331 @@
+starter_species:
+- TURTWIG
+- CHIMCHAR
+- PIPLUP
+
+# Only one of the Pokemon per modal group can be generated,
+# and no dupes of any selected from a group
+modal_species:
+- [GARDEVOIR, GALLADE]
+- [GLALIE, FROSLASS]
+- [WORMADAM, MOTHIM]
+
+limited_acquisition_methods:
+- starter
+- static_encounter
+- gift
+- trade
+- fossil_restore
+- roaming
+
+acquisition_methods:
+- name: starter
+  is_default: true
+- name: walk
+  is_default: true
+- name: surf
+  is_default: false
+- name: old_rod
+  is_default: false
+- name: good_rod
+  is_default: false
+- name: super_rod
+  is_default: false
+- name: static_encounter
+  is_default: true
+- name: trade
+  is_default: true
+- name: gift
+  is_default: true
+- name: fossil_restore
+  is_default: true
+- name: honey_tree
+  is_default: true
+- name: binoculars
+  is_default: true
+- name: roaming
+  is_default: true
+- name: odd_keystone
+  is_default: false
+
+evo_items_available:
+  moon_stone: inf
+  fire_stone: inf
+  water_stone: inf
+  thunder_stone: inf
+  leaf_stone: inf
+  sun_stone: inf
+  shiny_stone: inf
+  dusk_stone: inf
+  dawn_stone: inf
+
+spheres:
+- sphereNum: 1
+  contents:
+  - name: TwinleafTown
+    type: map
+  - name: Route201
+    type: map
+  - name: LakeVerity
+    type: map
+  - name: Route219
+    type: map
+  - name: Route202
+    type: map
+  - name: Route203
+    type: map
+  - name: OreburghGate1F
+    type: map
+  - name: OreburghGateB1F
+    type: map
+  - name: OreburghCity
+    type: map
+  - name: OreburghMineB1F
+    type: map
+  - name: OreburghMineB2F
+    type: map
+  - name: Route207
+    type: map
+  - name: old_rod
+    type: acquisition_unlock
+  - name: Route204South
+    type: map
+  - name: RavagedPath
+    type: map
+  - name: Route204North
+    type: map
+  - name: FloaromaMeadow
+    type: map
+  - name: Route205South
+    type: map
+  - name: ValleyWindworks
+    type: map
+  - name: EternaForest
+    type: map
+  - name: OldChateau
+    type: map
+  - name: Route205North
+    type: map
+  - name: EternaCity
+    type: map
+  - name: odd_keystone
+    type: acquisition_unlock
+  - name: OreburghMiningMuseum
+    type: map
+- sphereNum: 2
+  contents:
+  - name: Route206
+    type: map
+  - name: WaywardCave1F
+    type: map
+  - name: WaywardCaveB1F
+    type: map
+  - name: MtCoronetSouth1F
+    type: map
+  - name: Route208
+    type: map
+  - name: HearthomeCity
+    type: map
+  - name: Route211West
+    type: map
+  - name: MtCoronetNorth1F1R
+    type: map
+  - name: Route209
+    type: map
+  - name: good_rod
+    type: acquisition_unlock
+  - name: LostTower1F
+    type: map
+  - name: LostTower2F
+    type: map
+  - name: LostTower3F
+    type: map
+  - name: LostTower4F
+    type: map
+  - name: LostTower5F
+    type: map
+  - name: SolaceonRuins
+    type: map
+  - name: Route212North
+    type: map
+  - name: TrophyGarden
+    type: map
+  - name: Route212South
+    type: map
+  - name: Route210South
+    type: map
+  - name: Route215
+    type: map
+  - name: Route214
+    type: map
+  - name: ManiacTunnel
+    type: map
+  - name: ValorLakefront
+    type: map
+  - name: Route213
+    type: map
+  - name: PastoriaCity
+    type: map
+  - name: GreatMarshArea1_2
+    type: map
+  - name: GreatMarshArea3_4
+    type: map
+  - name: GreatMarshArea5
+    type: map
+  - name: GreatMarshArea6
+    type: map
+  - name: GreatMarshSpecialArea
+    type: map
+- sphereNum: 3
+  contents:
+  - name: Route210North
+    type: map
+  - name: CelesticTown
+    type: map
+  - name: surf
+    type: acquisition_unlock
+  - name: Route220
+    type: map
+  - name: Route221
+    type: map
+  - name: FuegoIronworks
+    type: map
+  - name: Route211East
+    type: map
+  - name: Route218
+    type: map
+  - name: IronIslandExterior
+    type: map
+  - name: IronIslandInterior1F
+    type: map
+  - name: IronIslandInteriorB1F
+    type: map
+  - name: IronIslandInteriorB2F
+    type: map
+  - name: IronIslandInteriorB3F
+    type: map
+  - name: MtCoronetNorthB1F
+    type: map
+  - name: MtCoronetNorth1F2R
+    type: map
+  - name: Route216
+    type: map
+  - name: Route217
+    type: map
+  - name: AcuityLakefront
+    type: map
+  - name: LakeAcuity
+    type: map
+  - name: SnowpointCity
+    type: map
+- sphereNum: 4
+  contents:
+  - name: MtCoronet2F
+    type: map
+  - name: MtCoronet3F
+    type: map
+  - name: MtCoronet4F1R
+    type: map
+  - name: MtCoronet4F2R
+    type: map
+  - name: MtCoronet4F3R
+    type: map
+  - name: MtCoronet5F
+    type: map
+  - name: MtCoronet6F
+    type: map
+  - name: MtCoronetTunnelRoom
+    type: map
+  - name: MtCoronetMountainSide
+    type: map
+  - name: SpearPillar
+    type: map
+  - name: LakeValor
+    type: map
+  - name: LakeValorCavern
+    type: map
+  - name: LakeAcuityCavern
+    type: map
+  - name: LakeVerityCavern
+    type: map
+  - name: Route222
+    type: map
+  - name: SunyshoreCity
+    type: map
+  - name: Route223
+    type: map
+- sphereNum: 5
+  contents:
+  - name: VictoryRoad1F
+    type: map
+  - name: VictoryRoad2F
+    type: map
+  - name: VictoryRoadB1F
+    type: map
+  - name: PokemonLeague
+    type: map
+- sphereNum: 6
+  contents:
+  - name: VictoryRoad1FBack2
+    type: map
+  - name: VictoryRoad1FBack1
+    type: map
+  - name: VictoryRoad1FBack3
+    type: map
+  - name: Route224
+    type: map
+  - name: SendoffSpring
+    type: map
+  - name: TurnbackCaveSection1
+    type: map
+  - name: TurnbackCaveSection2
+    type: map
+  - name: TurnbackCaveSection3
+    type: map
+  - name: TurnbackCaveSection4
+    type: map
+  - name: OldChateauTV
+    type: map
+  - name: SnowpointTemple1F
+    type: map
+  - name: SnowpointTempleB1F
+    type: map
+  - name: SnowpointTempleB2F
+    type: map
+  - name: SnowpointTempleB3F
+    type: map
+  - name: SnowpointTempleB4F
+    type: map
+  - name: SnowpointTempleB5F
+    type: map
+  - name: super_rod
+    type: acquisition_unlock
+  - name: Route225
+    type: map
+  - name: Route226
+    type: map
+  - name: Route227
+    type: map
+  - name: StarkMountainEntrance
+    type: map
+  - name: StarkMountainInterior
+    type: map
+  - name: StarkMountainOutside
+    type: map
+  - name: StarkMountainInnerCave
+    type: map
+  - name: Route228
+    type: map
+  - name: Route229
+    type: map
+  - name: Route230
+    type: map
+  - name: ResortArea
+    type: map
+  - name: FullMoonIsland
+    type: map
+
+sphere_generation_modes:
+  all: [1,2,3,4,5,6] # all areas including postgame
+  no_postgame: [1,2,3,4,5] # beginning of game through Victory Road, excluding postgame
+  pre_victory_road: [1,2,3,4] # beginning of game up to Victory Road

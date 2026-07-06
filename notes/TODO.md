@@ -84,3 +84,5 @@
   - have party be output regularly even if it doesnt fail so we can see the party in debug
 
 - improve debug logging
+
+- might not make sense to have postgame spheres at all (e.g., in D/P Cresselia can only be obtained post-national dex which contradicts our exclusion of other post-national dex stuff like poke radar and swarms etc. So maybe postgame doesn't need to be included in any of the games.)

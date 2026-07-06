@@ -1698,7 +1698,8 @@ class DexelectApp(ctk.CTk):
         multi_check_row("generation_filter", "Generation filter (empty = no filter)",
                         label_map={1: "Gen 1 (National Dex #1–151)",
                                    2: "Gen 2 (National Dex #152–251)",
-                                   3: "Gen 3 (National Dex #252–386)"})
+                                   3: "Gen 3 (National Dex #252–386)",
+                                   4: "Gen 4 (National Dex #387–493)"})
         evo_methods = list(cd.get("allowed_evo_methods", {}).keys())
         nested_bool_row("allowed_evo_methods", "Allowed evolution methods", evo_methods)
 

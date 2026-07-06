@@ -1,0 +1,104 @@
+require_one_sphere_one: false
+allowed_balancing:
+  value: [balanced, early_game_heavy, late_game_heavy]
+  options: [balanced, early_game_heavy, late_game_heavy]
+allowed_spreads:
+  value: [clustered, wide_spread, mixed_spread]
+  options: [clustered, wide_spread, mixed_spread]
+allowed_patterns:
+  value: [single_cluster, dual_cluster, early_late_split, middle_only]
+  options: [single_cluster, dual_cluster, early_late_split, middle_only]
+force_starter: false
+allow_not_fully_evolved: false
+max_evo_stage: 3
+allowed_evo_methods:
+  none: true
+  level-up: true
+  moon_stone: true
+  fire_stone: true
+  water_stone: true
+  thunder_stone: true
+  leaf_stone: true
+  sun_stone: true
+  shiny_stone: true
+  dusk_stone: true
+  dawn_stone_male: true
+  dawn_stone_female: true
+  trade: false
+  trade_metal_coat: false
+  trade_kings_rock: false
+  trade_upgrade: false
+  trade_deepseatooth: false
+  trade_deepseascale: false
+  trade_dubious_disc: false
+  trade_electirizer: false
+  trade_magmarizer: false
+  trade_protector: false
+  trade_reaper_cloth: false
+  trade_dragon_scale: false
+  happiness: true
+  happiness_day: true
+  happiness_night: true
+  level-up_beauty: true
+  level-up_empty_slot_extra_ball: true
+  level-up_personality: true
+  level-up_atk_greater_def: true
+  level-up_def_greater_atk: true
+  level-up_atk_equal_def: true
+  level-up_male: true
+  level-up_female: true
+  level-up_mt_coronet: true
+  level-up_moss_rock: true
+  level-up_icy_rock: true
+  level-up_oval_stone_day: true
+  level-up_razor_claw_night: true
+  level-up_razor_fang_night: true
+  level-up_rollout: true
+  level-up_ancientpower: true
+allow_legendaries: false
+allow_duplicate_species: false
+species_blacklist: []
+bst_max: none
+bst_min: none
+allow_dual_type: true
+type_distribution:
+  value: anything_goes
+  options: [anything_goes, no_overlap, all_share_one_type]
+prescribed_type:
+  value: none
+  options: [none, normal, fire, water, grass, electric, flying, fighting, ice, psychic,
+    ground, rock, poison, bug, dragon, ghost, steel, dark]
+type_blacklist:
+  value: []
+  options: [normal, fire, water, grass, electric, flying, fighting, ice, psychic,
+    ground, rock, poison, bug, dragon, ghost, steel, dark]
+ensure_hm_coverage:
+  CUT: false
+  FLY: true
+  SURF: true
+  STRENGTH: false
+  DEFOG: false
+  ROCK_SMASH: false
+  WATERFALL: false
+  ROCK_CLIMB: false
+  FLASH: false
+  DIG: false
+  TELEPORT: false
+allowed_acquisition_methods:
+  starter: true
+  walk: true
+  surf: true
+  old_rod: true
+  good_rod: true
+  super_rod: true
+  static_encounter: true
+  trade: false
+  gift: true
+  fossil_restore: true
+  roaming: true
+  honey_tree: true
+  binoculars: false
+  odd_keystone: true
+generation_filter:
+  value: []
+  options: [1, 2, 3, 4]

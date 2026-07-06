@@ -1,0 +1,1580 @@
+- map_name: Route225
+  walk:
+  - RATTATA
+  - RATICATE
+  - SPEAROW
+  - FEAROW
+  - ROSELIA
+  - BANETTE
+  - MACHOKE
+  surf:
+  - GOLDUCK
+  - POLIWHIRL
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - POLIWAG
+  super_rod:
+  - GYARADOS
+  - POLIWHIRL
+- map_name: Route226
+  walk:
+  - FEAROW
+  - RATICATE
+  - GOLDUCK
+  - MACHOKE
+  - RATTATA
+  - SPEAROW
+  - BANETTE
+  surf:
+  - TENTACRUEL
+  - PELIPPER
+  - SPHEAL
+  - SEALEO
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - HORSEA
+  super_rod:
+  - GYARADOS
+  - SEADRA
+  - RELICANTH
+  trade:
+  - MAGIKARP
+- map_name: Route227
+  walk:
+  - FEAROW
+  - RHYDON
+  - CAMERUPT
+  - GRAVELER
+  - WEEZING
+  - RHYHORN
+  - SKARMORY
+  - NUMEL
+  - GOLBAT
+  - BANETTE
+  surf:
+  - POLIWAG
+  - POLIWHIRL
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - BARBOACH
+  super_rod:
+  - GYARADOS
+  - WHISCASH
+- map_name: StarkMountainEntrance
+  walk:
+  - CAMERUPT
+  - GEODUDE
+  - GOLBAT
+  - GRAVELER
+  - MACHOKE
+  - MAGCARGO
+  - ONIX
+  - SLUGMA
+  - WEEZING
+- map_name: StarkMountainInterior
+  walk:
+  - CAMERUPT
+  - GEODUDE
+  - GOLBAT
+  - GRAVELER
+  - MACHOKE
+  - MAGCARGO
+  - ONIX
+  - SLUGMA
+  - WEEZING
+- map_name: StarkMountainOutside
+  walk:
+  - FEAROW
+  - GOLBAT
+  - GRAVELER
+  - WEEZING
+  - RHYHORN
+  - RHYDON
+  - SKARMORY
+  - NUMEL
+  - CAMERUPT
+  - BANETTE
+- map_name: StarkMountainInnerCave
+  static_encounter:
+  - HEATRAN
+- map_name: Route228
+  walk:
+  - DIGLETT
+  - DUGTRIO
+  - RHYDON
+  - CACNEA
+  - CACTURNE
+  - HIPPOWDON
+  surf:
+  - POLIWAG
+  - POLIWHIRL
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - BARBOACH
+  - MAGIKARP
+  super_rod:
+  - GYARADOS
+  - WHISCASH
+- map_name: Route229
+  walk:
+  - ARIADOS
+  - BELLSPROUT
+  - GLOOM
+  - ILLUMISE
+  - LEDIAN
+  - ODDISH
+  - PINSIR
+  - PURUGLY
+  - VOLBEAT
+  - WEEPINBELL
+  surf:
+  - WINGULL
+  - PELIPPER
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  super_rod:
+  - GYARADOS
+- map_name: Route230
+  walk:
+  - GLOOM
+  - WEEPINBELL
+  - FLOATZEL
+  - ODDISH
+  - BELLSPROUT
+  - GOLDUCK
+  - GASTRODON
+  - DUSTOX
+  surf:
+  - TENTACRUEL
+  - PELIPPER
+  - SPHEAL
+  - SEALEO
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - REMORAID
+  super_rod:
+  - GYARADOS
+  - OCTILLERY
+  - WAILMER
+  - WAILORD
+- map_name: ResortArea
+  surf:
+  - GOLDUCK
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - GOLDEEN
+  super_rod:
+  - GYARADOS
+  - SEAKING
+- map_name: FullMoonIsland
+  roaming:
+  - CRESSELIA
+- map_name: VictoryRoad1FBack2
+  walk:
+  - FLOATZEL
+  - GOLBAT
+  - MACHOKE
+  - MEDICHAM
+  - STEELIX
+  surf:
+  - GOLBAT
+  - LAPRAS
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  super_rod:
+  - GYARADOS
+- map_name: VictoryRoad1FBack1
+  walk:
+  - MACHOKE
+  - GOLBAT
+  - GRAVELER
+  - MEDICHAM
+  - ONIX
+  - STEELIX
+- map_name: VictoryRoad1FBack3
+  walk:
+  - MACHOKE
+  - GOLBAT
+  - GRAVELER
+  - MEDICHAM
+  - ONIX
+  - STEELIX
+- map_name: Route224
+  walk:
+  - ROSELIA
+  - FLOATZEL
+  - GASTRODON
+  - CHATOT
+  - GLOOM
+  - WEEPINBELL
+  - BEAUTIFLY
+  - BUIZEL
+  - SHELLOS
+  surf:
+  - TENTACRUEL
+  - PELIPPER
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - REMORAID
+  super_rod:
+  - GYARADOS
+  - OCTILLERY
+  - LUVDISC
+- map_name: SendoffSpring
+  walk:
+  - BIBAREL
+  - CHIMECHO
+  - GOLDUCK
+  - NOCTOWL
+  - STARAVIA
+  surf:
+  - GOLDUCK
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - GOLDEEN
+  super_rod:
+  - GYARADOS
+  - SEAKING
+- map_name: TurnbackCaveSection1
+  walk:
+  - GOLBAT
+  - HAUNTER
+  - BRONZONG
+  - BRONZOR
+- map_name: TurnbackCaveSection2
+  walk:
+  - GOLBAT
+  - HAUNTER
+  - BRONZONG
+  - BRONZOR
+- map_name: TurnbackCaveSection3
+  walk:
+  - GOLBAT
+  - HAUNTER
+  - BRONZONG
+  - BRONZOR
+- map_name: TurnbackCaveSection4
+  static_encounter:
+  - GIRATINA
+- map_name: OldChateauTV
+  static_encounter:
+  - ROTOM
+- map_name: SnowpointTemple1F
+  walk:
+  - GOLBAT
+  - SNEASEL
+  - ONIX
+  - GRAVELER
+  - STEELIX
+- map_name: SnowpointTempleB1F
+  walk:
+  - GOLBAT
+  - GRAVELER
+  - ONIX
+  - SNEASEL
+  - STEELIX
+- map_name: SnowpointTempleB2F
+  walk:
+  - GOLBAT
+  - GRAVELER
+  - ONIX
+  - SNEASEL
+  - STEELIX
+- map_name: SnowpointTempleB3F
+  walk:
+  - GOLBAT
+  - GRAVELER
+  - ONIX
+  - SNEASEL
+  - STEELIX
+- map_name: SnowpointTempleB4F
+  walk:
+  - GOLBAT
+  - GRAVELER
+  - SNEASEL
+  - STEELIX
+- map_name: SnowpointTempleB5F
+  walk:
+  - GOLBAT
+  - GRAVELER
+  - SNEASEL
+  - STEELIX
+  static_encounter:
+  - REGIGIGAS
+- map_name: MtCoronet2F
+  walk:
+  - GRAVELER
+  - BRONZONG
+  - CLEFAIRY
+  - GOLBAT
+  - MACHOKE
+  - MEDICHAM
+  - CHINGLING
+  - BRONZOR
+- map_name: MtCoronet3F
+  walk:
+  - GRAVELER
+  - BRONZONG
+  - CLEFAIRY
+  - GOLBAT
+  - MACHOKE
+  - MEDICHAM
+  - CHINGLING
+  - BRONZOR
+- map_name: MtCoronet4F1R
+  walk:
+  - BRONZONG
+  - CHINGLING
+  - CLEFAIRY
+  - GOLBAT
+  - GRAVELER
+  - MACHOKE
+  - MEDICHAM
+  surf:
+  - ZUBAT
+  - GOLBAT
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - BARBOACH
+  super_rod:
+  - DRAGONAIR
+  - DRATINI
+  - GYARADOS
+- map_name: MtCoronet4F2R
+  walk:
+  - BRONZONG
+  - CHIMECHO
+  - CHINGLING
+  - CLEFAIRY
+  - GOLBAT
+  - GRAVELER
+  - MACHOKE
+  - MEDICHAM
+- map_name: MtCoronet4F3R
+  walk:
+  - BRONZONG
+  - CHIMECHO
+  - CHINGLING
+  - CLEFAIRY
+  - GOLBAT
+  - GRAVELER
+  - MACHOKE
+  - MEDICHAM
+- map_name: MtCoronet5F
+  walk:
+  - BRONZONG
+  - CHIMECHO
+  - CLEFAIRY
+  - GOLBAT
+  - GRAVELER
+  - MACHOKE
+  - MEDICHAM
+- map_name: MtCoronet6F
+  walk:
+  - BRONZONG
+  - CHIMECHO
+  - CLEFAIRY
+  - GOLBAT
+  - GRAVELER
+  - MACHOKE
+  - MEDICHAM
+- map_name: MtCoronetTunnelRoom
+  walk:
+  - BRONZONG
+  - CHINGLING
+  - CLEFAIRY
+  - GOLBAT
+  - GRAVELER
+  - MACHOKE
+  - MEDICHAM
+- map_name: MtCoronetMountainSide
+  walk:
+  - ABOMASNOW
+  - BRONZONG
+  - CHINGLING
+  - CLEFAIRY
+  - GOLBAT
+  - MACHOKE
+  - MEDICHAM
+  - NOCTOWL
+  - SNOVER
+- map_name: SpearPillar
+  static_encounter:
+  - PALKIA
+- map_name: LakeValor
+  walk:
+  - PSYDUCK
+  - NOCTOWL
+  - STARAVIA
+  - BIBAREL
+  - CHINGLING
+  surf:
+  - PSYDUCK
+  - GOLDUCK
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - GOLDEEN
+  super_rod:
+  - GYARADOS
+  - SEAKING
+- map_name: LakeValorCavern
+  static_encounter:
+  - AZELF
+- map_name: LakeAcuityCavern
+  static_encounter:
+  - UXIE
+- map_name: LakeVerityCavern
+  roaming:
+  - MESPRIT
+- map_name: Route222
+  walk:
+  - CHATOT
+  - FLOATZEL
+  - GASTRODON
+  - GLAMEOW
+  - PURUGLY
+  - WINGULL
+  surf:
+  - TENTACOOL
+  - TENTACRUEL
+  - WINGULL
+  - PELIPPER
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - REMORAID
+  super_rod:
+  - GYARADOS
+  - OCTILLERY
+  - SHARPEDO
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+- map_name: SunyshoreCity
+  surf:
+  - MANTYKE
+  - PELIPPER
+  - TENTACRUEL
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - REMORAID
+  super_rod:
+  - STARYU
+  - GYARADOS
+  - OCTILLERY
+- map_name: Route223
+  surf:
+  - TENTACRUEL
+  - PELIPPER
+  - MANTYKE
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - REMORAID
+  super_rod:
+  - GYARADOS
+  - OCTILLERY
+  - WAILMER
+  - WAILORD
+- map_name: VictoryRoad1F
+  walk:
+  - MACHOKE
+  - GOLBAT
+  - GRAVELER
+  - MEDICHAM
+  - ONIX
+  - STEELIX
+- map_name: VictoryRoad2F
+  walk:
+  - KADABRA
+  - GOLBAT
+  - GRAVELER
+  - MEDICHAM
+  - ONIX
+  - STEELIX
+- map_name: VictoryRoadB1F
+  walk:
+  - FLOATZEL
+  - MACHOKE
+  - GOLBAT
+  - MEDICHAM
+  - STEELIX
+  surf:
+  - GOLBAT
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  super_rod:
+  - GYARADOS
+- map_name: PokemonLeague
+  surf:
+  - PELIPPER
+  - TENTACRUEL
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - REMORAID
+  super_rod:
+  - GYARADOS
+  - LUVDISC
+  - OCTILLERY
+- map_name: MtCoronetNorthB1F
+  walk:
+  - CHINGLING
+  - CLEFAIRY
+  - GOLBAT
+  - GRAVELER
+  - MACHOKE
+  - MEDITITE
+  surf:
+  - ZUBAT
+  - GOLBAT
+  old_rod:
+  - FEEBAS
+  - MAGIKARP
+  good_rod:
+  - BARBOACH
+  - FEEBAS
+  - MAGIKARP
+  super_rod:
+  - FEEBAS
+  - GYARADOS
+  - WHISCASH
+- map_name: MtCoronetNorth1F2R
+  walk:
+  - CHINGLING
+  - CLEFAIRY
+  - GOLBAT
+  - GRAVELER
+  - MACHOKE
+  - MEDITITE
+- map_name: Route216
+  walk:
+  - SNEASEL
+  - SNOVER
+  - MACHOKE
+  - MEDITITE
+  - GRAVELER
+  - ZUBAT
+  - NOCTOWL
+- map_name: Route217
+  walk:
+  - SNEASEL
+  - SNOVER
+  - MACHOKE
+  - MEDICHAM
+  - MEDITITE
+  - ZUBAT
+  - NOCTOWL
+- map_name: AcuityLakefront
+  walk:
+  - SNEASEL
+  - SNOVER
+  - MACHOKE
+  - MEDITITE
+  - ZUBAT
+  - NOCTOWL
+  - MEDICHAM
+- map_name: LakeAcuity
+  walk:
+  - PSYDUCK
+  - NOCTOWL
+  - SNEASEL
+  - BIBAREL
+  - CHINGLING
+  surf:
+  - PSYDUCK
+  - GOLDUCK
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - GOLDEEN
+  - MAGIKARP
+  super_rod:
+  - GYARADOS
+  - SEAKING
+- map_name: SnowpointCity
+  trade:
+  - HAUNTER
+- map_name: Route210North
+  walk:
+  - PSYDUCK
+  - MACHOP
+  - MEDITITE
+  - BIBAREL
+  - MACHOKE
+  - HOOTHOOT
+  - NOCTOWL
+  surf:
+  - PSYDUCK
+  - GOLDUCK
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - BARBOACH
+  super_rod:
+  - GYARADOS
+  - WHISCASH
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+- map_name: CelesticTown
+  surf:
+  - PSYDUCK
+  - GOLDUCK
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - BARBOACH
+  super_rod:
+  - GYARADOS
+  - WHISCASH
+  - CORPHISH
+  - CRAWDAUNT
+- map_name: Route220
+  surf:
+  - TENTACOOL
+  - TENTACRUEL
+  - WINGULL
+  - PELIPPER
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - FINNEON
+  super_rod:
+  - GYARADOS
+  - CHINCHOU
+  - LANTURN
+  - LUMINEON
+- map_name: Route221
+  walk:
+  - FLOATZEL
+  - WINGULL
+  - ROSELIA
+  - SHELLOS
+  - GASTRODON
+  - SUDOWOODO
+  surf:
+  - TENTACOOL
+  - TENTACRUEL
+  - WINGULL
+  - PELIPPER
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - FINNEON
+  super_rod:
+  - GYARADOS
+  - LUMINEON
+  - CLAMPERL
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+- map_name: FuegoIronworks
+  walk:
+  - WINGULL
+  - SHINX
+  - LUXIO
+  - PACHIRISU
+  - FLOATZEL
+  - SHELLOS
+  - GASTRODON
+  surf:
+  - PELIPPER
+  - TENTACOOL
+  - TENTACRUEL
+  - WINGULL
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - FINNEON
+  super_rod:
+  - SHELLDER
+  - GYARADOS
+  - LUMINEON
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+- map_name: Route211East
+  walk:
+  - MEDITITE
+  - MACHOKE
+  - GRAVELER
+  - PONYTA
+  - CHINGLING
+  - ZUBAT
+  - NOCTOWL
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+- map_name: Route218
+  walk:
+  - FLOATZEL
+  - SHELLOS
+  - GASTRODON
+  - WINGULL
+  - GLAMEOW
+  surf:
+  - TENTACOOL
+  - WINGULL
+  - TENTACRUEL
+  - PELIPPER
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - FINNEON
+  super_rod:
+  - GYARADOS
+  - LUMINEON
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+- map_name: IronIslandExterior
+  surf:
+  - TENTACOOL
+  - TENTACRUEL
+  - WINGULL
+  - PELIPPER
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - FINNEON
+  super_rod:
+  - GYARADOS
+  - LUMINEON
+  - QWILFISH
+- map_name: IronIslandInterior1F
+  walk:
+  - ZUBAT
+  - GOLBAT
+  - GEODUDE
+  - GRAVELER
+  - ONIX
+- map_name: IronIslandInteriorB1F
+  walk:
+  - GOLBAT
+  - GRAVELER
+  - ONIX
+  - GEODUDE
+- map_name: IronIslandInteriorB2F
+  walk:
+  - GRAVELER
+  - ONIX
+  - GOLBAT
+  - STEELIX
+  - GEODUDE
+  gift:
+  - RIOLU
+- map_name: IronIslandInteriorB3F
+  walk:
+  - GRAVELER
+  - ONIX
+  - GOLBAT
+  - STEELIX
+  - GEODUDE
+- map_name: Route212North
+  walk:
+  - BUDEW
+  - KRICKETUNE
+  - ROSELIA
+  - STARAVIA
+  - STARLY
+  surf:
+  - PSYDUCK
+  - GOLDUCK
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - GOLDEEN
+  super_rod:
+  - GYARADOS
+  - SEAKING
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+- map_name: TrophyGarden
+  walk:
+  - PICHU
+  - ROSELIA
+  - STARAVIA
+  - KRICKETUNE
+  - PIKACHU
+- map_name: Route212South
+  walk:
+  - BIBAREL
+  - KRICKETUNE
+  - ROSELIA
+  - WOOPER
+  surf:
+  - QUAGSIRE
+  - WOOPER
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - BARBOACH
+  - MAGIKARP
+  super_rod:
+  - GYARADOS
+  - WHISCASH
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+- map_name: Route210South
+  walk:
+  - GEODUDE
+  - PONYTA
+  - KRICKETUNE
+  - CHANSEY
+  - BONSLY
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+- map_name: Route215
+  walk:
+  - GEODUDE
+  - PONYTA
+  - KRICKETUNE
+  - ABRA
+  - KADABRA
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+- map_name: Route214
+  walk:
+  - PONYTA
+  - GEODUDE
+  - GRAVELER
+  - KRICKETUNE
+  - GIRAFARIG
+  - SUDOWOODO
+  surf:
+  - PSYDUCK
+  - GOLDUCK
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - GOLDEEN
+  super_rod:
+  - GYARADOS
+  - SEAKING
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+- map_name: ManiacTunnel
+  walk:
+  - GEODUDE
+  - HIPPOPOTAS
+- map_name: ValorLakefront
+  walk:
+  - GEODUDE
+  - GRAVELER
+  - GIRAFARIG
+  - STARAVIA
+  - BIBAREL
+  - KRICKETUNE
+- map_name: Route213
+  walk:
+  - SHELLOS
+  - BUIZEL
+  - WINGULL
+  - FLOATZEL
+  surf:
+  - PELIPPER
+  - TENTACOOL
+  - TENTACRUEL
+  - WINGULL
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - REMORAID
+  super_rod:
+  - GYARADOS
+  - OCTILLERY
+  - SHARPEDO
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+- map_name: PastoriaCity
+  surf:
+  - TENTACOOL
+  - TENTACRUEL
+  - WINGULL
+  - PELIPPER
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - REMORAID
+  super_rod:
+  - GYARADOS
+  - OCTILLERY
+- map_name: GreatMarshArea1_2
+  walk:
+  - AZURILL
+  - BIBAREL
+  - BIDOOF
+  - BUDEW
+  - HOOTHOOT
+  - MARILL
+  - NOCTOWL
+  - PSYDUCK
+  - QUAGSIRE
+  - STARLY
+  - WOOPER
+  surf:
+  - WOOPER
+  - MARILL
+  - PSYDUCK
+  - QUAGSIRE
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - BARBOACH
+  - GYARADOS
+  - MAGIKARP
+  super_rod:
+  - GYARADOS
+  - WHISCASH
+  - CARVANHA
+- map_name: GreatMarshArea3_4
+  walk:
+  - AZURILL
+  - BIBAREL
+  - BIDOOF
+  - BUDEW
+  - HOOTHOOT
+  - MARILL
+  - PSYDUCK
+  - QUAGSIRE
+  - STARLY
+  - WOOPER
+  surf:
+  - WOOPER
+  - MARILL
+  - PSYDUCK
+  - QUAGSIRE
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - BARBOACH
+  - GYARADOS
+  - MAGIKARP
+  super_rod:
+  - GYARADOS
+  - WHISCASH
+  - CARVANHA
+- map_name: GreatMarshArea5
+  walk:
+  - AZURILL
+  - BIBAREL
+  - BIDOOF
+  - BUDEW
+  - HOOTHOOT
+  - MARILL
+  - QUAGSIRE
+  - STARLY
+  - WOOPER
+- map_name: GreatMarshArea6
+  walk:
+  - AZURILL
+  - BIBAREL
+  - BIDOOF
+  - BUDEW
+  - HOOTHOOT
+  - MARILL
+  - PSYDUCK
+  - QUAGSIRE
+  - STARLY
+  - WOOPER
+  surf:
+  - WOOPER
+  - MARILL
+  - PSYDUCK
+  - QUAGSIRE
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - BARBOACH
+  - GYARADOS
+  - MAGIKARP
+  super_rod:
+  - GYARADOS
+  - WHISCASH
+  - CARVANHA
+- map_name: GreatMarshSpecialArea
+  binoculars:
+  - GOLDUCK
+  - ROSELIA
+  - STARAVIA
+  - CROAGUNK
+  - TOXICROAK
+  - SKORUPI
+  - DRAPION
+  - CARNIVINE
+- map_name: Route206
+  walk:
+  - BRONZOR
+  - GEODUDE
+  - KRICKETOT
+  - KRICKETUNE
+  - PONYTA
+  - ZUBAT
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+- map_name: WaywardCave1F
+  walk:
+  - ZUBAT
+  - GEODUDE
+  - BRONZOR
+- map_name: WaywardCaveB1F
+  walk:
+  - BRONZOR
+  - GEODUDE
+  - GIBLE
+  - ZUBAT
+- map_name: MtCoronetSouth1F
+  walk:
+  - MACHOP
+  - CLEFFA
+  - GEODUDE
+  - ZUBAT
+  - MEDITITE
+  - CHINGLING
+  surf:
+  - ZUBAT
+  - GOLBAT
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - BARBOACH
+  super_rod:
+  - GYARADOS
+  - WHISCASH
+- map_name: Route208
+  walk:
+  - PSYDUCK
+  - MACHOP
+  - MEDITITE
+  - BIDOOF
+  - BIBAREL
+  - ZUBAT
+  surf:
+  - PSYDUCK
+  - GOLDUCK
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - BARBOACH
+  super_rod:
+  - GYARADOS
+  - WHISCASH
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+- map_name: HearthomeCity
+  gift:
+  - HAPPINY
+- map_name: Route211West
+  walk:
+  - MEDITITE
+  - BIDOOF
+  - GEODUDE
+  - PONYTA
+  - CHINGLING
+  - ZUBAT
+  - HOOTHOOT
+- map_name: MtCoronetNorth1F1R
+  walk:
+  - MACHOP
+  - CLEFFA
+  - GEODUDE
+  - ZUBAT
+  - MEDITITE
+  - CHINGLING
+- map_name: Route209
+  walk:
+  - ZUBAT
+  - GASTLY
+  - CHANSEY
+  - STARLY
+  - STARAVIA
+  - BIBAREL
+  - BONSLY
+  surf:
+  - PSYDUCK
+  - GOLDUCK
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - GOLDEEN
+  super_rod:
+  - GYARADOS
+  - SEAKING
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+  odd_keystone:
+  - SPIRITOMB
+- map_name: LostTower1F
+  walk:
+  - GASTLY
+  - MISDREAVUS
+  - ZUBAT
+- map_name: LostTower2F
+  walk:
+  - GASTLY
+  - MISDREAVUS
+  - ZUBAT
+- map_name: LostTower3F
+  walk:
+  - GASTLY
+  - GOLBAT
+  - MISDREAVUS
+  - ZUBAT
+- map_name: LostTower4F
+  walk:
+  - GASTLY
+  - GOLBAT
+  - MISDREAVUS
+  - ZUBAT
+- map_name: LostTower5F
+  walk:
+  - GASTLY
+  - GOLBAT
+  - MISDREAVUS
+  - ZUBAT
+- map_name: SolaceonRuins
+  walk:
+  - UNOWN
+- map_name: Route204South
+  walk:
+  - ZUBAT
+  - STARLY
+  - BIDOOF
+  - KRICKETOT
+  - SHINX
+  - BUDEW
+  surf:
+  - PSYDUCK
+  - GOLDUCK
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - GOLDEEN
+  super_rod:
+  - GYARADOS
+  - SEAKING
+- map_name: RavagedPath
+  walk:
+  - ZUBAT
+  - GEODUDE
+  - PSYDUCK
+  surf:
+  - ZUBAT
+  - PSYDUCK
+  - GOLBAT
+  - GOLDUCK
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - BARBOACH
+  super_rod:
+  - GYARADOS
+  - WHISCASH
+- map_name: Route204North
+  walk:
+  - BIDOOF
+  - BUDEW
+  - KRICKETOT
+  - SHINX
+  - STARLY
+  - ZUBAT
+  surf:
+  - GOLDUCK
+  - PSYDUCK
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - GOLDEEN
+  - MAGIKARP
+  super_rod:
+  - GYARADOS
+  - SEAKING
+- map_name: FloaromaMeadow
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+- map_name: Route205South
+  walk:
+  - SHELLOS
+  - BUIZEL
+  - BIDOOF
+  - PACHIRISU
+  surf:
+  - TENTACOOL
+  - WINGULL
+  - TENTACRUEL
+  - PELIPPER
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - FINNEON
+  super_rod:
+  - GYARADOS
+  - SHELLDER
+  - LUMINEON
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+- map_name: ValleyWindworks
+  walk:
+  - BIDOOF
+  - BUIZEL
+  - PACHIRISU
+  - SHELLOS
+  surf:
+  - PELIPPER
+  - TENTACOOL
+  - TENTACRUEL
+  - WINGULL
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - FINNEON
+  super_rod:
+  - GYARADOS
+  - LUMINEON
+  - SHELLDER
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+  static_encounter:
+  - DRIFLOON
+- map_name: EternaForest
+  walk:
+  - BUDEW
+  - BUNEARY
+  - CASCOON
+  - DUSTOX
+  - MISDREAVUS
+  - WURMPLE
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+- map_name: OldChateau
+  walk:
+  - GASTLY
+- map_name: Route205North
+  walk:
+  - BIDOOF
+  - BUIZEL
+  - PACHIRISU
+  - SHELLOS
+  surf:
+  - PSYDUCK
+  - GOLDUCK
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - BARBOACH
+  super_rod:
+  - GYARADOS
+  - WHISCASH
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX
+- map_name: EternaCity
+  surf:
+  - PSYDUCK
+  - GOLDUCK
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - BARBOACH
+  super_rod:
+  - GYARADOS
+  - WHISCASH
+  trade:
+  - CHATOT
+- map_name: OreburghMiningMuseum
+  fossil_restore:
+  - CRANIDOS
+  - SHIELDON
+  - OMANYTE
+  - KABUTO
+  - AERODACTYL
+  - LILEEP
+  - ANORITH
+- map_name: TwinleafTown
+  surf:
+  - PSYDUCK
+  - GOLDUCK
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - GOLDEEN
+  super_rod:
+  - GYARADOS
+  - SEAKING
+- map_name: Route201
+  walk:
+  - STARLY
+  - BIDOOF
+- map_name: LakeVerity
+  walk:
+  - STARLY
+  - BIDOOF
+  surf:
+  - PSYDUCK
+  - GOLDUCK
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - GOLDEEN
+  super_rod:
+  - GYARADOS
+  - SEAKING
+  starter:
+  - TURTWIG
+  - CHIMCHAR
+  - PIPLUP
+- map_name: Route219
+  surf:
+  - TENTACOOL
+  - TENTACRUEL
+  - WINGULL
+  - PELIPPER
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - FINNEON
+  super_rod:
+  - GYARADOS
+  - LUMINEON
+  - CLAMPERL
+- map_name: Route202
+  walk:
+  - STARLY
+  - BIDOOF
+  - KRICKETOT
+  - SHINX
+- map_name: Route203
+  walk:
+  - ABRA
+  - BIDOOF
+  - KRICKETOT
+  - SHINX
+  - STARLY
+  - ZUBAT
+  surf:
+  - PSYDUCK
+  - GOLDUCK
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - GOLDEEN
+  super_rod:
+  - GYARADOS
+  - SEAKING
+- map_name: OreburghGate1F
+  walk:
+  - GEODUDE
+  - ZUBAT
+- map_name: OreburghGateB1F
+  walk:
+  - ZUBAT
+  - PSYDUCK
+  - GEODUDE
+  surf:
+  - ZUBAT
+  - PSYDUCK
+  - GOLBAT
+  - GOLDUCK
+  old_rod:
+  - MAGIKARP
+  good_rod:
+  - MAGIKARP
+  - BARBOACH
+  super_rod:
+  - GYARADOS
+  - WHISCASH
+- map_name: OreburghCity
+  trade:
+  - ABRA
+- map_name: OreburghMineB1F
+  walk:
+  - ZUBAT
+  - GEODUDE
+  - ONIX
+- map_name: OreburghMineB2F
+  walk:
+  - ZUBAT
+  - GEODUDE
+  - ONIX
+- map_name: Route207
+  walk:
+  - MACHOP
+  - GEODUDE
+  - ZUBAT
+  - KRICKETOT
+  honey_tree:
+  - WURMPLE
+  - COMBEE
+  - BURMY
+  - CHERUBI
+  - AIPOM
+  - HERACROSS
+  - MUNCHLAX

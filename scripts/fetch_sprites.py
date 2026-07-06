@@ -3,19 +3,20 @@
 fetch_sprites.py
 
 Downloads front-facing Pokémon sprites from the PokeAPI sprites GitHub repo
-for Gen 1 (Red/Blue), Gen 2 (Gold/Silver), and Gen 3 (Ruby/Sapphire).
+for Gen 1 (Red/Blue), Gen 2 (Gold/Silver), Gen 3 (Ruby/Sapphire), and Gen 4 (Diamond/Pearl).
 
 Output structure:
   assets/sprites/
     gen1/   # Red/Blue,  Pokémon #001 – #151
     gen2/   # Gold,      Pokémon #001 – #251
     gen3/   # Ruby,      Pokémon #001 – #386
+    gen4/   # Diamond/Pearl, Pokémon #001 – #493
 
 Usage:
   python fetch_sprites.py
 
 Optional flags:
-  --gens 1 2 3      Download only specific generations (default: all)
+  --gens 1 2 3 4    Download only specific generations (default: all)
 """
 
 import argparse
@@ -48,6 +49,12 @@ GENS = {
         "url_path": "generation-iii/ruby-sapphire",
         "range": range(1, 387),          # 001 – 386
         "label": "Gen 3 (Ruby/Sapphire)",
+    },
+    4: {
+        "folder": "gen4",
+        "url_path": "generation-iv/diamond-pearl",
+        "range": range(1, 494),          # 001 – 493
+        "label": "Gen 4 (Diamond/Pearl)",
     },
 }
 
@@ -114,7 +121,7 @@ def fetch_gen(gen_num: int, cfg: dict, out_root: Path) -> None:
 def main():
     parser = argparse.ArgumentParser(description="Download Pokémon sprites from PokeAPI.")
     parser.add_argument(
-        "--gens", nargs="+", type=int, choices=[1, 2, 3], default=[1, 2, 3],
+        "--gens", nargs="+", type=int, choices=[1, 2, 3, 4], default=[1, 2, 3, 4],
         metavar="N", help="Generations to download (e.g. --gens 1 3)"
     )
     args = parser.parse_args()
