@@ -21,14 +21,14 @@ def main():
         print("\nAll done!")
         return
 
-    all_pools, all_pokemon, config_data, meta_data, mappings, global_settings = build_all_data_structures()
+    all_pools, all_pokemon, config_data, meta_data, mappings, global_settings, obtainable_pokemon = build_all_data_structures()
 
     if args.ui == "gui":
         from ui.gui import DexelectApp
-        app = DexelectApp(all_pools, all_pokemon, config_data, meta_data, mappings, global_settings)
+        app = DexelectApp(all_pools, all_pokemon, config_data, meta_data, mappings, global_settings, obtainable_pokemon)
         app.mainloop()
     else:
-        ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_settings)
+        ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_settings, obtainable_pokemon)
 
 if __name__ == "__main__":
     main()

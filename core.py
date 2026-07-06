@@ -12,8 +12,9 @@ DEBUG = False
 
 GEN_RANGES = {1: (1, 151), 2: (152, 251), 3: (252, 386), 4: (387, 493)}
 
-def generate_final_party(all_pools: dict, all_pokemon: dict, config_data: dict, meta_data: dict, n: int = 6,
-                         retry: int = 0, max_retries: int = 300, max_iterations: int = 20000):
+def generate_final_party(all_pools: dict, all_pokemon: dict, config_data: dict, meta_data: dict,
+                         obtainable_pokemon: dict, n: int = 6,
+                         retry: int = 0, max_retries: int = 300, max_iterations: int = 2000):
     """
     Generates a final party of Pokemon.
 
@@ -22,6 +23,7 @@ def generate_final_party(all_pools: dict, all_pokemon: dict, config_data: dict, 
         all_pokemon (dict of Pokemon objects)
         config_data (dict): the config options from the config YAML
         meta_data (dict): the config options from the config YAML
+        obtainable_pokemon (dict of Pokemon objects): subset of all_pokemon obtainable in this game
         n (int): optional party size
         retry (int): optional
         max_retries (int): optional
@@ -66,10 +68,10 @@ def generate_final_party(all_pools: dict, all_pokemon: dict, config_data: dict, 
             # abort this attempt, retry whole function
             return generate_final_party(all_pools, all_pokemon,
                                         config_data, meta_data,
-                                        n, retry + 1,
+                                        obtainable_pokemon, n, retry + 1,
                                         max_retries, max_iterations)
 
-        rand_mon = generate_random_mon(all_pokemon)
+        rand_mon = generate_random_mon(obtainable_pokemon)
 
         if is_party_valid(
                 tentative_party + [rand_mon],
@@ -99,7 +101,7 @@ def generate_final_party(all_pools: dict, all_pokemon: dict, config_data: dict, 
                     print("Party doesn't contain 'starter' acquisition method. Retrying final party generation...")
                 return generate_final_party(all_pools, all_pokemon,
                                             config_data, meta_data,
-                                            n, retry + 1,
+                                            obtainable_pokemon, n, retry + 1,
                                             max_retries, max_iterations)
         if DEBUG:
             print("Generating balance stats...")
@@ -111,7 +113,7 @@ def generate_final_party(all_pools: dict, all_pokemon: dict, config_data: dict, 
                 print("Party doesn't pass balancing requirements in config. Retrying final party generation...")
             return generate_final_party(all_pools, all_pokemon,
                                         config_data, meta_data,
-                                        n, retry + 1,
+                                        obtainable_pokemon, n, retry + 1,
                                         max_retries, max_iterations)
 
         final_party_blob = {
@@ -131,7 +133,7 @@ def generate_final_party(all_pools: dict, all_pokemon: dict, config_data: dict, 
         # try again if party wasn't viable / obtainable from pools
         return generate_final_party(all_pools, all_pokemon,
                                     config_data, meta_data,
-                                    n, retry + 1,
+                                    obtainable_pokemon, n, retry + 1,
                                     max_retries, max_iterations)
 
 def is_party_valid(party, is_party_full, config_data, meta_data) -> bool:

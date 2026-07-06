@@ -253,7 +253,7 @@ def display_party(party_blob, config_data, global_settings, duration, game, gene
     print_global_settings()
 
 
-def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_settings):
+def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_settings, obtainable_pokemon):
     # ANSI codes
     BRIGHT_CYAN = "\033[96m"
     BRIGHT_GREEN = "\033[92m"
@@ -318,7 +318,7 @@ def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_set
         # check for any set modes
         if mode == 'set_game':
             if set_game(mappings):
-                all_pools, all_pokemon, config_data, meta_data, mappings, global_settings = build_all_data_structures()
+                all_pools, all_pokemon, config_data, meta_data, mappings, global_settings, obtainable_pokemon = build_all_data_structures()
                 # if user sets a new game, then the displayed game and corresponding config file path need to change too
                 game = global_settings['game']
                 config_file_path = mappings[game]['config']
@@ -344,7 +344,7 @@ def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_set
             continue
 
         elif mode == 'reload_config':
-            all_pools, all_pokemon, config_data, meta_data, mappings, global_settings = build_all_data_structures()
+            all_pools, all_pokemon, config_data, meta_data, mappings, global_settings, obtainable_pokemon = build_all_data_structures()
             party_on_screen = 'config_reloaded'
             continue
 
@@ -364,7 +364,7 @@ def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_set
             print("Generating party...\n")
             start = time.time()
             party_blob = generate_final_party(
-                all_pools, all_pokemon, config_data, meta_data, n=party_size
+                all_pools, all_pokemon, config_data, meta_data, obtainable_pokemon, n=party_size
             )
             end = time.time()
             duration = end - start

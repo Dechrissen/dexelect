@@ -247,7 +247,7 @@ SPRITE_MAX = 112  # sprite size (px) — matches original sprite dimensions
 
 class DexelectApp(ctk.CTk):
 
-    def __init__(self, all_pools, all_pokemon, config_data, meta_data, mappings, global_settings):
+    def __init__(self, all_pools, all_pokemon, config_data, meta_data, mappings, global_settings, obtainable_pokemon):
         super().__init__()
 
         # ---- Window setup ----
@@ -278,12 +278,13 @@ class DexelectApp(ctk.CTk):
                 self.iconbitmap(_ico)
 
         # ---- App state ----
-        self.all_pools       = all_pools
-        self.all_pokemon     = all_pokemon
-        self.config_data     = config_data
-        self.meta_data       = meta_data
-        self.mappings        = mappings
-        self.global_settings = global_settings
+        self.all_pools           = all_pools
+        self.all_pokemon         = all_pokemon
+        self.config_data         = config_data
+        self.meta_data           = meta_data
+        self.mappings            = mappings
+        self.global_settings     = global_settings
+        self.obtainable_pokemon  = obtainable_pokemon
 
         # Tkinter variables for sidebar controls (bound to widgets)
         self.var_game         = tk.StringVar()
@@ -345,7 +346,8 @@ class DexelectApp(ctk.CTk):
          self.config_data,
          self.meta_data,
          self.mappings,
-         self.global_settings) = build_all_data_structures()
+         self.global_settings,
+         self.obtainable_pokemon) = build_all_data_structures()
         self._populate_ui_from_state()
         self._set_status("Config reloaded.", color=C_SUCCESS)
 
@@ -1952,7 +1954,8 @@ class DexelectApp(ctk.CTk):
             else:
                 party_blob = generate_final_party(
                     self.all_pools, self.all_pokemon,
-                    self.config_data, self.meta_data, n=int(self.var_party_size.get())
+                    self.config_data, self.meta_data, self.obtainable_pokemon,
+                    n=int(self.var_party_size.get())
                 )
 
             duration = time.time() - start
@@ -2213,6 +2216,6 @@ class DexelectApp(ctk.CTk):
 # =============================================================================
 
 if __name__ == "__main__":
-    _pools, _pokemon, _config, _meta, _mappings, _settings = build_all_data_structures()
-    app = DexelectApp(_pools, _pokemon, _config, _meta, _mappings, _settings)
+    _pools, _pokemon, _config, _meta, _mappings, _settings, _obtainable = build_all_data_structures()
+    app = DexelectApp(_pools, _pokemon, _config, _meta, _mappings, _settings, _obtainable)
     app.mainloop()

@@ -86,3 +86,5 @@
 - improve debug logging
 
 - might not make sense to have postgame spheres at all (e.g., in D/P Cresselia can only be obtained post-national dex which contradicts our exclusion of other post-national dex stuff like poke radar and swarms etc. So maybe postgame doesn't need to be included in any of the games.)
+
+- decide if we want to change "Random" generation mode to be "fully random amongst obtainable pokemon" instead, in which case we just make the function use the new obtainable_pokemon dict instead

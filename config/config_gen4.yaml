@@ -1,4 +1,4 @@
-require_one_sphere_one: false
+require_one_sphere_one: true
 allowed_balancing:
   value: [balanced, early_game_heavy, late_game_heavy]
   options: [balanced, early_game_heavy, late_game_heavy]
@@ -76,7 +76,7 @@ ensure_hm_coverage:
   CUT: false
   FLY: true
   SURF: true
-  STRENGTH: false
+  STRENGTH: true
   DEFOG: false
   ROCK_SMASH: false
   WATERFALL: false
