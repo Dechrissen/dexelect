@@ -180,7 +180,7 @@
   super_rod:
   - GYARADOS
   - SEAKING
-- map_name: FullMoonIsland
+- map_name: RandomLocationStartingFromFullMoonIsland
   roaming:
   - CRESSELIA
 - map_name: VictoryRoad1FBack2
@@ -447,7 +447,7 @@
 - map_name: LakeAcuityCavern
   static_encounter:
   - UXIE
-- map_name: LakeVerityCavern
+- map_name: RandomLocationStartingFromLakeVerityCavern
   roaming:
   - MESPRIT
 - map_name: Route222
@@ -478,7 +478,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
+  - SILCOON
 - map_name: SunyshoreCity
   surf:
   - MANTYKE
@@ -657,7 +657,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
+  - SILCOON
 - map_name: CelesticTown
   surf:
   - PSYDUCK
@@ -718,7 +718,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
+  - SILCOON
 - map_name: FuegoIronworks
   walk:
   - WINGULL
@@ -749,7 +749,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
+  - SILCOON
 - map_name: Route211East
   walk:
   - MEDITITE
@@ -766,7 +766,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
+  - SILCOON
 - map_name: Route218
   walk:
   - FLOATZEL
@@ -794,7 +794,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
+  - SILCOON
 - map_name: IronIslandExterior
   surf:
   - TENTACOOL
@@ -864,7 +864,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
+  - SILCOON
 - map_name: TrophyGarden
   walk:
   - PICHU
@@ -896,7 +896,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
+  - SILCOON
 - map_name: Route210South
   walk:
   - GEODUDE
@@ -911,7 +911,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
+  - SILCOON
 - map_name: Route215
   walk:
   - GEODUDE
@@ -926,7 +926,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
+  - SILCOON
 - map_name: Route214
   walk:
   - PONYTA
@@ -953,7 +953,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
+  - SILCOON
 - map_name: ManiacTunnel
   walk:
   - GEODUDE
@@ -993,7 +993,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
+  - SILCOON
 - map_name: PastoriaCity
   surf:
   - TENTACOOL
@@ -1127,7 +1127,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
+  - SILCOON
 - map_name: WaywardCave1F
   walk:
   - ZUBAT
@@ -1184,7 +1184,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
+  - SILCOON
 - map_name: HearthomeCity
   gift:
   - HAPPINY
@@ -1232,7 +1232,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
+  - SILCOON
   odd_keystone:
   - SPIRITOMB
 - map_name: LostTower1F
@@ -1330,7 +1330,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
+  - SILCOON
 - map_name: Route205South
   walk:
   - SHELLOS
@@ -1358,7 +1358,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
+  - SILCOON
 - map_name: ValleyWindworks
   walk:
   - BIDOOF
@@ -1386,8 +1386,8 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
-  static_encounter:
+  - SILCOON
+  repeatable_static_encounter:
   - DRIFLOON
 - map_name: EternaForest
   walk:
@@ -1404,7 +1404,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
+  - SILCOON
 - map_name: OldChateau
   walk:
   - GASTLY
@@ -1432,7 +1432,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
-  - MUNCHLAX
+  - SILCOON
 - map_name: EternaCity
   surf:
   - PSYDUCK
@@ -1573,4 +1573,7 @@
   - CHERUBI
   - AIPOM
   - HERACROSS
+  - SILCOON
+- map_name: RandomHoneyTreeLocation
+  munchlax_tree:
   - MUNCHLAX

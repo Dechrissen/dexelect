@@ -29,7 +29,10 @@ To modify configuration options, navigate to the Config tab and make changes to 
 ### Progression
 Generates a party which adheres to logical game progression and config settings.
 
-### Random
+### Random (Obtainable)
+Generates a completely random party drawn from the set of obtainable Pokémon for the selected game. Config settings are ignored in this mode.
+
+### Random (National Dex)
 Generates a completely random party drawn from the National Pokédex for the selected game. Config settings are ignored in this mode.
 
 ## Balance Stats / Terminology

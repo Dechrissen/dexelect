@@ -32,13 +32,17 @@ def set_game(mappings):
     selected_game = None
     valid_options = {}
 
+    with open(resource_path("config/global_settings.yaml"), "r") as f:
+        current_game = yaml.safe_load(f).get("game")
+
     print_header()
 
     print("Supported Games")
     print("---------------")
     for i, game_title in enumerate(mappings.keys(), start=1):
         valid_options[str(i)] = game_title
-        print(f"{i}. {game_title}")
+        marker = " (current)" if game_title == current_game else ""
+        print(f"{i}. {game_title}{marker}")
 
     print("")
     print("Enter game number.\n")
@@ -82,22 +86,36 @@ def set_party_size():
         return True
 
 
-def toggle_generation_mode(generation_mode):
-    if generation_mode == 'Progression':
-        new_generation_mode = 'Random'
-    elif generation_mode == 'Random':
-        new_generation_mode = 'Progression'
-    else:
-        # probably don't need this case but w/e
-        new_generation_mode = 'Progression'
+GENERATION_MODES = ["Progression", "Random (Obtainable)", "Random (National Dex)"]
+
+def set_generation_mode():
+    valid_options = {}
 
     with open(resource_path("config/global_settings.yaml"), "r") as f:
         data = yaml.safe_load(f)
-    data["generation_mode"] = new_generation_mode
-    with open(resource_path("config/global_settings.yaml"), "w") as f:
-        yaml.safe_dump(data, f)
+    current_mode = data.get("generation_mode")
 
-    return new_generation_mode
+    print_header()
+
+    print("Generation Mode")
+    print("---------------")
+    for i, mode in enumerate(GENERATION_MODES, start=1):
+        valid_options[str(i)] = mode
+        marker = " (current)" if mode == current_mode else ""
+        print(f"{i}. {mode}{marker}")
+
+    print("")
+    print("Enter mode number.\n")
+
+    user = input("> ").strip().lower()
+
+    if user not in valid_options.keys():
+        return False
+    else:
+        data["generation_mode"] = valid_options[user]
+        with open(resource_path("config/global_settings.yaml"), "w") as f:
+            yaml.safe_dump(data, f)
+        return True
 
 def print_header():
     TITLE = "\033[1;100;96m"
@@ -281,7 +299,7 @@ def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_set
 
         print(f"Press {BRIGHT_CYAN}ENTER{RESET} to generate a party.")
         print(f"{BRIGHT_CYAN}G{RESET} - Set [G]ame")
-        print(f"{BRIGHT_CYAN}M{RESET} - Toggle [M]ode")
+        print(f"{BRIGHT_CYAN}M{RESET} - Set [M]ode")
         print(f"{BRIGHT_CYAN}P{RESET} - Set [P]arty Size")
         print(f"{BRIGHT_CYAN}R{RESET} - [R]eload config from disk")
         print(f"{BRIGHT_CYAN}H{RESET} - [H]elp")
@@ -299,7 +317,7 @@ def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_set
             print("Goodbye!")
             return
         if user == "m":
-            mode = "toggle_generation_mode"
+            mode = "set_generation_mode"
         if user == "g":
             mode = "set_game"
         if user == "p":
@@ -338,10 +356,15 @@ def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_set
                 party_on_screen = 'invalid_input'
                 continue
 
-        elif mode == 'toggle_generation_mode':
-            generation_mode = toggle_generation_mode(generation_mode)
-            party_on_screen = 'generation_mode_toggled'
-            continue
+        elif mode == 'set_generation_mode':
+            if set_generation_mode():
+                with open(resource_path("config/global_settings.yaml"), "r") as f:
+                    generation_mode = yaml.safe_load(f).get('generation_mode', 'Progression')
+                party_on_screen = 'generation_mode_toggled'
+                continue
+            else:
+                party_on_screen = 'invalid_input'
+                continue
 
         elif mode == 'reload_config':
             all_pools, all_pokemon, config_data, meta_data, mappings, global_settings, obtainable_pokemon = build_all_data_structures()
@@ -354,7 +377,13 @@ def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_set
 
 
         # generation
-        if generation_mode == 'Random':
+        if generation_mode == 'Random (Obtainable)':
+            print("Generating party...\n")
+            start = time.time()
+            party_blob = generate_fully_randomized_party(obtainable_pokemon, n=party_size)
+            end = time.time()
+            duration = end - start
+        if generation_mode == 'Random (National Dex)':
             print("Generating party...\n")
             start = time.time()
             party_blob = generate_fully_randomized_party(all_pokemon, n=party_size)

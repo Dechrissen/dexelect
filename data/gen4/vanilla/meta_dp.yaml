@@ -13,6 +13,7 @@ limited_acquisition_methods:
 - gift
 - trade
 - roaming
+#- fossil_restore # in gen 4, fossils are no longer key items
 
 acquisition_methods:
 - name: starter
@@ -29,6 +30,8 @@ acquisition_methods:
   is_default: false
 - name: static_encounter
   is_default: true
+- name: repeatable_static_encounter
+  is_default: true
 - name: trade
   is_default: true
 - name: gift
@@ -36,6 +39,8 @@ acquisition_methods:
 - name: fossil_restore
   is_default: true
 - name: honey_tree
+  is_default: true
+- name: munchlax_tree
   is_default: true
 - name: binoculars
   is_default: true
@@ -129,6 +134,8 @@ spheres:
   - name: MtCoronetNorth1F1R
     type: map
   - name: Route209
+    type: map
+  - name: RandomHoneyTreeLocation
     type: map
 - sphereNum: 4
   contents:
@@ -244,7 +251,7 @@ spheres:
     type: map
   - name: LakeAcuityCavern
     type: map
-  - name: LakeVerityCavern
+  - name: RandomLocationStartingFromLakeVerityCavern
     type: map
   - name: Route222
     type: map
@@ -318,7 +325,7 @@ spheres:
     type: map
   - name: ResortArea
     type: map
-  - name: FullMoonIsland
+  - name: RandomLocationStartingFromFullMoonIsland
     type: map
 
 sphere_generation_modes:

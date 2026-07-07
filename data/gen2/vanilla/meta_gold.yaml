@@ -37,6 +37,8 @@ acquisition_methods:
     is_default: false
   - name: static_encounter
     is_default: true
+  - name: repeatable_static_encounter
+    is_default: true
   - name: trade
     is_default: true
   - name: gift
@@ -132,6 +134,8 @@ spheres:
           - name: BurnedTower1F
             type: map
           - name: BurnedTowerB1F
+            type: map
+          - name: RandomLocationStartingFromBurnedTowerB1F
             type: map
           - name: TinTower2F
             type: map

@@ -66,6 +66,7 @@ allowed_acquisition_methods:
   super_rod: true
   poke_flute: true
   static_encounter: true
+  repeatable_static_encounter: true
   trade: false
   gift: true
   purchase: true

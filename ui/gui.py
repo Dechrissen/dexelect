@@ -447,7 +447,7 @@ class DexelectApp(ctk.CTk):
         ctk.CTkLabel(sf, text="MODE", font=FONT_HEADER, text_color=C_MUTED).grid(
             row=6, column=0, padx=20, pady=(20, 6), sticky="w")
 
-        for i, mode in enumerate(["Progression", "Random"]):
+        for i, mode in enumerate(["Progression", "Random (Obtainable)", "Random (National Dex)"]):
             ctk.CTkRadioButton(
                 sf,
                 text=mode,
@@ -461,11 +461,11 @@ class DexelectApp(ctk.CTk):
             ).grid(row=7 + i, column=0, padx=24, pady=3, sticky="w")
 
         ctk.CTkFrame(sf, height=1, fg_color=C_ACCENT2).grid(
-            row=9, column=0, padx=16, pady=(16, 0), sticky="ew")
+            row=10, column=0, padx=16, pady=(16, 0), sticky="ew")
 
         # ---- Party size ----
         ctk.CTkLabel(sf, text="PARTY SIZE", font=FONT_HEADER, text_color=C_MUTED).grid(
-            row=10, column=0, padx=20, pady=(16, 6), sticky="w")
+            row=11, column=0, padx=20, pady=(16, 6), sticky="w")
 
         self.party_size_btn = ctk.CTkSegmentedButton(
             sf,
@@ -481,14 +481,14 @@ class DexelectApp(ctk.CTk):
             text_color=C_TEXT,
             font=FONT_BODY,
         )
-        self.party_size_btn.grid(row=11, column=0, padx=20, pady=(0, 4), sticky="w")
+        self.party_size_btn.grid(row=12, column=0, padx=20, pady=(0, 4), sticky="w")
 
         ctk.CTkFrame(sf, height=1, fg_color=C_ACCENT2).grid(
-            row=12, column=0, padx=16, pady=(16, 0), sticky="ew")
+            row=13, column=0, padx=16, pady=(16, 0), sticky="ew")
 
         # ---- Display toggles (global_settings.yaml) ----
         ctk.CTkLabel(sf, text="DISPLAY", font=FONT_HEADER, text_color=C_MUTED).grid(
-            row=13, column=0, padx=20, pady=(16, 6), sticky="w")
+            row=14, column=0, padx=20, pady=(16, 6), sticky="w")
 
         ctk.CTkCheckBox(
             sf,
@@ -500,7 +500,7 @@ class DexelectApp(ctk.CTk):
             fg_color=C_ACCENT,
             hover_color=C_ACCENT2,
             checkmark_color=C_TEXT,
-        ).grid(row=14, column=0, padx=24, pady=3, sticky="w")
+        ).grid(row=15, column=0, padx=24, pady=3, sticky="w")
 
         ctk.CTkCheckBox(
             sf,
@@ -512,7 +512,7 @@ class DexelectApp(ctk.CTk):
             fg_color=C_ACCENT,
             hover_color=C_ACCENT2,
             checkmark_color=C_TEXT,
-        ).grid(row=15, column=0, padx=24, pady=3, sticky="w")
+        ).grid(row=16, column=0, padx=24, pady=3, sticky="w")
 
         ctk.CTkCheckBox(
             sf,
@@ -524,11 +524,11 @@ class DexelectApp(ctk.CTk):
             fg_color=C_ACCENT,
             hover_color=C_ACCENT2,
             checkmark_color=C_TEXT,
-        ).grid(row=16, column=0, padx=24, pady=3, sticky="w")
+        ).grid(row=17, column=0, padx=24, pady=3, sticky="w")
 
         # ---- Export ----
         ctk.CTkFrame(sf, height=1, fg_color=C_ACCENT2).grid(
-            row=17, column=0, padx=16, pady=(16, 0), sticky="ew")
+            row=18, column=0, padx=16, pady=(16, 0), sticky="ew")
 
         self.export_btn = ctk.CTkButton(
             sf,
@@ -542,7 +542,7 @@ class DexelectApp(ctk.CTk):
             corner_radius=5,
             state="disabled",
         )
-        self.export_btn.grid(row=18, column=0, padx=20, pady=(12, 0), sticky="ew")
+        self.export_btn.grid(row=19, column=0, padx=20, pady=(12, 0), sticky="ew")
 
         # ---- Copyright (pinned to bottom) ----
         self._sidebar_footer = tk.Frame(sf, bg=C_SIDEBAR)
@@ -829,9 +829,9 @@ class DexelectApp(ctk.CTk):
             sh = "s_on"    if active else "s_off"
             mh = "map_on"  if active else "map_off"
             ih = "item_on" if active else "item_off"
-            label = "  (enabled)" if active else "  (disabled)"
+            status = "Enabled" if active else "Disabled"
             new_count = new_species_counts.get(num, 0)
-            text_widget.insert("end", f"Sphere {num}{label} – {new_count} new species\n", sh)
+            text_widget.insert("end", f"Sphere {num} (new species: {new_count}) – {status}\n", sh)
             for entry in sphere.get("contents", []):
                 name  = entry["name"]
                 etype = entry["type"]
@@ -1747,6 +1747,7 @@ class DexelectApp(ctk.CTk):
 
         game_names = list(self.mappings.keys())
         self.game_dropdown.configure(values=game_names)
+        self._rebuild_game_dropdown_menu(game_names)
         self.var_game.set(gs.get("game", game_names[0]))
         self.var_gen_mode.set(gs.get("generation_mode", "Progression"))
         self.var_show_acq.set(bool(gs.get("show_acquisition_details", True)))
@@ -1759,6 +1760,33 @@ class DexelectApp(ctk.CTk):
         self._refresh_spheres_tab()
 
         self._populate_config_controls()
+
+    def _rebuild_game_dropdown_menu(self, game_names):
+        """
+        Rebuild the game dropdown's popup menu so romhack entries display a
+        "(romhack)" suffix, while the underlying selected value (var_game,
+        _on_game_changed, etc.) still receives the plain game name. Reaches into
+        CTkOptionMenu/DropdownMenu internals since customtkinter has no public
+        support for per-entry display text that differs from the entry's value.
+        """
+        dropdown = self.game_dropdown
+        menu = dropdown._dropdown_menu
+        width = menu._min_character_width
+
+        menu.delete(0, "end")
+
+        def format_label(text):
+            if sys.platform.startswith("linux"):
+                return "  " + text.ljust(width) + "  "
+            return text.ljust(width)
+
+        def is_romhack(name):
+            return "romhacks" in self.mappings[name]["pokedex"]
+
+        for name in game_names:
+            display = name + " (romhack)" if is_romhack(name) else name
+            menu.add_command(label=format_label(display),
+                             command=lambda v=name: dropdown._dropdown_callback(v))
 
 
     # =========================================================================
@@ -1798,7 +1826,7 @@ class DexelectApp(ctk.CTk):
         if self.last_party_blob is not None:
             self._populate_cards(self.last_party_blob)
         else:
-            is_random = self.var_gen_mode.get() == "Random"
+            is_random = self.var_gen_mode.get() in ("Random (National Dex)", "Random (Obtainable)")
             placeholder = "N/A" if (is_random and self.var_show_balance.get()) else "—"
             for lbl in self.stat_labels.values():
                 lbl.configure(text=placeholder, text_color=C_MUTED)
@@ -1952,8 +1980,10 @@ class DexelectApp(ctk.CTk):
             gen_mode = self.var_gen_mode.get()
             start = time.time()
 
-            if gen_mode == "Random":
+            if gen_mode == "Random (National Dex)":
                 party_blob = generate_fully_randomized_party(self.all_pokemon, n=int(self.var_party_size.get()))
+            elif gen_mode == "Random (Obtainable)":
+                party_blob = generate_fully_randomized_party(self.obtainable_pokemon, n=int(self.var_party_size.get()))
             else:
                 party_blob = generate_final_party(
                     self.all_pools, self.all_pokemon,
@@ -2000,7 +2030,7 @@ class DexelectApp(ctk.CTk):
         """Fill the 6 party-member cards and stats strip from party_blob."""
         show_acq     = self.var_show_acq.get()
         show_balance = self.var_show_balance.get()
-        is_random    = self.var_gen_mode.get() == "Random"
+        is_random    = self.var_gen_mode.get() in ("Random (National Dex)", "Random (Obtainable)")
 
         game = self.var_game.get()
         sprite_dir = resource_path(self.mappings[game]["sprites"])
@@ -2103,7 +2133,7 @@ class DexelectApp(ctk.CTk):
         game      = self.var_game.get()
         mode      = self.var_gen_mode.get()
         blob      = self.last_party_blob
-        is_random = (mode == "Random")
+        is_random = mode in ("Random (National Dex)", "Random (Obtainable)")
 
         # --- Party list ---
         def sort_key(p):

@@ -13,19 +13,13 @@
 <p align="center">
   <a href='https://ko-fi.com/Q5Q311GBFF' target='_blank'><img height='32' style='border:0px;height:32px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
   </br>
-  <a href="https://github.com/Dechrissen/dexelect/blob/master/LICENSE"><img
-  alt="MIT License"
-  src="https://img.shields.io/badge/license-MIT-orange"></a>
   <a href="https://github.com/Dechrissen/dexelect/releases/latest"><img
   alt="Download Dexelect"
   src="https://img.shields.io/badge/download-latest-green"></a>
   <a href="https://discord.gg/YTxu5uM7r6"><img
   alt="Solus Discord server"
-  src="https://img.shields.io/discord/1346293888318443520?label=discord&logo=discord&logoColor=white&color=blue"></a>
-  
-  
+  src="https://img.shields.io/discord/1346293888318443520?label=discord&logo=discord&logoColor=white&color=blue"></a> 
 </p>
-
 
 
 # Dexelect – Progression-aware Party Generator
@@ -85,6 +79,9 @@ See [`CONTRIBUTING.md`](/CONTRIBUTING.md) if you'd like to add support for a rom
 |-----|-----------------------------------------------------------|----|
 | 1   | [Solus RGB](https://github.com/Dechrissen/poke-solus-rgb) | ✔  |
 
+### Implementation quirks
+- **Munchlax trees** – In Diamond/Pearl/Platinum, [Munchlax trees](https://bulbapedia.bulbagarden.net/wiki/Honey_Tree#Munchlax_trees) are a special case to handle. A random 4/21 total Honey Trees in the game are upgraded to special Munchlax trees in which Munchlax can be encountered 1% of the time. The locations are dependent on Trainer ID and secret ID, so there's no way to know where they are until finding them in a new file. This means there is no reliable point in the game to use as the acquisition point for Munchlax, and the party balance stats will not be 100% accurate. The solution I settled on for Dexelect (since it uses a sphere progression system) was to _assume that Munchlax trees are accessible in Sphere 3_, since by that point in the game, the probability of having access to at least one of the 4 Munchlax trees is 91% (up from 77% in Sphere 2 and 0% in Sphere 1) which seemed like a high enough probability to rely on for calculating party balance stats.
+
 
 ## Installation
 
@@ -114,7 +111,7 @@ Requires Python 3.10+.
 ### Using the GUI
 - The app is split into sidebar (left) and main window (right). Help option is at the top right.
 - Left sidebar:
-  - The mode can be toggled between 'Progression' and 'Random'
+  - The mode can be switched between 'Progression', 'Random (Obtainable)', and 'Random (National Dex)'
   - Party size can be adjusted (1–6)
   - 'Acquisition Details', 'HM Coverage', and 'Balance Stats' display can each be toggled on or off
   - 'Export Party' button exports party to `.txt` file
@@ -130,9 +127,7 @@ Requires Python 3.10+.
 ### Using the CLI app (`python main.py --ui=cli`)
 - `ENTER` – Generate a party with the current settings
 - `G` – Open the 'Supported Games' menu to switch current game
-- `M` – Toggle the generation mode between 'Progression' and 'Random'
-  - Progression: Considers game data, locations, progression, config settings
-  - Random: Completely random generation using current game's National Dex
+- `M` – Open the 'Generation Mode' menu to change the party generation mode
 - `P` – Open the 'Set Party Size' menu to set party size (1–6)
 - `R` – Reload the config file from disk (after making any config changes while the app is running)
 - `H` – Display help menu

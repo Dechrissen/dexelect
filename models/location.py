@@ -9,6 +9,7 @@ class Location:
                  super_rod: list[str] = None,
                  poke_flute: list[str] = None,
                  static_encounter: list[str] = None,
+                 repeatable_static_encounter: list[str] = None,
                  trade: list[str] = None,
                  gift: list[str] = None,
                  purchase: list[str] = None,
@@ -29,7 +30,8 @@ class Location:
                  # gen 4 methods ...
                  honey_tree: list[str] = None,
                  binoculars: list[str] = None,
-                 odd_keystone: list[str] = None):
+                 odd_keystone: list[str] = None,
+                 munchlax_tree: list[str] = None):
         ### acquisition methods ###
         self.name = name # str
         self.starter = starter  # list[str]
@@ -40,6 +42,7 @@ class Location:
         self.super_rod = super_rod # list[str]
         self.poke_flute = poke_flute # list[str]
         self.static_encounter = static_encounter # list[str]
+        self.repeatable_static_encounter = repeatable_static_encounter # list[str]
         self.trade = trade # list[str]
         self.gift = gift # list[str]
         self.purchase = purchase  # list[str]
@@ -61,4 +64,5 @@ class Location:
         self.honey_tree = honey_tree # list[str]
         self.binoculars = binoculars # list[str]
         self.odd_keystone = odd_keystone # list[str]
+        self.munchlax_tree = munchlax_tree # list[str]
 

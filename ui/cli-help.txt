@@ -6,7 +6,7 @@ Dexelect — Progression-aware Pokemon party generator
 Usage:
   ENTER – Generate a party
   G – Open the Supported Games menu to change the game mode
-  M – Toggle the generation mode between 'Progression' and 'Random'
+  M – Open the Generation Mode menu to change the party generation mode
   P – Open the Set Party Size menu to set party size (1–6)
   R – Reload the current configuration file from disk (if changes were made while the app is running)
   H – Display this help
@@ -14,7 +14,8 @@ Usage:
 
 Modes:
   Progression — Generated party adheres to logical game progression and config settings
-  Random — Generated party is completely random drawing from current game's National Pokedex
+  Random (Obtainable) — Generated party is completely random drawing from current game's set of obtainable Pokemon (config settings ignored)
+  Random (National Dex) — Generated party is completely random drawing from current game's National Pokedex (config settings ignored)
 
 Definitions:
   Sphere – Broad chunk of game progression (e.g. Sphere 1 for Kanto spans Pallet Town to Cerulean City)

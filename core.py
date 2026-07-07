@@ -616,13 +616,13 @@ def generate_random_mon(all_pokemon: dict[str, 'Pokemon']) -> 'Pokemon':
     """
     return random.choice(list(all_pokemon.values()))
 
-def generate_fully_randomized_party(all_pokemon: dict[str, 'Pokemon'], n: int = 6) -> dict:
+def generate_fully_randomized_party(pokemon_dict: dict[str, 'Pokemon'], n: int = 6) -> dict:
     """
     Generates a fully randomized party of Pokemon with empty balance stats and acquisition data (since the party is not
     generated with any considerations about acquisition/viability, these stats are irrelevant).
 
     args:
-        all_pokemon (dict of Pokemon objects)
+        pokemon_dict (dict of Pokemon objects)
         n (int): the party size
 
     returns:
@@ -631,7 +631,7 @@ def generate_fully_randomized_party(all_pokemon: dict[str, 'Pokemon'], n: int = 
     party = []
 
     for i in range(n):
-        mon = generate_random_mon(all_pokemon)
+        mon = generate_random_mon(pokemon_dict)
         # fill its entry with dummy (empty) acquisition data
         entry = {
             "party_member_obj": mon,
@@ -726,6 +726,7 @@ def construct_full_location_set(location_data) -> dict[str, Location]:
             super_rod=cur_loc["super_rod"] if "super_rod" in cur_loc else None,
             poke_flute=cur_loc["poke_flute"] if "poke_flute" in cur_loc else None,
             static_encounter=cur_loc["static_encounter"] if "static_encounter" in cur_loc else None,
+            repeatable_static_encounter=cur_loc["repeatable_static_encounter"] if "repeatable_static_encounter" in cur_loc else None,
             trade=cur_loc["trade"] if "trade" in cur_loc else None,
             gift=cur_loc["gift"] if "gift" in cur_loc else None,
             purchase=cur_loc["purchase"] if "purchase" in cur_loc else None,
@@ -748,7 +749,8 @@ def construct_full_location_set(location_data) -> dict[str, Location]:
             # gen 4 methods ...
             honey_tree=cur_loc["honey_tree"] if "honey_tree" in cur_loc else None,
             binoculars=cur_loc["binoculars"] if "binoculars" in cur_loc else None,
-            odd_keystone=cur_loc["odd_keystone"] if "odd_keystone" in cur_loc else None
+            odd_keystone=cur_loc["odd_keystone"] if "odd_keystone" in cur_loc else None,
+            munchlax_tree=cur_loc["munchlax_tree"] if "munchlax_tree" in cur_loc else None
         )
 
         # add current loc's Location object to dict

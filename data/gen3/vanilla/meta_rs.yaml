@@ -289,7 +289,7 @@ spheres:
     type: map
   - name: SkyPillar6F
     type: map
-  - name: LittlerootTown
+  - name: RandomLocationStartingFromLittlerootTown
     type: map
 
 sphere_generation_modes:

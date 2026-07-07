@@ -1089,6 +1089,6 @@
 - map_name: SkyPillar6F
   static_encounter:
   - RAYQUAZA
-- map_name: LittlerootTown
+- map_name: RandomLocationStartingFromLittlerootTown
   roaming:
   - LATIAS

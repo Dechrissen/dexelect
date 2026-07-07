@@ -86,9 +86,4 @@
 - improve debug logging
 
 - might not make sense to have postgame spheres at all (e.g., in D/P Cresselia can only be obtained post-national dex which contradicts our exclusion of other post-national dex stuff like poke radar and swarms etc. So maybe postgame doesn't need to be included in any of the games.)
-
-- decide if we want to change "Random" generation mode to be "fully random amongst obtainable pokemon" instead, in which case we just make the function use the new obtainable_pokemon dict instead
-
-- determine optimal boundary points for spheres in al previous games to see if they can be balanced better (# of new species introduced per sphere)
-
-- for honey tree: "what's the latest sphere where player will definitely have visited all trees? can make all the honey trees in that sphere "munchlax_trees" and just assume munchlax is available in/by that latest sphere.
+  - alternatively, add all postgame stuff in all games (post-national dex stuff)

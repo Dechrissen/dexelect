@@ -31,6 +31,7 @@
   - MAGMAR
   - RATTATA
   - ZUBAT
+- map_name: RandomLocationStartingFromBurnedTowerB1F
   roaming:
   - ENTEI
   - RAIKOU
@@ -1480,7 +1481,7 @@
   - KINGLER
   - CORSOLA
   - STARYU
-  static_encounter:
+  repeatable_static_encounter:
   - LAPRAS
 - map_name: VermilionCity
   surf:

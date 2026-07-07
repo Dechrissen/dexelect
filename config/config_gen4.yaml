@@ -1,4 +1,4 @@
-require_one_sphere_one: false
+require_one_sphere_one: true
 allowed_balancing:
   value: [balanced, early_game_heavy, late_game_heavy]
   options: [balanced, early_game_heavy, late_game_heavy]
@@ -74,8 +74,8 @@ type_blacklist:
     ground, rock, poison, bug, dragon, ghost, steel, dark]
 ensure_hm_coverage:
   CUT: false
-  FLY: false
-  SURF: false
+  FLY: true
+  SURF: true
   STRENGTH: false
   DEFOG: false
   ROCK_SMASH: false
@@ -92,6 +92,7 @@ allowed_acquisition_methods:
   good_rod: true
   super_rod: true
   static_encounter: true
+  repeatable_static_encounter: true
   trade: false
   gift: true
   fossil_restore: true
@@ -99,6 +100,7 @@ allowed_acquisition_methods:
   honey_tree: true
   binoculars: true
   odd_keystone: true
+  munchlax_tree: true
 generation_filter:
   value: []
   options: [1, 2, 3, 4]

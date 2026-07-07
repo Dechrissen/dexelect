@@ -91,10 +91,11 @@ def test_pokedex_data_types(yaml_files):
 def test_location_fields(yaml_files):
     """Tests whether all fields in each location entry are valid."""
     valid_acquisition_methods = {'starter','walk','surf','old_rod','good_rod','super_rod','poke_flute',
-                                 'static_encounter','trade','gift','purchase','fossil_restore','prize_window',
+                                 'static_encounter','repeatable_static_encounter','trade','gift','purchase','fossil_restore','prize_window',
                                  'bug_catching_contest', 'rock_smash', 'squirt_bottle', 'headbutt', 'roaming',
                                  'rainbow_wing', 'silver_wing', 'dive', 'go_goggles', 'devon_scope',
-                                 'sealed_chamber_puzzle', 'mirage_island', 'honey_tree', 'binoculars', 'odd_keystone'}
+                                 'sealed_chamber_puzzle', 'mirage_island', 'honey_tree', 'binoculars', 'odd_keystone',
+                                 'munchlax_tree'}
     for path, category in filter_yaml(yaml_files, "locations"):
         locations = load_yaml(path)
         for location in locations:
