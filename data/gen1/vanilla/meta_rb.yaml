@@ -67,6 +67,8 @@ spheres:
             type: map
           - name: ViridianForest
             type: map
+      - sphereNum: 2
+        contents:
           - name: Route3
             type: map
           - name: MtMoon1F
@@ -83,7 +85,7 @@ spheres:
             type: map
           - name: Route25
             type: map
-      - sphereNum: 2
+      - sphereNum: 3
         contents:
           - name: CeruleanCity
             type: map
@@ -123,7 +125,7 @@ spheres:
             type: item
           - name: leaf_stone
             type: item
-      - sphereNum: 3
+      - sphereNum: 4
         contents:
           - name: PokemonTower3F
             type: map
@@ -169,7 +171,7 @@ spheres:
             type: map
           - name: SaffronCity
             type: map
-      - sphereNum: 4
+      - sphereNum: 5
         contents:
           - name: Route19
             type: map
@@ -197,7 +199,7 @@ spheres:
             type: map
           - name: Route21
             type: map
-      - sphereNum: 5
+      - sphereNum: 6
         contents:
           - name: Route23
             type: map
@@ -207,7 +209,7 @@ spheres:
             type: map
           - name: VictoryRoad3F
             type: map
-      - sphereNum: 6
+      - sphereNum: 7
         contents:
           - name: CeruleanCave1F
             type: map
@@ -217,7 +219,7 @@ spheres:
             type: map
 
 sphere_generation_modes:
-  all: [1,2,3,4,5,6] # all areas, including Cerulean Cave
-  no_cerulean_cave: [1,2,3,4,5] # beginning of game up to Route 23 and Victory Road, inclusive
-  pre_victory_road: [1,2,3,4] # beginning of game up to Cinnabar Island
+  all: [1,2,3,4,5,6,7] # all areas, including Cerulean Cave
+  no_cerulean_cave: [1,2,3,4,5,6] # beginning of game up to Route 23 and Victory Road, inclusive
+  pre_victory_road: [1,2,3,4,5] # beginning of game up to Cinnabar Island
 

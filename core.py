@@ -893,3 +893,41 @@ def build_pools(all_spheres, all_pokemon, starting_acquisition_methods) -> dict[
         print("Done.")
 
     return all_pools
+
+
+def count_new_species_per_sphere(all_pools, obtainable_pokemon, all_pokemon) -> dict[int, int]:
+    """
+    For each sphere, counts how many species are introduced there for the
+    first time: the sphere containing the earliest form (walking down through
+    pre-evolutions) of that species that appears in any pool entry, regardless of
+    acquisition method. This is deliberately config-agnostic (like build_obtainable_pokemon),
+    so it reflects the game's theoretically obtainable Pokemon rather than the user's
+    current settings.
+
+    args:
+        all_pools (dict of pools, as built by build_pools)
+        obtainable_pokemon (dict of Pokemon objects theoretically obtainable in this game)
+        all_pokemon (dict of all Pokemon objects, needed to walk evolution chains)
+
+    returns:
+        dict mapping sphere_num -> count of species first introduced in that sphere
+    """
+
+    counts = {sphere_num: 0 for sphere_num in all_pools}
+
+    for mon in obtainable_pokemon.values():
+        cur_mon = mon
+        forms = [cur_mon]
+        while cur_mon.get_immediate_child(all_pokemon):
+            cur_mon = cur_mon.get_immediate_child(all_pokemon)
+            forms.append(cur_mon)
+        forms.reverse()
+
+        for sphere_num in sorted(all_pools.keys()):
+            pool_entries = all_pools[sphere_num]["pool_entries"]
+            found = any(form.name == entry["pokemon_obj"].name for form in forms for entry in pool_entries)
+            if found:
+                counts[sphere_num] += 1
+                break
+
+    return counts

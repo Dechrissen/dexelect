@@ -5,17 +5,13 @@ starter_species:
 
 # Only one of the Pokemon per modal group can be generated,
 # and no dupes of any selected from a group
-modal_species:
-- [GARDEVOIR, GALLADE]
-- [GLALIE, FROSLASS]
-- [WORMADAM, MOTHIM]
+modal_species: []
 
 limited_acquisition_methods:
 - starter
 - static_encounter
 - gift
 - trade
-- fossil_restore
 - roaming
 
 acquisition_methods:
@@ -84,6 +80,8 @@ spheres:
     type: map
   - name: OreburghMineB2F
     type: map
+- sphereNum: 2
+  contents:
   - name: Route207
     type: map
   - name: old_rod
@@ -112,7 +110,7 @@ spheres:
     type: acquisition_unlock
   - name: OreburghMiningMuseum
     type: map
-- sphereNum: 2
+- sphereNum: 3
   contents:
   - name: Route206
     type: map
@@ -132,6 +130,8 @@ spheres:
     type: map
   - name: Route209
     type: map
+- sphereNum: 4
+  contents:
   - name: good_rod
     type: acquisition_unlock
   - name: LostTower1F
@@ -176,7 +176,7 @@ spheres:
     type: map
   - name: GreatMarshSpecialArea
     type: map
-- sphereNum: 3
+- sphereNum: 5
   contents:
   - name: Route210North
     type: map
@@ -218,8 +218,6 @@ spheres:
     type: map
   - name: SnowpointCity
     type: map
-- sphereNum: 4
-  contents:
   - name: MtCoronet2F
     type: map
   - name: MtCoronet3F
@@ -254,7 +252,7 @@ spheres:
     type: map
   - name: Route223
     type: map
-- sphereNum: 5
+- sphereNum: 6
   contents:
   - name: VictoryRoad1F
     type: map
@@ -264,8 +262,6 @@ spheres:
     type: map
   - name: PokemonLeague
     type: map
-- sphereNum: 6
-  contents:
   - name: VictoryRoad1FBack2
     type: map
   - name: VictoryRoad1FBack1
@@ -327,5 +323,4 @@ spheres:
 
 sphere_generation_modes:
   all: [1,2,3,4,5,6] # all areas including postgame
-  no_postgame: [1,2,3,4,5] # beginning of game through Victory Road, excluding postgame
-  pre_victory_road: [1,2,3,4] # beginning of game up to Victory Road
+  pre_victory_road_and_postgame: [1,2,3,4,5] # beginning of game up to postgame

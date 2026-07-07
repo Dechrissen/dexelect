@@ -35,7 +35,7 @@ import sys
 import webbrowser
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont, ImageTk
-from core import generate_final_party, generate_fully_randomized_party
+from core import generate_final_party, generate_fully_randomized_party, count_new_species_per_sphere
 from data.loader import build_all_data_structures
 from util import resource_path
 from version import __version__
@@ -820,6 +820,8 @@ class DexelectApp(ctk.CTk):
         modes       = self.meta_data.get("sphere_generation_modes", {})
         sel_mode    = self.meta_data.get("selected_sphere_mode", "")
         active_nums = set(modes.get(sel_mode, []))
+        new_species_counts = count_new_species_per_sphere(
+            self.all_pools, self.obtainable_pokemon, self.all_pokemon)
 
         for sphere in spheres:
             num    = sphere["sphereNum"]
@@ -828,7 +830,8 @@ class DexelectApp(ctk.CTk):
             mh = "map_on"  if active else "map_off"
             ih = "item_on" if active else "item_off"
             label = "  (enabled)" if active else "  (disabled)"
-            text_widget.insert("end", f"Sphere {num}{label}\n", sh)
+            new_count = new_species_counts.get(num, 0)
+            text_widget.insert("end", f"Sphere {num}{label} – {new_count} new species\n", sh)
             for entry in sphere.get("contents", []):
                 name  = entry["name"]
                 etype = entry["type"]

@@ -85,6 +85,8 @@ spheres:
             type: map
           - name: SproutTower3F
             type: map
+      - sphereNum: 2
+        contents:
           - name: RuinsOfAlphInnerChamber
             type: map
           - name: Route32
@@ -101,7 +103,7 @@ spheres:
             type: map
           - name: SlowpokeWellB1F
             type: map
-      - sphereNum: 2
+      - sphereNum: 3
         contents:
           - name: IlexForest
             type: map
@@ -149,7 +151,7 @@ spheres:
             type: map
           - name: TinTowerRoof
             type: map
-      - sphereNum: 3
+      - sphereNum: 4
         contents:
           - name: Route38
             type: map
@@ -181,7 +183,7 @@ spheres:
             type: map
           - name: CianwoodCity
             type: map
-      - sphereNum: 4
+      - sphereNum: 5
         contents:
           - name: Route42
             type: map
@@ -229,7 +231,7 @@ spheres:
             type: map
           - name: VictoryRoad
             type: map
-      - sphereNum: 5
+      - sphereNum: 6
         contents:
           - name: VermilionCity
             type: map
@@ -283,8 +285,6 @@ spheres:
             type: map
           - name: Route7
             type: map
-      - sphereNum: 6
-        contents:
           - name: DiglettsCave
             type: map
           - name: Route2
@@ -331,5 +331,5 @@ spheres:
 sphere_generation_modes:
   all: [1,2,3,4,5,6,7] # all areas, including Mt. Silver
   no_mt_silver: [1,2,3,4,5,6] # beginning of game through end of Kanto, excluding Mt. Silver
-  pre_kanto: [1,2,3,4] # beginning of game up to Elite Four (Johto only)
+  pre_kanto: [1,2,3,4,5] # beginning of game up to Elite Four (Johto only)
 

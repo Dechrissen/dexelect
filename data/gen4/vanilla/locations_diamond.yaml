@@ -1450,12 +1450,6 @@
 - map_name: OreburghMiningMuseum
   fossil_restore:
   - CRANIDOS
-  - SHIELDON
-  - OMANYTE
-  - KABUTO
-  - AERODACTYL
-  - LILEEP
-  - ANORITH
 - map_name: TwinleafTown
   surf:
   - PSYDUCK

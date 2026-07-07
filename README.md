@@ -75,8 +75,8 @@ See [`CONTRIBUTING.md`](/CONTRIBUTING.md) if you'd like to add support for a rom
 | 3   | Ruby       | ✔         |
 | 3   | Sapphire   | ✔         |
 | 3   | Emerald    | Planned   |
-| 4   | Diamond    | Planned   |
-| 4   | Pearl      | Planned   |
+| 4   | Diamond    | ✔         |
+| 4   | Pearl      | ✔         |
 | 4   | Platinum   | Planned   |
 
 ### Romhacks

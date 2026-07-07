@@ -77,6 +77,8 @@ spheres:
     type: map
   - name: RustboroCity
     type: map
+- sphereNum: 2
+  contents:
   - name: Route116
     type: map
   - name: RusturfTunnel
@@ -99,7 +101,7 @@ spheres:
     type: map
   - name: DewfordTown
     type: map
-- sphereNum: 2
+- sphereNum: 3
   contents:
   - name: Route107
     type: map
@@ -141,7 +143,7 @@ spheres:
     type: map
   - name: Route117
     type: map
-- sphereNum: 3
+- sphereNum: 4
   contents:
   - name: surf
     type: acquisition_unlock
@@ -165,7 +167,7 @@ spheres:
     type: acquisition_unlock
   - name: AncientTomb
     type: map
-- sphereNum: 4
+- sphereNum: 5
   contents:
   - name: Route121
     type: map
@@ -205,6 +207,8 @@ spheres:
     type: map
   - name: MossdeepCity
     type: map
+- sphereNum: 6
+  contents:
   - name: super_rod
     type: acquisition_unlock
   - name: dive
@@ -269,7 +273,7 @@ spheres:
     type: map
   - name: MeteorFallsB1F2R
     type: map
-- sphereNum: 5
+- sphereNum: 7
   contents:
   - name: EverGrandeCity
     type: map
@@ -279,7 +283,7 @@ spheres:
     type: map
   - name: VictoryRoadB2F
     type: map
-- sphereNum: 6
+- sphereNum: 8
   contents:
   - name: StevensHouse
     type: map
@@ -289,7 +293,7 @@ spheres:
     type: map
 
 sphere_generation_modes:
-  all: [1,2,3,4,5,6] # all areas including postgame
-  no_postgame: [1,2,3,4,5] # beginning of game through Victory Road, excluding postgame
-  pre_victory_road: [1,2,3,4] # beginning of game up to Victory Road
+  all: [1,2,3,4,5,6,7,8] # all areas including postgame
+  no_postgame: [1,2,3,4,5,6,7] # beginning of game through Victory Road, excluding postgame
+  pre_victory_road: [1,2,3,4,5,6] # beginning of game up to Victory Road
 
