@@ -56,6 +56,9 @@ PHASES = {
     "h": "PHASE H - plain Tk + ttk.Notebook",
     "i": "PHASE I - plain Tk + Notebook + canvas-embedded content",
     "j": "PHASE J - plain Tk + Notebook + canvas + images/window icons",
+    "k": "PHASE K - plain Tk + window icons only",
+    "l": "PHASE L - plain Tk + displayed images only",
+    "m": "PHASE M - plain Tk + PIL-loaded images (logo + sprites)",
 }
 INSTRUCTIONS = "  |  drag + resize me for a few seconds, then close"
 
@@ -80,7 +83,8 @@ def run_plain_tk(title, dpi_aware, rows=12):
     root.mainloop()
 
 
-def run_app_like(title, notebook=False, canvas_embed=False, images=False, rows=25):
+def run_app_like(title, notebook=False, canvas_embed=False, images=False, rows=25,
+                 win_icons=False, photo_labels=False, pil_images=False):
     """Phase G plus Dexelect-tk ingredients, stacked one at a time, to find
     which one causes the residual ~0.5s move trail in the tk GUI (round 3)."""
     if sys.platform == "win32":
@@ -93,6 +97,10 @@ def run_app_like(title, notebook=False, canvas_embed=False, images=False, rows=2
     root.geometry("1000x800")
 
     if images:
+        win_icons = True
+        photo_labels = True
+
+    if win_icons:
         icon_imgs = []
         for size in (16, 32, 38, 64, 128, 256):
             path = REPO_ROOT / f"assets/icons/{size}.png"
@@ -133,6 +141,23 @@ def run_app_like(title, notebook=False, canvas_embed=False, images=False, rows=2
         container = inner
 
     photos = []
+    if pil_images:
+        # Load images exactly the way the real tk GUI does: PIL -> ImageTk.
+        from PIL import Image, ImageTk
+        logo_path = REPO_ROOT / "assets/logo/dexelect-logo-black.png"
+        if logo_path.exists():
+            src = Image.open(logo_path)
+            w = 190
+            h = round(w * src.height / src.width)
+            photos.append(ImageTk.PhotoImage(src.resize((w, h), Image.LANCZOS)))
+            tk.Label(container, image=photos[-1]).pack(anchor="w", padx=10, pady=4)
+        sprite_dir = REPO_ROOT / "assets/sprites/gen1"
+        sprite_files = sorted(sprite_dir.glob("*.png"))[:6] if sprite_dir.exists() else []
+        for f in sprite_files:
+            img = Image.open(f).resize((112, 112), Image.NEAREST)
+            photos.append(ImageTk.PhotoImage(img))
+
+    pil_sprites = photos[1:] if pil_images else []
     for i in range(rows):
         row = tk.Frame(container)
         row.pack(fill="x", padx=10, pady=2)
@@ -140,10 +165,12 @@ def run_app_like(title, notebook=False, canvas_embed=False, images=False, rows=2
             tk.Button(row, text=f"button {i}-{j}").pack(side="left", padx=4)
         tk.Entry(row, width=12).pack(side="left", padx=4)
         tk.Label(row, text="some label text " * 2).pack(side="left", padx=8)
-        if images and i < 6:
+        if photo_labels and i < 6:
             photo = tk.PhotoImage(width=112, height=112)
             photos.append(photo)
             tk.Label(row, image=photo).pack(side="left")
+        if pil_sprites and i < len(pil_sprites):
+            tk.Label(row, image=pil_sprites[i]).pack(side="left")
     root._photos = photos
     root.mainloop()
 
@@ -223,6 +250,12 @@ def main():
             run_app_like(title, notebook=True, canvas_embed=True)
         elif phase == "j":
             run_app_like(title, notebook=True, canvas_embed=True, images=True)
+        elif phase == "k":
+            run_app_like(title, win_icons=True)
+        elif phase == "l":
+            run_app_like(title, photo_labels=True)
+        elif phase == "m":
+            run_app_like(title, pil_images=True)
         return
 
     print("Windows will open one at a time. Drag + resize each by the")
