@@ -13,9 +13,8 @@
 #   python main.py --ui tk
 #
 # Structure mirrors ui/gui.py:
-#   - Diagnostic log (trimmed: no CustomTkinter/sizemove machinery)
 #   - Config file helpers
-#   - Tooltip + PIL glyph icons
+#   - Tooltip + glyph icons
 #   - DexelectApp class
 #       - __init__          : root window, fonts, layout, content-driven sizing
 #       - _build_sidebar    : left panel (game, mode, party size, toggles, export)
@@ -42,66 +41,6 @@ from util import resource_path
 from version import __version__
 
 from ui.gui_theme import TYPE_COLORS  # semantic data (type -> color), not styling
-
-
-# =============================================================================
-# DIAGNOSTIC LOG
-# =============================================================================
-# Same collection mechanism as ui/gui.py so Windows perf runs of the two GUIs
-# produce comparable numbers: on Windows a dexelect_debug.log is written next
-# to the exe (fallback: home dir; overwritten each launch), elsewhere opt-in
-# via DEXELECT_PERF_LOG=1; DEXELECT_NO_DIAG_LOG=1 disables everywhere.
-
-def _open_diag_log():
-    if os.environ.get("DEXELECT_NO_DIAG_LOG"):
-        return None
-    if sys.platform != "win32" and not os.environ.get("DEXELECT_PERF_LOG"):
-        return None
-    if getattr(sys, "frozen", False):          # PyInstaller build
-        candidates = [os.path.dirname(sys.executable)]
-    else:
-        candidates = [os.getcwd()]
-    candidates.append(os.path.expanduser("~"))
-    for base in candidates:
-        try:
-            f = open(os.path.join(base, "dexelect_debug.log"), "w",
-                     encoding="utf-8", buffering=1)
-        except OSError:
-            continue
-        try:
-            import faulthandler
-            faulthandler.enable(file=f)
-        except Exception:
-            pass
-        return f
-    return None
-
-_DIAG_FILE = _open_diag_log()
-
-def _diag(msg: str):
-    line = f"[{time.strftime('%H:%M:%S')}] {msg}"
-    print(line, file=sys.stderr)
-    if _DIAG_FILE:
-        try:
-            _DIAG_FILE.write(line + "\n")
-        except OSError:
-            pass
-
-if _DIAG_FILE:
-    import platform as _platform
-    _diag(f"dexelect v{__version__} (tk ui) | python {sys.version.split()[0]} | "
-          f"{_platform.platform()} | tk {tk.TkVersion}")
-
-
-# =============================================================================
-# DIAGNOSTIC OMISSIONS (temporary — Windows move-trail bisection)
-# =============================================================================
-# DEXELECT_SKIP=icons,tabs,logo omits parts of the UI so the residual Windows
-# drag trail can be attributed by elimination. Remove once the cause is found.
-
-_SKIP = set(filter(None, os.environ.get("DEXELECT_SKIP", "").lower().split(",")))
-if _SKIP:
-    _diag(f"DEXELECT_SKIP active: {sorted(_SKIP)}")
 
 
 # =============================================================================
@@ -294,7 +233,7 @@ class DexelectApp(tk.Tk):
         self.font_fixed = tkfont.nametofont("TkFixedFont")
 
         # ---- App icon ----
-        _icon_sizes = [] if "icons" in _SKIP else [16, 32, 38, 64, 128, 256]
+        _icon_sizes = [16, 32, 38, 64, 128, 256]
         _icon_imgs = []
         for _s in _icon_sizes:
             _p = resource_path(f"assets/icons/{_s}.png")
@@ -303,7 +242,7 @@ class DexelectApp(tk.Tk):
         if _icon_imgs:
             self.wm_iconphoto(True, *_icon_imgs)
             self._icon_imgs = _icon_imgs  # prevent GC
-        if sys.platform == "win32" and "icons" not in _SKIP:
+        if sys.platform == "win32":
             _ico = resource_path("assets/icons/dexelect.ico")
             if os.path.exists(_ico):
                 self.iconbitmap(_ico)
@@ -350,10 +289,8 @@ class DexelectApp(tk.Tk):
         self._hm_resize_job = None
         self._config_note_resize_job = None
 
-        # Gen-tab scrollbar auto-hide state + toggle counter (see _yscroll_set
-        # and _start_perf_log).
+        # Gen-tab scrollbar auto-hide state (see _yscroll_set in _build_gen_tab)
         self._gen_scrollbar_hidden = False
-        self._scrollbar_toggle_count = 0
 
         # Tooltip text keyed by config field name
         try:
@@ -378,8 +315,6 @@ class DexelectApp(tk.Tk):
                   and not (self._help_overlay and self._help_overlay.winfo_exists())
                   else None)
 
-        if _DIAG_FILE or os.environ.get("DEXELECT_PERF_LOG"):
-            self.after(1000, self._start_perf_log)
 
 
     # =========================================================================
@@ -506,8 +441,6 @@ class DexelectApp(tk.Tk):
 
         # ---- Title ----
         _logo_path = resource_path("assets/logo/dexelect-logo-black.png")
-        if "logo" in _SKIP:
-            _logo_path = ""
         if os.path.exists(_logo_path):
             _logo_src = Image.open(_logo_path)
             _logo_display_w = 190
@@ -653,24 +586,15 @@ class DexelectApp(tk.Tk):
         self.notebook = ttk.Notebook(self.main_frame)
         self.notebook.grid(row=1, column=0, sticky="nsew", padx=8, pady=(0, 8))
 
-        skip_spheres = "tabs" in _SKIP or "spheres" in _SKIP
-        skip_config  = "tabs" in _SKIP or "config" in _SKIP
-        tab_names = ["Generate"]
-        if not skip_spheres:
-            tab_names.append("Spheres")
-        if not skip_config:
-            tab_names.append("Config")
         self._tab_frames = {}
-        for name in tab_names:
+        for name in ("Generate", "Spheres", "Config"):
             frame = tk.Frame(self.notebook)
             self.notebook.add(frame, text=name)
             self._tab_frames[name] = frame
 
         self._build_gen_tab(self._tab_frames["Generate"])
-        if not skip_spheres:
-            self._build_spheres_tab(self._tab_frames["Spheres"])
-        if not skip_config:
-            self._build_config_tab(self._tab_frames["Config"])
+        self._build_spheres_tab(self._tab_frames["Spheres"])
+        self._build_config_tab(self._tab_frames["Config"])
 
         # Config controls exist only while their tab is selected (see
         # _sync_config_tab); react to tab switches.
@@ -874,8 +798,6 @@ class DexelectApp(tk.Tk):
 
     def _refresh_spheres_tab(self):
         """Update the game label, sphere mode dropdown options, and re-render the sphere map."""
-        if not hasattr(self, "_spheres_text"):
-            return  # Spheres tab omitted via DEXELECT_SKIP=tabs
         self._spheres_game_label.configure(text=self.var_game.get())
         modes = list(self.meta_data.get("sphere_generation_modes", {}).keys())
         current = self.meta_data.get("selected_sphere_mode", modes[0] if modes else "")
@@ -939,7 +861,6 @@ class DexelectApp(tk.Tk):
             hidden = float(first) <= 0.0 and float(last) >= 1.0
             if hidden != self._gen_scrollbar_hidden:
                 self._gen_scrollbar_hidden = hidden
-                self._scrollbar_toggle_count += 1
                 if hidden:
                     scrollbar.grid_remove()
                 else:
@@ -1382,8 +1303,6 @@ class DexelectApp(tk.Tk):
         disappears when they don't exist. Building on tab entry costs a few
         tens of ms once; dragging stays smooth everywhere else.
         """
-        if "Config" not in getattr(self, "_tab_frames", {}):
-            return
         selected = self.notebook.select() == str(self._tab_frames["Config"])
         if selected and not self._config_built:
             self._populate_config_controls()
@@ -1392,8 +1311,6 @@ class DexelectApp(tk.Tk):
             self._teardown_config_tab()
 
     def _teardown_config_tab(self):
-        if not hasattr(self, "_config_inner"):
-            return
         for w in self._config_inner.winfo_children():
             w.destroy()
         self.config_vars.clear()
@@ -1405,10 +1322,6 @@ class DexelectApp(tk.Tk):
         Build (or rebuild) all config widgets inside the scrollable config frame.
         Called by _sync_config_tab when the Config tab is entered.
         """
-        if not hasattr(self, "_config_inner"):
-            return  # Config tab omitted via DEXELECT_SKIP=tabs/config
-        if "configwidgets" in _SKIP:
-            return  # canvas built but left empty (isolates canvas vs widgets)
         self._config_loading = True
         inner = self._config_inner
 
@@ -2077,44 +1990,6 @@ class DexelectApp(tk.Tk):
     def _set_config_status(self, message: str, color: str = C_MUTED):
         """Update the status label in the Config tab."""
         self.config_status_label.configure(text=message, fg=color)
-
-
-    # =========================================================================
-    # PERF LOG (opt-in diagnostics, same fields as ui/gui.py minus sizemove)
-    # =========================================================================
-
-    def _start_perf_log(self):
-        """Print one perf line per second: worst event-loop lag, heartbeat count,
-        <Configure> events across all widgets, and scrollbar auto-hide flips."""
-        counts = {"cfg_all": 0}
-        self.bind("<Configure>", lambda e: counts.__setitem__("cfg_all", counts["cfg_all"] + 1),
-                  add="+")
-
-        HEARTBEAT_MS = 100
-        state = {"last": time.perf_counter(), "worst": 0.0, "ticks": 0,
-                 "sb_last": self._scrollbar_toggle_count}
-
-        def _tick():
-            now = time.perf_counter()
-            lag = (now - state["last"]) * 1000.0 - HEARTBEAT_MS
-            state["worst"] = max(state["worst"], lag)
-            state["ticks"] += 1
-            state["last"] = now
-            self.after(HEARTBEAT_MS, _tick)
-
-        def _report():
-            sb_now = self._scrollbar_toggle_count
-            _diag(f"perf: lag_worst={state['worst']:5.0f}ms ticks={state['ticks']:2d}/s "
-                  f"cfg_all={counts['cfg_all']:4d}/s sb_toggles={sb_now - state['sb_last']}")
-            state["worst"] = 0.0
-            state["ticks"] = 0
-            state["sb_last"] = sb_now
-            counts["cfg_all"] = 0
-            self.after(1000, _report)
-
-        self.after(HEARTBEAT_MS, _tick)
-        self.after(1000, _report)
-        _diag("perf log active")
 
 
 # =============================================================================
