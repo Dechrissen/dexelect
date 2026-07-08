@@ -254,6 +254,14 @@ class DexelectApp(ctk.CTk):
         # slow-motion stutter. Slowing the poll to 1s keeps per-monitor DPI awareness working
         # (just detected up to 1s later) while cutting the overhead during drags.
         ctk.ScalingTracker.update_loop_interval = 1000
+        # AppearanceModeTracker is worse: it polls the OS light/dark theme every 30ms
+        # forever, and on Windows each poll is a registry read via darkdetect.theme()
+        # (~33 reads/sec, slower still when antivirus hooks registry access). Those
+        # timer callbacks starve the modal move loop and make the window trail behind
+        # the cursor during drags. This app is a fixed dark theme, so pin the mode —
+        # a "user"-set mode skips the darkdetect call — and slow the now-no-op loop.
+        ctk.set_appearance_mode("dark")
+        ctk.AppearanceModeTracker.update_loop_interval = 1000
         super().__init__()
 
         # ---- Window setup ----
@@ -322,6 +330,13 @@ class DexelectApp(ctk.CTk):
         self._gen_canvas_resize_job = None
         self._stats_resize_job = None
         self._hm_resize_job = None
+        self._config_note_resize_job = None
+
+        # True while the OS modal move/resize loop is running (Windows only; set by
+        # the WM_ENTERSIZEMOVE hook in _install_win_sizemove_hook). Relayout work
+        # requested during that window is parked here and flushed once on exit.
+        self._in_sizemove = False
+        self._sizemove_deferred = {}
 
         # Tooltip text keyed by config field name
         try:
@@ -338,6 +353,11 @@ class DexelectApp(ctk.CTk):
         self._populate_ui_from_state()
 
         self.after(0, self._update_min_size)
+
+        if sys.platform == "win32":
+            # Deferred so the window is fully created and GetParent(winfo_id())
+            # resolves the real OS frame window.
+            self.after(0, self._install_win_sizemove_hook)
 
         self.bind("<Return>", lambda e: self._run_generation()
                   if self.generate_btn.cget("state") == "normal"
@@ -380,10 +400,84 @@ class DexelectApp(ctk.CTk):
         window edges visibly laggy. Routing those handlers through this collapses
         rapid-fire events into a single call once resizing activity settles.
         """
+        if self._in_sizemove:
+            # Inside the OS modal move/resize loop: don't even schedule — after()
+            # callbacks fire during the modal loop and each relayout starves it.
+            # Only the latest func per job survives; flushed on WM_EXITSIZEMOVE.
+            self._sizemove_deferred[job_attr] = func
+            return
         job = getattr(self, job_attr, None)
         if job is not None:
             self.after_cancel(job)
         setattr(self, job_attr, self.after(delay_ms, func))
+
+    def _flush_sizemove_deferred(self):
+        """Run relayout work parked while the OS modal move/resize loop was active."""
+        deferred, self._sizemove_deferred = self._sizemove_deferred, {}
+        for job_attr, func in deferred.items():
+            self._debounce(job_attr, 10, func)
+
+    def _install_win_sizemove_hook(self):
+        """Windows only: subclass the native window proc to catch the OS modal
+        move/resize loop (WM_ENTERSIZEMOVE .. WM_EXITSIZEMOVE).
+
+        While that loop runs, all <Configure>-driven relayout is parked in
+        _sizemove_deferred (see _debounce and the gen-canvas handler) instead of
+        executing, then flushed once on exit. Without this, Windows delivers
+        <Configure> on every mouse movement of an edge drag and the per-widget
+        CustomTkinter redraws back up the message loop for seconds. Best-effort:
+        any failure leaves the app on the debounce-only behavior.
+        """
+        try:
+            import ctypes
+            from ctypes import wintypes
+
+            WM_ENTERSIZEMOVE = 0x0231
+            WM_EXITSIZEMOVE  = 0x0232
+            GWL_WNDPROC      = -4
+
+            user32 = ctypes.windll.user32
+            user32.GetParent.restype  = ctypes.c_void_p
+            user32.GetParent.argtypes = [ctypes.c_void_p]
+            user32.CallWindowProcW.restype  = ctypes.c_ssize_t
+            user32.CallWindowProcW.argtypes = [
+                ctypes.c_void_p, ctypes.c_void_p,
+                ctypes.c_uint, ctypes.c_size_t, ctypes.c_ssize_t,
+            ]
+            user32.SetWindowLongPtrW.restype  = ctypes.c_void_p
+            user32.SetWindowLongPtrW.argtypes = [
+                ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p,
+            ]
+
+            # winfo_id() is Tk's client-area window; the OS frame window that
+            # receives WM_ENTERSIZEMOVE is its parent.
+            hwnd = user32.GetParent(self.winfo_id())
+            if not hwnd:
+                return
+
+            WNDPROC = ctypes.WINFUNCTYPE(ctypes.c_ssize_t, ctypes.c_void_p,
+                                         ctypes.c_uint, ctypes.c_size_t, ctypes.c_ssize_t)
+
+            def _wndproc(h, msg, wparam, lparam):
+                # Never let an exception escape a ctypes callback: ctypes would
+                # swallow it and return 0 ("handled"), skipping the original proc.
+                try:
+                    if msg == WM_ENTERSIZEMOVE:
+                        self._in_sizemove = True
+                    elif msg == WM_EXITSIZEMOVE:
+                        self._in_sizemove = False
+                        self.after(0, self._flush_sizemove_deferred)
+                except Exception:
+                    self._in_sizemove = False
+                return user32.CallWindowProcW(self._orig_wndproc, h, msg, wparam, lparam)
+
+            # Keep a reference on self: if the WNDPROC thunk is garbage-collected
+            # while installed, the next window message crashes the process.
+            self._sizemove_wndproc = WNDPROC(_wndproc)
+            self._orig_wndproc = user32.SetWindowLongPtrW(
+                hwnd, GWL_WNDPROC, ctypes.cast(self._sizemove_wndproc, ctypes.c_void_p))
+        except Exception:
+            self._in_sizemove = False
 
     def _update_min_size(self):
         self.update_idletasks()
@@ -1064,23 +1158,27 @@ class DexelectApp(ctk.CTk):
         scrollbar.bind("<Enter>", _enable_gen_scroll)
         scrollbar.bind("<Leave>", _disable_gen_scroll)
 
-        def _apply_gen_canvas_size(width, height):
-            # Row 2 (cards_outer) has weight=1 and absorbs extra height when the
-            # window is large.  The scroll region equals gen_inner's natural height,
-            # clamped up to the canvas height so the cards section fills the space.
-            gen_inner.update_idletasks()
-            content_h = gen_inner.winfo_reqheight()
-            new_h = max(height, content_h)
-            canvas.itemconfig(inner_id, height=new_h)
-            canvas.configure(scrollregion=(0, 0, width, new_h))
+        def _sync_gen_canvas():
+            # Reads live canvas dims rather than stale <Configure> event values so
+            # a run deferred past the end of an OS resize drag lands on the final
+            # size. _refit_gen_height handles the height/scrollregion recompute.
+            canvas.itemconfig(inner_id, width=canvas.winfo_width())
+            _refit_gen_height()
 
         def _on_gen_canvas_configure(event):
+            if self._in_sizemove:
+                # OS modal resize loop (Windows): the width itemconfig below is what
+                # propagates each resize step into every themed widget of the card
+                # grid (each redraws its own canvas on <Configure>), so skip it
+                # entirely — content stays frozen at its old size until the
+                # WM_EXITSIZEMOVE flush runs _sync_gen_canvas once.
+                self._sizemove_deferred["_gen_canvas_resize_job"] = _sync_gen_canvas
+                return
             # Track width immediately (cheap, keeps content visually in sync while
-            # dragging); defer the expensive reqheight/scrollregion recompute until
-            # resizing activity settles so live-resize doesn't stutter.
+            # dragging on platforms without the sizemove hook); defer the expensive
+            # reqheight/scrollregion recompute until resizing activity settles.
             canvas.itemconfig(inner_id, width=event.width)
-            self._debounce("_gen_canvas_resize_job", 80,
-                            lambda: _apply_gen_canvas_size(event.width, event.height))
+            self._debounce("_gen_canvas_resize_job", 80, _sync_gen_canvas)
 
         canvas.bind("<Configure>", _on_gen_canvas_configure)
 
@@ -1453,7 +1551,23 @@ class DexelectApp(ctk.CTk):
         scroll.grid_columnconfigure(0, weight=1)
         scroll.grid_columnconfigure(1, weight=1)
         self.config_scroll = scroll
-        scroll._parent_canvas.bind("<Configure>", self._on_config_note_resize)
+
+        # bind() without add="+" replaces CTkScrollableFrame's own internal
+        # <Configure> binding (_fit_frame_dimensions_to_canvas — stretches the
+        # content frame to the canvas width), so chain it explicitly here. It's
+        # routed through the sizemove gate because its width itemconfigure is what
+        # would cascade each Windows resize step into every config widget (the
+        # same storm as the gen tab's card grid); it ignores its event arg and
+        # reads live canvas dims, so a deferred call with None lands correctly.
+        def _on_config_canvas_configure(event):
+            if self._in_sizemove:
+                self._sizemove_deferred["_config_fit_job"] = \
+                    lambda: scroll._fit_frame_dimensions_to_canvas(None)
+            else:
+                scroll._fit_frame_dimensions_to_canvas(event)
+            self._on_config_note_resize(event)
+
+        scroll._parent_canvas.bind("<Configure>", _on_config_canvas_configure)
 
         # Mouse-wheel scrolling: activate globally while cursor is inside the frame.
         # Using enter/leave avoids accumulating duplicate bindings on every rebuild.
@@ -1881,8 +1995,19 @@ class DexelectApp(ctk.CTk):
             self.warning_strip.grid_remove()
 
     def _on_config_note_resize(self, event):
-        if self._config_note_label:
-            self._config_note_label.configure(wraplength=max(200, event.width - 40))
+        # Fires on every <Configure> of the config canvas during a live resize, and
+        # each wraplength configure forces a label re-measure + redraw — debounce it.
+        # The deferred run reads the width live since the event's value goes stale.
+        self._debounce("_config_note_resize_job", 80, self._apply_config_note_wrap)
+
+    def _apply_config_note_wrap(self):
+        if not self._config_note_label:
+            return
+        try:
+            width = self.config_scroll._parent_canvas.winfo_width()
+            self._config_note_label.configure(wraplength=max(200, width - 40))
+        except tk.TclError:
+            pass  # label was destroyed by a config-tab rebuild mid-debounce
 
     def _update_party_size_text_colors(self):
         current = self.var_party_size.get()

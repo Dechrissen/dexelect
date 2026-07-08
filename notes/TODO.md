@@ -32,9 +32,7 @@
 
 - add coverage tests for running generation for a few minutes and making sure certain % of pokemon get generated? gotta figure out what metric makes sense
 
-- add some script that generates the config files for each game (creates the yaml) or something that resets it to the default (recommended) values before i push a release (or maybe have options in the UI to switch to certain presets, like "recommended", "hard", etc)
-  - `config_gen1.default.yaml`
-  - `config_gen1.hard.yaml`
+
 
 - add event support generally (gen 2/3)
   - might just be eon_ticket acquisition method toggle
@@ -87,3 +85,12 @@
 
 - might not make sense to have postgame spheres at all (e.g., in D/P Cresselia can only be obtained post-national dex which contradicts our exclusion of other post-national dex stuff like poke radar and swarms etc. So maybe postgame doesn't need to be included in any of the games.)
   - alternatively, add all postgame stuff in all games (post-national dex stuff)
+
+
+- add some script that generates the config files for each game (creates the yaml) or something that resets it to the default (recommended) values before i push a release (or maybe have options in the UI to switch to certain presets, like "recommended", "hard", etc)
+  - `config_gen1.default.yaml`
+  - `config_gen1.hard.yaml`
+  - then i can start releasing new rulesets, themed challenges, etc. and distribute the config yamls to people
+    - e.g. mono-type runs or 2nd stage only runs
+
+- add acq details and balance stats to 'Random (Obtainable)' parties
