@@ -54,6 +54,58 @@ from ui.gui_theme import (
 
 
 # =============================================================================
+# DIAGNOSTIC LOG
+# =============================================================================
+# Temporary instrumentation for the Windows drag/resize performance problem:
+# on Windows builds a dexelect_debug.log is always written next to the exe
+# (fallback: home dir; ~1 line/sec, overwritten each launch) so no console is
+# needed to collect evidence; elsewhere it's opt-in via DEXELECT_PERF_LOG=1.
+# DEXELECT_NO_DIAG_LOG=1 disables it everywhere. faulthandler routes native
+# crash stacks into the same file. Remove once the Windows issue is closed.
+
+def _open_diag_log():
+    if os.environ.get("DEXELECT_NO_DIAG_LOG"):
+        return None
+    if sys.platform != "win32" and not os.environ.get("DEXELECT_PERF_LOG"):
+        return None
+    if getattr(sys, "frozen", False):          # PyInstaller build
+        candidates = [os.path.dirname(sys.executable)]
+    else:
+        candidates = [os.getcwd()]
+    candidates.append(os.path.expanduser("~"))
+    for base in candidates:
+        try:
+            f = open(os.path.join(base, "dexelect_debug.log"), "w",
+                     encoding="utf-8", buffering=1)   # line-buffered: survives crash
+        except OSError:
+            continue
+        try:
+            import faulthandler
+            faulthandler.enable(file=f)
+        except Exception:
+            pass
+        return f
+    return None
+
+_DIAG_FILE = _open_diag_log()
+
+def _diag(msg: str):
+    line = f"[{time.strftime('%H:%M:%S')}] {msg}"
+    print(line, file=sys.stderr)   # no-op under windowed PyInstaller (stderr=None)
+    if _DIAG_FILE:
+        try:
+            _DIAG_FILE.write(line + "\n")
+        except OSError:
+            pass
+
+if _DIAG_FILE:
+    import platform as _platform
+    _diag(f"dexelect v{__version__} | python {sys.version.split()[0]} | "
+          f"{_platform.platform()} | tk {tk.TkVersion} | "
+          f"ctk {getattr(ctk, '__version__', '?')}")
+
+
+# =============================================================================
 # CONFIG FILE HELPERS
 # =============================================================================
 
@@ -334,9 +386,16 @@ class DexelectApp(ctk.CTk):
 
         # True while the OS modal move/resize loop is running (Windows only; set by
         # the WM_ENTERSIZEMOVE hook in _install_win_sizemove_hook). Relayout work
-        # requested during that window is parked here and flushed once on exit.
+        # requested during that window is parked here; the watchdog loop flushes it
+        # once _sizemove_flush_pending is raised by WM_EXITSIZEMOVE.
         self._in_sizemove = False
+        self._sizemove_flush_pending = False
         self._sizemove_deferred = {}
+
+        # Gen-tab scrollbar auto-hide state + toggle counter (see _yscroll_set in
+        # _build_gen_tab and _start_perf_log).
+        self._gen_scrollbar_hidden = False
+        self._scrollbar_toggle_count = 0
 
         # Tooltip text keyed by config field name
         try:
@@ -358,6 +417,9 @@ class DexelectApp(ctk.CTk):
             # Deferred so the window is fully created and GetParent(winfo_id())
             # resolves the real OS frame window.
             self.after(0, self._install_win_sizemove_hook)
+
+        if _DIAG_FILE or os.environ.get("DEXELECT_PERF_LOG"):
+            self.after(1000, self._start_perf_log)
 
         self.bind("<Return>", lambda e: self._run_generation()
                   if self.generate_btn.cget("state") == "normal"
@@ -423,14 +485,24 @@ class DexelectApp(ctk.CTk):
 
         While that loop runs, all <Configure>-driven relayout is parked in
         _sizemove_deferred (see _debounce and the gen-canvas handler) instead of
-        executing, then flushed once on exit. Without this, Windows delivers
-        <Configure> on every mouse movement of an edge drag and the per-widget
-        CustomTkinter redraws back up the message loop for seconds. Best-effort:
-        any failure leaves the app on the debounce-only behavior.
+        executing; a watchdog after() loop flushes it shortly after the drag ends.
+        Without this, Windows delivers <Configure> on every mouse movement of an
+        edge drag and the per-widget CustomTkinter redraws back up the message
+        loop for seconds.
+
+        Safety rules for the wndproc, learned the hard way (v0.10.2 crashed on
+        every drag): it runs inside the OS modal loop, so it must never call into
+        Tcl/Tk (no after(), no widget access — flag writes only), it must always
+        chain to the original proc (returning without chaining breaks the window),
+        and it must never be able to call through a NULL proc pointer. Best-effort:
+        any install failure leaves the app on the debounce-only behavior, and
+        DEXELECT_NO_SIZEMOVE_HOOK=1 disables the hook entirely for diagnosis.
         """
+        if os.environ.get("DEXELECT_NO_SIZEMOVE_HOOK"):
+            _diag("sizemove hook disabled via env")
+            return
         try:
             import ctypes
-            from ctypes import wintypes
 
             WM_ENTERSIZEMOVE = 0x0231
             WM_EXITSIZEMOVE  = 0x0232
@@ -444,6 +516,10 @@ class DexelectApp(ctk.CTk):
                 ctypes.c_void_p, ctypes.c_void_p,
                 ctypes.c_uint, ctypes.c_size_t, ctypes.c_ssize_t,
             ]
+            user32.DefWindowProcW.restype  = ctypes.c_ssize_t
+            user32.DefWindowProcW.argtypes = [
+                ctypes.c_void_p, ctypes.c_uint, ctypes.c_size_t, ctypes.c_ssize_t,
+            ]
             user32.SetWindowLongPtrW.restype  = ctypes.c_void_p
             user32.SetWindowLongPtrW.argtypes = [
                 ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p,
@@ -453,31 +529,116 @@ class DexelectApp(ctk.CTk):
             # receives WM_ENTERSIZEMOVE is its parent.
             hwnd = user32.GetParent(self.winfo_id())
             if not hwnd:
+                _diag("sizemove hook skipped (no frame hwnd)")
                 return
 
             WNDPROC = ctypes.WINFUNCTYPE(ctypes.c_ssize_t, ctypes.c_void_p,
                                          ctypes.c_uint, ctypes.c_size_t, ctypes.c_ssize_t)
 
+            # Locals captured by the closure: no self-attribute lookups or global
+            # resolution can fail mid-callback.
+            app              = self
+            call_window_proc = user32.CallWindowProcW
+            def_window_proc  = user32.DefWindowProcW
+            orig_proc        = None  # closure cell; assigned right after install
+
             def _wndproc(h, msg, wparam, lparam):
-                # Never let an exception escape a ctypes callback: ctypes would
-                # swallow it and return 0 ("handled"), skipping the original proc.
                 try:
                     if msg == WM_ENTERSIZEMOVE:
-                        self._in_sizemove = True
+                        app._in_sizemove = True
                     elif msg == WM_EXITSIZEMOVE:
-                        self._in_sizemove = False
-                        self.after(0, self._flush_sizemove_deferred)
+                        app._in_sizemove = False
+                        app._sizemove_flush_pending = True  # watchdog flushes
                 except Exception:
-                    self._in_sizemove = False
-                return user32.CallWindowProcW(self._orig_wndproc, h, msg, wparam, lparam)
+                    pass
+                if orig_proc:
+                    return call_window_proc(orig_proc, h, msg, wparam, lparam)
+                return def_window_proc(h, msg, wparam, lparam)
 
             # Keep a reference on self: if the WNDPROC thunk is garbage-collected
             # while installed, the next window message crashes the process.
             self._sizemove_wndproc = WNDPROC(_wndproc)
-            self._orig_wndproc = user32.SetWindowLongPtrW(
+            orig_proc = user32.SetWindowLongPtrW(
                 hwnd, GWL_WNDPROC, ctypes.cast(self._sizemove_wndproc, ctypes.c_void_p))
-        except Exception:
+            if not orig_proc:
+                _diag("sizemove hook install failed (SetWindowLongPtrW=0)")
+                return
+            self._orig_wndproc = orig_proc
+
+            # Restore the original proc before teardown so no message can reach a
+            # Python callback during interpreter shutdown. <Destroy> on the root
+            # also fires for every child widget, hence the idempotence guard.
+            def _uninstall(event=None):
+                nonlocal orig_proc
+                if orig_proc:
+                    try:
+                        user32.SetWindowLongPtrW(hwnd, GWL_WNDPROC,
+                                                 ctypes.c_void_p(orig_proc))
+                    except Exception:
+                        pass
+                    orig_proc = None
+            self.bind("<Destroy>", _uninstall, add="+")
+
+            # Watchdog: a pure-Python flag check 4×/sec (no registry/ctypes work,
+            # unlike the CustomTkinter polls this file suppresses). It exists so
+            # the wndproc never has to touch Tcl to trigger the post-drag flush.
+            def _watchdog():
+                if self._sizemove_flush_pending and not self._in_sizemove:
+                    self._sizemove_flush_pending = False
+                    self._flush_sizemove_deferred()
+                self.after(250, _watchdog)
+            self.after(250, _watchdog)
+
+            _diag("sizemove hook installed")
+        except Exception as e:
             self._in_sizemove = False
+            _diag(f"sizemove hook not installed ({e!r})")
+
+    def _start_perf_log(self):
+        """Opt-in diagnostics (DEXELECT_PERF_LOG=1): print one perf line per second.
+
+        lag_worst  — worst event-loop starvation seen this second: how late a 100ms
+                     heartbeat timer actually fired. This is the number that should
+                     match perceived drag/resize latency; a healthy idle loop stays
+                     under ~5ms.
+        ticks      — heartbeats serviced this second (expect ~10; lower = starved).
+        cfg_all    — <Configure> events across ALL widgets this second (a binding
+                     on the root fires for every descendant via bindtags). High
+                     sustained counts at idle mean a relayout feedback loop.
+        sb_toggles — gen-tab scrollbar auto-hide flips (see _yscroll_set): nonzero
+                     at idle confirms the show/hide feedback loop.
+        sizemove   — whether the WM_ENTERSIZEMOVE hook currently reports a drag.
+        """
+        counts = {"cfg_all": 0}
+        self.bind("<Configure>", lambda e: counts.__setitem__("cfg_all", counts["cfg_all"] + 1),
+                  add="+")
+
+        HEARTBEAT_MS = 100
+        state = {"last": time.perf_counter(), "worst": 0.0, "ticks": 0,
+                 "sb_last": self._scrollbar_toggle_count}
+
+        def _tick():
+            now = time.perf_counter()
+            lag = (now - state["last"]) * 1000.0 - HEARTBEAT_MS
+            state["worst"] = max(state["worst"], lag)
+            state["ticks"] += 1
+            state["last"] = now
+            self.after(HEARTBEAT_MS, _tick)
+
+        def _report():
+            sb_now = self._scrollbar_toggle_count
+            _diag(f"perf: lag_worst={state['worst']:5.0f}ms ticks={state['ticks']:2d}/s "
+                  f"cfg_all={counts['cfg_all']:4d}/s sb_toggles={sb_now - state['sb_last']} "
+                  f"sizemove={self._in_sizemove}")
+            state["worst"] = 0.0
+            state["ticks"] = 0
+            state["sb_last"] = sb_now
+            counts["cfg_all"] = 0
+            self.after(1000, _report)
+
+        self.after(HEARTBEAT_MS, _tick)
+        self.after(1000, _report)
+        _diag("perf log active")
 
     def _update_min_size(self):
         self.update_idletasks()
@@ -1112,11 +1273,20 @@ class DexelectApp(ctk.CTk):
         scrollbar.grid(row=0, column=1, sticky="ns")
 
         # Auto-hide: only show scrollbar when content exceeds canvas height.
+        # Touch grid state only on actual changes: _yscroll_set fires constantly,
+        # and showing/hiding the scrollbar changes the canvas width, which reflows
+        # content, which can change content height and flip the state right back —
+        # a feedback loop. The toggle counter surfaces that in the perf log
+        # (DEXELECT_PERF_LOG=1); sustained toggles/s at idle means the loop is live.
         def _yscroll_set(first, last):
-            if float(first) <= 0.0 and float(last) >= 1.0:
-                scrollbar.grid_remove()
-            else:
-                scrollbar.grid()
+            hidden = float(first) <= 0.0 and float(last) >= 1.0
+            if hidden != self._gen_scrollbar_hidden:
+                self._gen_scrollbar_hidden = hidden
+                self._scrollbar_toggle_count += 1
+                if hidden:
+                    scrollbar.grid_remove()
+                else:
+                    scrollbar.grid()
             scrollbar.set(first, last)
         canvas.configure(yscrollcommand=_yscroll_set)
 
