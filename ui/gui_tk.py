@@ -329,6 +329,7 @@ class DexelectApp(tk.Tk):
         # Config tab variables — populated dynamically in _populate_config_controls
         self.config_vars    = {}
         self._config_loading = False
+        self._config_built   = False
 
         # Generation state
         self.is_generating   = False
@@ -670,6 +671,10 @@ class DexelectApp(tk.Tk):
             self._build_spheres_tab(self._tab_frames["Spheres"])
         if not skip_config:
             self._build_config_tab(self._tab_frames["Config"])
+
+        # Config controls exist only while their tab is selected (see
+        # _sync_config_tab); react to tab switches.
+        self.notebook.bind("<<NotebookTabChanged>>", lambda e: self._sync_config_tab())
 
     def _switch_tab(self, name: str):
         self.notebook.select(self._tab_frames[name])
@@ -1368,10 +1373,37 @@ class DexelectApp(tk.Tk):
                                           fg=C_MUTED, anchor="e")
         self.config_file_label.grid(row=0, column=2, sticky="e", padx=(0, 4))
 
+    def _sync_config_tab(self):
+        """Build the Config controls only while the Config tab is selected; tear
+        them down when leaving it.
+
+        Bisected on Windows (2026-07-08): the pane's ~150 form widgets measurably
+        drag window moves even while unmapped in the notebook — the trail
+        disappears when they don't exist. Building on tab entry costs a few
+        tens of ms once; dragging stays smooth everywhere else.
+        """
+        if "Config" not in getattr(self, "_tab_frames", {}):
+            return
+        selected = self.notebook.select() == str(self._tab_frames["Config"])
+        if selected and not self._config_built:
+            self._populate_config_controls()
+            self._config_built = True
+        elif not selected and self._config_built:
+            self._teardown_config_tab()
+
+    def _teardown_config_tab(self):
+        if not hasattr(self, "_config_inner"):
+            return
+        for w in self._config_inner.winfo_children():
+            w.destroy()
+        self.config_vars.clear()
+        self._config_note_label = None
+        self._config_built = False
+
     def _populate_config_controls(self):
         """
         Build (or rebuild) all config widgets inside the scrollable config frame.
-        Called on initial load and whenever the game changes.
+        Called by _sync_config_tab when the Config tab is entered.
         """
         if not hasattr(self, "_config_inner"):
             return  # Config tab omitted via DEXELECT_SKIP=tabs/config
@@ -1608,7 +1640,10 @@ class DexelectApp(tk.Tk):
         self._build_hm_labels()
         self._refresh_spheres_tab()
 
-        self._populate_config_controls()
+        # Rebuild the Config pane for the (possibly new) game — but only if its
+        # tab is currently selected; otherwise it stays torn down until visited.
+        self._teardown_config_tab()
+        self._sync_config_tab()
 
     def _rebuild_game_dropdown_menu(self, game_names):
         """
