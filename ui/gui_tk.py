@@ -652,16 +652,23 @@ class DexelectApp(tk.Tk):
         self.notebook = ttk.Notebook(self.main_frame)
         self.notebook.grid(row=1, column=0, sticky="nsew", padx=8, pady=(0, 8))
 
+        skip_spheres = "tabs" in _SKIP or "spheres" in _SKIP
+        skip_config  = "tabs" in _SKIP or "config" in _SKIP
+        tab_names = ["Generate"]
+        if not skip_spheres:
+            tab_names.append("Spheres")
+        if not skip_config:
+            tab_names.append("Config")
         self._tab_frames = {}
-        tab_names = ("Generate",) if "tabs" in _SKIP else ("Generate", "Spheres", "Config")
         for name in tab_names:
             frame = tk.Frame(self.notebook)
             self.notebook.add(frame, text=name)
             self._tab_frames[name] = frame
 
         self._build_gen_tab(self._tab_frames["Generate"])
-        if "tabs" not in _SKIP:
+        if not skip_spheres:
             self._build_spheres_tab(self._tab_frames["Spheres"])
+        if not skip_config:
             self._build_config_tab(self._tab_frames["Config"])
 
     def _switch_tab(self, name: str):
@@ -1367,7 +1374,9 @@ class DexelectApp(tk.Tk):
         Called on initial load and whenever the game changes.
         """
         if not hasattr(self, "_config_inner"):
-            return  # Config tab omitted via DEXELECT_SKIP=tabs
+            return  # Config tab omitted via DEXELECT_SKIP=tabs/config
+        if "configwidgets" in _SKIP:
+            return  # canvas built but left empty (isolates canvas vs widgets)
         self._config_loading = True
         inner = self._config_inner
 
