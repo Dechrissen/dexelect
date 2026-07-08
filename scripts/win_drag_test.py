@@ -17,12 +17,14 @@
 #   PHASE E  like C, but with Dexelect's exact window setup (size formula,
 #            wm_iconphoto icon set, iconbitmap, minsize)
 #   PHASE F  like C, but with ~150 widgets (Dexelect-scale widget count)
+#   PHASE G  like B (plain Tk, DPI-aware), but with ~150 widgets - separates
+#            "CustomTkinter widgets are slow" from "many Tk windows are slow"
 #
-# Round 1 results (2026-07-08, Win10 19045): A smooth, B smooth, C laggy resize
-# only, D laggy resize only. Conclusions: resize lag = CustomTkinter per-widget
-# redraw machinery (not DPI, not the polls); the MOVE trail did not reproduce
-# in any phase, so it comes from something Dexelect's window has that these
-# didn't — hence phases E (window setup) and F (widget count).
+# Round 1 results, corrected (2026-07-08, Win10 19045): A smooth, B smooth;
+# C, D, E, F all show the move trail AND resize lag, F worst by far. So both
+# symptoms are CustomTkinter widgets scaling with count — not DPI, not the
+# polls, not Dexelect's window setup. Phase G exists to separate "CTk themed
+# widgets are the cost" from "any ~150 Tk child windows are the cost".
 #
 # Reading the result:
 #   A laggy                 -> Tk/system level; no app code involved at all
@@ -32,6 +34,9 @@
 #   C+D laggy, A+B smooth   -> CustomTkinter's widget drawing itself
 #   E trails on move        -> Dexelect's window setup (size/icons/minsize)
 #   F trails on move        -> widget count is the move-trail ingredient
+#   G trails like F         -> raw Tk child-window count; reduce total widgets
+#   G smooth, F trails      -> CustomTkinter widgets specifically; swap the
+#                              hardcoded-color CTk labels/frames for plain tk
 #
 # Each phase runs in its own process because DPI awareness is process-wide and
 # can only be set once.
@@ -47,13 +52,14 @@ PHASES = {
     "d": "PHASE D - CustomTkinter, Dexelect mitigations",
     "e": "PHASE E - CustomTkinter, Dexelect window setup",
     "f": "PHASE F - CustomTkinter, ~150 widgets",
+    "g": "PHASE G - plain Tk, ~150 widgets",
 }
 INSTRUCTIONS = "  |  drag + resize me for a few seconds, then close"
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
-def run_plain_tk(title, dpi_aware):
+def run_plain_tk(title, dpi_aware, rows=12):
     if dpi_aware and sys.platform == "win32":
         import ctypes
         ctypes.windll.shcore.SetProcessDpiAwareness(2)
@@ -61,12 +67,13 @@ def run_plain_tk(title, dpi_aware):
     root = tk.Tk()
     root.title(title + INSTRUCTIONS)
     root.geometry("1000x700")
-    for i in range(12):
+    for i in range(rows):
         row = tk.Frame(root)
         row.pack(fill="x", padx=10, pady=2)
         for j in range(3):
             tk.Button(row, text=f"button {i}-{j}").pack(side="left", padx=4)
-        tk.Label(row, text="some label text " * 3).pack(side="left", padx=8)
+        tk.Entry(row, width=12).pack(side="left", padx=4)
+        tk.Label(row, text="some label text " * 2).pack(side="left", padx=8)
     root.mainloop()
 
 
@@ -137,6 +144,8 @@ def main():
             run_ctk(title, dexelect_window=True)
         elif phase == "f":
             run_ctk(title, rows=25)
+        elif phase == "g":
+            run_plain_tk(title, dpi_aware=True, rows=25)
         return
 
     print("Windows will open one at a time. Drag + resize each by the")
