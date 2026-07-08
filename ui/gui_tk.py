@@ -94,6 +94,17 @@ if _DIAG_FILE:
 
 
 # =============================================================================
+# DIAGNOSTIC OMISSIONS (temporary — Windows move-trail bisection)
+# =============================================================================
+# DEXELECT_SKIP=icons,tabs,logo omits parts of the UI so the residual Windows
+# drag trail can be attributed by elimination. Remove once the cause is found.
+
+_SKIP = set(filter(None, os.environ.get("DEXELECT_SKIP", "").lower().split(",")))
+if _SKIP:
+    _diag(f"DEXELECT_SKIP active: {sorted(_SKIP)}")
+
+
+# =============================================================================
 # CONFIG FILE HELPERS
 # =============================================================================
 
@@ -283,7 +294,7 @@ class DexelectApp(tk.Tk):
         self.font_fixed = tkfont.nametofont("TkFixedFont")
 
         # ---- App icon ----
-        _icon_sizes = [16, 32, 38, 64, 128, 256]
+        _icon_sizes = [] if "icons" in _SKIP else [16, 32, 38, 64, 128, 256]
         _icon_imgs = []
         for _s in _icon_sizes:
             _p = resource_path(f"assets/icons/{_s}.png")
@@ -292,7 +303,7 @@ class DexelectApp(tk.Tk):
         if _icon_imgs:
             self.wm_iconphoto(True, *_icon_imgs)
             self._icon_imgs = _icon_imgs  # prevent GC
-        if sys.platform == "win32":
+        if sys.platform == "win32" and "icons" not in _SKIP:
             _ico = resource_path("assets/icons/dexelect.ico")
             if os.path.exists(_ico):
                 self.iconbitmap(_ico)
@@ -494,6 +505,8 @@ class DexelectApp(tk.Tk):
 
         # ---- Title ----
         _logo_path = resource_path("assets/logo/dexelect-logo-black.png")
+        if "logo" in _SKIP:
+            _logo_path = ""
         if os.path.exists(_logo_path):
             _logo_src = Image.open(_logo_path)
             _logo_display_w = 190
@@ -640,14 +653,16 @@ class DexelectApp(tk.Tk):
         self.notebook.grid(row=1, column=0, sticky="nsew", padx=8, pady=(0, 8))
 
         self._tab_frames = {}
-        for name in ("Generate", "Spheres", "Config"):
+        tab_names = ("Generate",) if "tabs" in _SKIP else ("Generate", "Spheres", "Config")
+        for name in tab_names:
             frame = tk.Frame(self.notebook)
             self.notebook.add(frame, text=name)
             self._tab_frames[name] = frame
 
         self._build_gen_tab(self._tab_frames["Generate"])
-        self._build_spheres_tab(self._tab_frames["Spheres"])
-        self._build_config_tab(self._tab_frames["Config"])
+        if "tabs" not in _SKIP:
+            self._build_spheres_tab(self._tab_frames["Spheres"])
+            self._build_config_tab(self._tab_frames["Config"])
 
     def _switch_tab(self, name: str):
         self.notebook.select(self._tab_frames[name])
@@ -847,6 +862,8 @@ class DexelectApp(tk.Tk):
 
     def _refresh_spheres_tab(self):
         """Update the game label, sphere mode dropdown options, and re-render the sphere map."""
+        if not hasattr(self, "_spheres_text"):
+            return  # Spheres tab omitted via DEXELECT_SKIP=tabs
         self._spheres_game_label.configure(text=self.var_game.get())
         modes = list(self.meta_data.get("sphere_generation_modes", {}).keys())
         current = self.meta_data.get("selected_sphere_mode", modes[0] if modes else "")
@@ -1349,6 +1366,8 @@ class DexelectApp(tk.Tk):
         Build (or rebuild) all config widgets inside the scrollable config frame.
         Called on initial load and whenever the game changes.
         """
+        if not hasattr(self, "_config_inner"):
+            return  # Config tab omitted via DEXELECT_SKIP=tabs
         self._config_loading = True
         inner = self._config_inner
 
