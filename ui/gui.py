@@ -248,6 +248,12 @@ SPRITE_MAX = 112  # sprite size (px) — matches original sprite dimensions
 class DexelectApp(ctk.CTk):
 
     def __init__(self, all_pools, all_pokemon, config_data, meta_data, mappings, global_settings, obtainable_pokemon):
+        # CustomTkinter polls Windows DPI-per-monitor every 100ms forever (ScalingTracker's
+        # internal after() loop) to catch cross-monitor scaling changes. On Windows that polling
+        # collides with the OS's modal move loop during window drags and produces visible
+        # slow-motion stutter. Slowing the poll to 1s keeps per-monitor DPI awareness working
+        # (just detected up to 1s later) while cutting the overhead during drags.
+        ctk.ScalingTracker.update_loop_interval = 1000
         super().__init__()
 
         # ---- Window setup ----
@@ -312,6 +318,11 @@ class DexelectApp(ctk.CTk):
         self._hm_list_frame  = None
         self._hm_dash_label  = None
 
+        # Debounce job IDs for <Configure> handlers (see _debounce)
+        self._gen_canvas_resize_job = None
+        self._stats_resize_job = None
+        self._hm_resize_job = None
+
         # Tooltip text keyed by config field name
         try:
             self.tooltips = read_yaml(TOOLTIPS_PATH) or {}
@@ -360,6 +371,19 @@ class DexelectApp(ctk.CTk):
     # =========================================================================
     # LAYOUT SKELETON
     # =========================================================================
+
+    def _debounce(self, job_attr: str, delay_ms: int, func):
+        """Cancel any pending call scheduled under job_attr and reschedule func.
+
+        Live window resizing on Windows fires many <Configure> events per second;
+        handlers that call update_idletasks() on every one of them make dragging the
+        window edges visibly laggy. Routing those handlers through this collapses
+        rapid-fire events into a single call once resizing activity settles.
+        """
+        job = getattr(self, job_attr, None)
+        if job is not None:
+            self.after_cancel(job)
+        setattr(self, job_attr, self.after(delay_ms, func))
 
     def _update_min_size(self):
         self.update_idletasks()
@@ -884,7 +908,7 @@ class DexelectApp(ctk.CTk):
         )
         self._spheres_mode_menu.pack(side="left")
 
-        ctk.CTkFrame(parent, height=1, fg_color=C_ACCENT2).grid(
+        tk.Frame(parent, height=1, bg=C_ACCENT2).grid(
             row=1, column=0, sticky="ew")
 
         map_frame = tk.Frame(parent, bg=C_BG)
@@ -1040,16 +1064,23 @@ class DexelectApp(ctk.CTk):
         scrollbar.bind("<Enter>", _enable_gen_scroll)
         scrollbar.bind("<Leave>", _disable_gen_scroll)
 
-        def _on_gen_canvas_configure(event):
+        def _apply_gen_canvas_size(width, height):
             # Row 2 (cards_outer) has weight=1 and absorbs extra height when the
             # window is large.  The scroll region equals gen_inner's natural height,
             # clamped up to the canvas height so the cards section fills the space.
-            canvas.itemconfig(inner_id, width=event.width)
             gen_inner.update_idletasks()
             content_h = gen_inner.winfo_reqheight()
-            new_h = max(event.height, content_h)
+            new_h = max(height, content_h)
             canvas.itemconfig(inner_id, height=new_h)
-            canvas.configure(scrollregion=(0, 0, event.width, new_h))
+            canvas.configure(scrollregion=(0, 0, width, new_h))
+
+        def _on_gen_canvas_configure(event):
+            # Track width immediately (cheap, keeps content visually in sync while
+            # dragging); defer the expensive reqheight/scrollregion recompute until
+            # resizing activity settles so live-resize doesn't stutter.
+            canvas.itemconfig(inner_id, width=event.width)
+            self._debounce("_gen_canvas_resize_job", 80,
+                            lambda: _apply_gen_canvas_size(event.width, event.height))
 
         canvas.bind("<Configure>", _on_gen_canvas_configure)
 
@@ -1189,7 +1220,7 @@ class DexelectApp(ctk.CTk):
         self._stats_left    = left
         self._stats_right   = right
         self._stats_wrapped = False
-        stats_frame.bind("<Configure>", lambda e: self._update_stats_layout())
+        stats_frame.bind("<Configure>", lambda e: self._debounce("_stats_resize_job", 80, self._update_stats_layout))
 
 
     # =========================================================================
@@ -1281,7 +1312,7 @@ class DexelectApp(ctk.CTk):
         for hm_name in self.config_data.get("ensure_hm_coverage", {}):
             lbl = ctk.CTkLabel(hm_list, text=hm_name, font=FONT_MONO, text_color=C_MUTED, fg_color=C_PANEL)
             self.hm_labels[hm_name] = lbl
-        hm_list.bind("<Configure>", lambda e: self._reflow_hm_list())
+        hm_list.bind("<Configure>", lambda e: self._debounce("_hm_resize_job", 80, self._reflow_hm_list))
 
         # Single dash (shown when toggle off or no party generated yet)
         self._hm_dash_label = ctk.CTkLabel(inner, text="—", font=FONT_MONO,
@@ -1529,7 +1560,7 @@ class DexelectApp(ctk.CTk):
                 scroll, text=text, font=FONT_SECTION_HEADER, text_color=C_ACCENT, anchor="w"
             ).grid(row=row, column=0, columnspan=2, padx=20, pady=(20, 4), sticky="w")
             row += 1
-            ctk.CTkFrame(scroll, height=1, fg_color=C_ACCENT2).grid(
+            tk.Frame(scroll, height=1, bg=C_ACCENT2).grid(
                 row=row, column=0, columnspan=2, padx=16, pady=(0, 10), sticky="ew")
             row += 1
 

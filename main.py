@@ -6,7 +6,7 @@ def main():
     parser = argparse.ArgumentParser(description="Dexelect")
     parser.add_argument("--ui", choices=["cli", "gui"], default="gui", help="Launch app with specified UI mode")
     parser.add_argument("--fetch-sprites", action="store_true", help="Download sprites then exit")
-    parser.add_argument("--gens", nargs="+", type=int, choices=[1, 2, 3], default=[1, 2, 3],
+    parser.add_argument("--gens", nargs="+", type=int, choices=[1, 2, 3, 4], default=[1, 2, 3, 4],
                         metavar="N", help="Generations to fetch when using --fetch-sprites")
     args = parser.parse_args()
 
