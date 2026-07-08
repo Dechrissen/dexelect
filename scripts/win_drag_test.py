@@ -53,6 +53,9 @@ PHASES = {
     "e": "PHASE E - CustomTkinter, Dexelect window setup",
     "f": "PHASE F - CustomTkinter, ~150 widgets",
     "g": "PHASE G - plain Tk, ~150 widgets",
+    "h": "PHASE H - plain Tk + ttk.Notebook",
+    "i": "PHASE I - plain Tk + Notebook + canvas-embedded content",
+    "j": "PHASE J - plain Tk + Notebook + canvas + images/window icons",
 }
 INSTRUCTIONS = "  |  drag + resize me for a few seconds, then close"
 
@@ -74,6 +77,74 @@ def run_plain_tk(title, dpi_aware, rows=12):
             tk.Button(row, text=f"button {i}-{j}").pack(side="left", padx=4)
         tk.Entry(row, width=12).pack(side="left", padx=4)
         tk.Label(row, text="some label text " * 2).pack(side="left", padx=8)
+    root.mainloop()
+
+
+def run_app_like(title, notebook=False, canvas_embed=False, images=False, rows=25):
+    """Phase G plus Dexelect-tk ingredients, stacked one at a time, to find
+    which one causes the residual ~0.5s move trail in the tk GUI (round 3)."""
+    if sys.platform == "win32":
+        import ctypes
+        ctypes.windll.shcore.SetProcessDpiAwareness(2)
+    import tkinter as tk
+    from tkinter import ttk
+    root = tk.Tk()
+    root.title(title + INSTRUCTIONS)
+    root.geometry("1000x800")
+
+    if images:
+        icon_imgs = []
+        for size in (16, 32, 38, 64, 128, 256):
+            path = REPO_ROOT / f"assets/icons/{size}.png"
+            if path.exists():
+                icon_imgs.append(tk.PhotoImage(file=str(path)))
+        if icon_imgs:
+            root.wm_iconphoto(True, *icon_imgs)
+            root._icons = icon_imgs
+        ico = REPO_ROOT / "assets/icons/dexelect.ico"
+        if sys.platform == "win32" and ico.exists():
+            root.iconbitmap(str(ico))
+
+    container = root
+    if notebook:
+        nb = ttk.Notebook(root)
+        nb.pack(fill="both", expand=True, padx=8, pady=8)
+        tabs = []
+        for name in ("Generate", "Spheres", "Config"):
+            f = tk.Frame(nb)
+            nb.add(f, text=name)
+            tabs.append(f)
+        tk.Text(tabs[1]).pack(fill="both", expand=True)
+        for i in range(40):
+            tk.Checkbutton(tabs[2], text=f"option {i}").pack(anchor="w")
+        container = tabs[0]
+
+    if canvas_embed:
+        canvas = tk.Canvas(container, highlightthickness=0, bd=0)
+        sb = tk.Scrollbar(container, command=canvas.yview)
+        canvas.configure(yscrollcommand=sb.set, yscrollincrement=1)
+        sb.pack(side="right", fill="y")
+        canvas.pack(fill="both", expand=True)
+        inner = tk.Frame(canvas)
+        iid = canvas.create_window((0, 0), window=inner, anchor="nw")
+        canvas.bind("<Configure>", lambda e: canvas.itemconfig(iid, width=e.width))
+        inner.bind("<Configure>",
+                   lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        container = inner
+
+    photos = []
+    for i in range(rows):
+        row = tk.Frame(container)
+        row.pack(fill="x", padx=10, pady=2)
+        for j in range(3):
+            tk.Button(row, text=f"button {i}-{j}").pack(side="left", padx=4)
+        tk.Entry(row, width=12).pack(side="left", padx=4)
+        tk.Label(row, text="some label text " * 2).pack(side="left", padx=8)
+        if images and i < 6:
+            photo = tk.PhotoImage(width=112, height=112)
+            photos.append(photo)
+            tk.Label(row, image=photo).pack(side="left")
+    root._photos = photos
     root.mainloop()
 
 
@@ -146,6 +217,12 @@ def main():
             run_ctk(title, rows=25)
         elif phase == "g":
             run_plain_tk(title, dpi_aware=True, rows=25)
+        elif phase == "h":
+            run_app_like(title, notebook=True)
+        elif phase == "i":
+            run_app_like(title, notebook=True, canvas_embed=True)
+        elif phase == "j":
+            run_app_like(title, notebook=True, canvas_embed=True, images=True)
         return
 
     print("Windows will open one at a time. Drag + resize each by the")
