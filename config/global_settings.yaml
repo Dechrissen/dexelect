@@ -1,5 +1,5 @@
 game: Red
-generation_mode: Progression
+generation_mode: Random (Obtainable)
 party_size: 6
 show_acquisition_details: true
 show_balance_stats: true
