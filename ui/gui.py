@@ -391,6 +391,10 @@ class DexelectApp(ctk.CTk):
         self._in_sizemove = False
         self._sizemove_flush_pending = False
         self._sizemove_deferred = {}
+        # Enter/exit counters bumped by the wndproc; reported in the perf log so a
+        # debug log can prove whether the hook actually sees the OS modal loop.
+        self._sizemove_enters = 0
+        self._sizemove_exits = 0
 
         # Gen-tab scrollbar auto-hide state + toggle counter (see _yscroll_set in
         # _build_gen_tab and _start_perf_log).
@@ -507,10 +511,11 @@ class DexelectApp(ctk.CTk):
             WM_ENTERSIZEMOVE = 0x0231
             WM_EXITSIZEMOVE  = 0x0232
             GWL_WNDPROC      = -4
+            GA_ROOT          = 2
 
             user32 = ctypes.windll.user32
-            user32.GetParent.restype  = ctypes.c_void_p
-            user32.GetParent.argtypes = [ctypes.c_void_p]
+            user32.GetAncestor.restype  = ctypes.c_void_p
+            user32.GetAncestor.argtypes = [ctypes.c_void_p, ctypes.c_uint]
             user32.CallWindowProcW.restype  = ctypes.c_ssize_t
             user32.CallWindowProcW.argtypes = [
                 ctypes.c_void_p, ctypes.c_void_p,
@@ -525,71 +530,92 @@ class DexelectApp(ctk.CTk):
                 ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p,
             ]
 
-            # winfo_id() is Tk's client-area window; the OS frame window that
-            # receives WM_ENTERSIZEMOVE is its parent.
-            hwnd = user32.GetParent(self.winfo_id())
-            if not hwnd:
-                _diag("sizemove hook skipped (no frame hwnd)")
-                return
-
             WNDPROC = ctypes.WINFUNCTYPE(ctypes.c_ssize_t, ctypes.c_void_p,
                                          ctypes.c_uint, ctypes.c_size_t, ctypes.c_ssize_t)
 
             # Locals captured by the closure: no self-attribute lookups or global
-            # resolution can fail mid-callback.
+            # resolution can fail mid-callback. `hooked` holds which frame HWND we
+            # currently subclass and its original proc.
             app              = self
             call_window_proc = user32.CallWindowProcW
             def_window_proc  = user32.DefWindowProcW
-            orig_proc        = None  # closure cell; assigned right after install
+            hooked           = {"hwnd": None, "orig": None}
 
             def _wndproc(h, msg, wparam, lparam):
                 try:
                     if msg == WM_ENTERSIZEMOVE:
                         app._in_sizemove = True
+                        app._sizemove_enters += 1
                     elif msg == WM_EXITSIZEMOVE:
                         app._in_sizemove = False
                         app._sizemove_flush_pending = True  # watchdog flushes
+                        app._sizemove_exits += 1
                 except Exception:
                     pass
-                if orig_proc:
-                    return call_window_proc(orig_proc, h, msg, wparam, lparam)
+                orig = hooked["orig"]
+                if orig:
+                    return call_window_proc(orig, h, msg, wparam, lparam)
                 return def_window_proc(h, msg, wparam, lparam)
 
             # Keep a reference on self: if the WNDPROC thunk is garbage-collected
             # while installed, the next window message crashes the process.
             self._sizemove_wndproc = WNDPROC(_wndproc)
-            orig_proc = user32.SetWindowLongPtrW(
-                hwnd, GWL_WNDPROC, ctypes.cast(self._sizemove_wndproc, ctypes.c_void_p))
-            if not orig_proc:
-                _diag("sizemove hook install failed (SetWindowLongPtrW=0)")
-                return
-            self._orig_wndproc = orig_proc
+            new_proc = ctypes.cast(self._sizemove_wndproc, ctypes.c_void_p)
+
+            def _unhook():
+                if hooked["hwnd"] and hooked["orig"]:
+                    try:
+                        user32.SetWindowLongPtrW(hooked["hwnd"], GWL_WNDPROC,
+                                                 ctypes.c_void_p(hooked["orig"]))
+                    except Exception:
+                        pass
+                hooked["hwnd"] = hooked["orig"] = None
+
+            def _rehook():
+                """(Re)install on the window's current top-level OS frame.
+
+                Diagnosed via the first Windows debug log: hooking once at startup
+                targeted a pre-map window that never receives WM_ENTERSIZEMOVE (Tk
+                creates the real frame at map time and recreates it on some wm
+                attribute changes), so the hook sat inert on every drag. GetAncestor
+                (GA_ROOT) resolves the frame that actually runs the modal loop, and
+                the watchdog below re-checks it every 250ms and follows it if Tk
+                swaps the frame HWND.
+                """
+                target = user32.GetAncestor(self.winfo_id(), GA_ROOT)
+                if not target or target == hooked["hwnd"]:
+                    return
+                _unhook()
+                orig = user32.SetWindowLongPtrW(target, GWL_WNDPROC, new_proc)
+                if orig:
+                    hooked["hwnd"], hooked["orig"] = target, orig
+                    _diag(f"sizemove hook installed on frame 0x{target:x}")
+                else:
+                    _diag(f"sizemove hook install failed on frame 0x{target:x} "
+                          f"(SetWindowLongPtrW=0)")
+
+            _rehook()
 
             # Restore the original proc before teardown so no message can reach a
             # Python callback during interpreter shutdown. <Destroy> on the root
-            # also fires for every child widget, hence the idempotence guard.
-            def _uninstall(event=None):
-                nonlocal orig_proc
-                if orig_proc:
-                    try:
-                        user32.SetWindowLongPtrW(hwnd, GWL_WNDPROC,
-                                                 ctypes.c_void_p(orig_proc))
-                    except Exception:
-                        pass
-                    orig_proc = None
-            self.bind("<Destroy>", _uninstall, add="+")
+            # also fires for every child widget; _unhook is idempotent.
+            self.bind("<Destroy>", lambda e: _unhook(), add="+")
 
-            # Watchdog: a pure-Python flag check 4×/sec (no registry/ctypes work,
-            # unlike the CustomTkinter polls this file suppresses). It exists so
-            # the wndproc never has to touch Tcl to trigger the post-drag flush.
+            # Watchdog: 4×/sec. Re-checks the hook target (self-heals late mapping
+            # and Tk frame recreation) and performs the post-drag relayout flush so
+            # the wndproc never has to touch Tcl. Cheap: one GetAncestor call and
+            # two flag checks per tick — nothing like the registry/ctypes polls
+            # this file suppresses.
             def _watchdog():
+                try:
+                    _rehook()
+                except Exception:
+                    pass
                 if self._sizemove_flush_pending and not self._in_sizemove:
                     self._sizemove_flush_pending = False
                     self._flush_sizemove_deferred()
                 self.after(250, _watchdog)
             self.after(250, _watchdog)
-
-            _diag("sizemove hook installed")
         except Exception as e:
             self._in_sizemove = False
             _diag(f"sizemove hook not installed ({e!r})")
@@ -607,7 +633,9 @@ class DexelectApp(ctk.CTk):
                      sustained counts at idle mean a relayout feedback loop.
         sb_toggles — gen-tab scrollbar auto-hide flips (see _yscroll_set): nonzero
                      at idle confirms the show/hide feedback loop.
-        sizemove   — whether the WM_ENTERSIZEMOVE hook currently reports a drag.
+        sizemove   — whether the WM_ENTERSIZEMOVE hook currently reports a drag,
+                     plus lifetime enter/exit counts: sm=(0,0) after drags proves
+                     the hook never saw the modal loop (wrong window hooked).
         """
         counts = {"cfg_all": 0}
         self.bind("<Configure>", lambda e: counts.__setitem__("cfg_all", counts["cfg_all"] + 1),
@@ -629,7 +657,8 @@ class DexelectApp(ctk.CTk):
             sb_now = self._scrollbar_toggle_count
             _diag(f"perf: lag_worst={state['worst']:5.0f}ms ticks={state['ticks']:2d}/s "
                   f"cfg_all={counts['cfg_all']:4d}/s sb_toggles={sb_now - state['sb_last']} "
-                  f"sizemove={self._in_sizemove}")
+                  f"sizemove={self._in_sizemove} "
+                  f"sm=({self._sizemove_enters},{self._sizemove_exits})")
             state["worst"] = 0.0
             state["ticks"] = 0
             state["sb_last"] = sb_now
