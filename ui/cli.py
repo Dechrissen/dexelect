@@ -2,7 +2,7 @@
 # https://derekandersen.net
 # https://github.com/Dechrissen/
 
-from util import resource_path
+from util import resource_path, format_duration
 from core import *
 from data.loader import build_all_data_structures
 from version import __version__
@@ -266,7 +266,7 @@ def display_party(party_blob, config_data, global_settings, duration, game, gene
     print()
 
     if duration:
-        print(f"[Generation took {duration:.2f}s]\n")
+        print(f"[Generation took {format_duration(duration)}]\n")
 
     print_global_settings()
 

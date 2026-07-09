@@ -38,7 +38,7 @@ Generates a completely random party drawn from the National Pokédex for the sel
 ## Balance Stats / Terminology
 
 ### Sphere
-A broad chunk of game progression (e.g. Sphere 1 for Kanto spans Pallet Town to Cerulean City).
+A broad chunk of game progression (e.g. Sphere 1 for Kanto spans Pallet Town to Viridian Forest).
 
 ### Lean
 The general bias of the party toward early or late game (early_game_heavy / balanced / late_game_heavy).
@@ -66,7 +66,7 @@ The tool's output can be fine-tuned to your liking by tweaking values such as:
 
 - Party balancing
 - Pokémon details (types, stat totals, etc.)
-- Allowed acquisition methods (walk, surf, rod, etc.)
+- Allowed acquisition methods (walk, surf, old_rod, etc.)
 
 Hover over the tooltips in the Config tab for an explanation of each config field.
 
@@ -78,8 +78,8 @@ Dexelect intended usage is to "prescribe" a party to be used in challenge playth
 Generate a party with difficult configuration settings, and challenge yourself to enter the Hall of Fame using only that party.
 
 ### Race with friends
-Generate a party and race your friends (using the same party) to finish the game. In-game time (IGT) can be used to determine a victor.
+Generate a party and race your friends (using the same party) to finish the game. In-game time (IGT) can be used to determine a victor at the end.
 
 ### General party inspiration
-To introduce variety to your playthroughs, Dexelect can be used to generate a party which you might not otherwise assemble on your own.
+To introduce variety to your playthroughs, Dexelect can be used to generate a party which you might not otherwise assemble on your own. For instance, if you only want 1 party member to be randomly chosen for you: set Party Size to 1 and Generation Mode to "Random (Obtainable)", then generate.
 

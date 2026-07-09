@@ -35,7 +35,7 @@ from datetime import datetime
 from PIL import Image, ImageTk
 from core import generate_final_party, generate_fully_randomized_party, count_new_species_per_sphere
 from data.loader import build_all_data_structures
-from util import resource_path
+from util import resource_path, format_duration
 from version import __version__
 
 
@@ -1820,7 +1820,7 @@ class DexelectApp(tk.Tk):
             self._set_status("Could not generate a party. Try adjusting settings.", color=C_WARNING)
             return
 
-        self._set_status(f"Party generated in {duration:.2f}s.", color=C_SUCCESS)
+        self._set_status(f"Party generated in {format_duration(duration)}.", color=C_SUCCESS)
         self.last_party_blob = party_blob
         self.export_btn.configure(state="normal")
         self._populate_cards(party_blob)
