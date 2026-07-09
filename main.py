@@ -11,13 +11,12 @@ def main():
     args = parser.parse_args()
 
     if args.fetch_sprites:
-        from scripts.fetch_sprites import fetch_gen, GENS
+        from scripts.fetch_sprites import fetch_sprites
         from pathlib import Path
         out_root = Path(__file__).parent / "assets/sprites"
         print(f"Output directory : {out_root.resolve()}")
         print(f"Generations      : {args.gens}")
-        for gen_num in sorted(args.gens):
-            fetch_gen(gen_num, GENS[gen_num], out_root)
+        fetch_sprites(sorted(set(args.gens)), out_root)
         print("\nAll done!")
         return
 
