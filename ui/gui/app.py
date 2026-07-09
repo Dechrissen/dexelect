@@ -2,17 +2,15 @@
 # https://derekandersen.net
 # https://github.com/Dechrissen/
 
-# gui_tk.py — plain Tk/ttk GUI for Dexelect
-# A CustomTkinter-free alternative to ui/gui.py with identical functionality,
-# rendered with the platform's native default theme: system fonts (named Tk
+# app.py — the Dexelect GUI (plain Tk/ttk)
+# Rendered with the platform's native default theme: system fonts (named Tk
 # fonts only), default colors, relief borders instead of color blocking.
-# It reads/writes the same config files as gui.py and cli.py, so all UIs stay
-# in sync and can be A/B compared.
+# It reads/writes the same config files as the CLI, so both UIs stay in sync.
 #
 # Run:
-#   python main.py --ui tk
+#   python main.py            (gui is the default UI)
 #
-# Structure mirrors ui/gui.py:
+# Structure:
 #   - Config file helpers
 #   - Tooltip + glyph icons
 #   - DexelectApp class
@@ -40,8 +38,6 @@ from data.loader import build_all_data_structures
 from util import resource_path
 from version import __version__
 
-from ui.gui_theme import TYPE_COLORS  # semantic data (type -> color), not styling
-
 
 # =============================================================================
 # CONFIG FILE HELPERS
@@ -49,7 +45,7 @@ from ui.gui_theme import TYPE_COLORS  # semantic data (type -> color), not styli
 
 GLOBAL_SETTINGS_PATH = "config/global_settings.yaml"
 GAME_SETTINGS_PATH   = "config/game_settings.yaml"
-TOOLTIPS_PATH        = "ui/tooltips.yaml"
+TOOLTIPS_PATH        = "ui/gui/tooltips.yaml"
 
 def read_yaml(path: str) -> dict:
     with open(resource_path(path), "r", encoding="utf-8") as f:
@@ -80,6 +76,52 @@ C_WARNING = "#a40000"     # status: error / warning
 C_NOTICE  = "#a05a00"     # warning strip
 C_LINK    = "#0645ad"     # clickable text
 C_COVERED = "#006400"     # HM covered by party
+
+# Pokémon type -> color (semantic data)
+TYPE_COLORS = {
+    "normal":   "#9a9a78",
+    "fire":     "#f08030",
+    "water":    "#6890f0",
+    "grass":    "#78c850",
+    "electric": "#f8d030",
+    "flying":   "#a890f0",
+    "fighting": "#c03028",
+    "ice":      "#98d8d8",
+    "psychic":  "#f85888",
+    "ground":   "#e0c068",
+    "rock":     "#b8a038",
+    "poison":   "#a040a0",
+    "bug":      "#a8b820",
+    "dragon":   "#7038f8",
+    "ghost":    "#705898",
+    "steel":    "#b8b8d0",
+    "dark":     "#705848",
+}
+
+# TYPE_COLORS was tuned for the dark CTk theme; the lightest types (electric,
+# ground, steel, ice, ...) wash out on the native light-grey background.
+# Colors above a perceptual-luminance threshold are scaled toward black,
+# preserving hue, so every badge stays legible.
+_BADGE_LUM_LIMIT = 0.55
+# Electric is distinguished from the other yellow hues (rock, ground) mainly
+# by brightness, which the global limit erases — it keeps a higher ceiling.
+_BADGE_LUM_EXCEPTIONS = {"electric": 0.64}
+_badge_color_cache = {}
+
+def _badge_color(color: str, limit: float = _BADGE_LUM_LIMIT) -> str:
+    if not (color.startswith("#") and len(color) == 7):
+        return color  # non-hex fallbacks (e.g. named colors) pass through
+    cached = _badge_color_cache.get((color, limit))
+    if cached:
+        return cached
+    r, g, b = (int(color[i:i + 2], 16) for i in (1, 3, 5))
+    lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+    out = color
+    if lum > limit:
+        k = limit / lum
+        out = f"#{int(r * k):02x}{int(g * k):02x}{int(b * k):02x}"
+    _badge_color_cache[(color, limit)] = out
+    return out
 
 
 # =============================================================================
@@ -619,7 +661,7 @@ class DexelectApp(tk.Tk):
         button, and tk.Text's built-in mousewheel scrolling — no overlay, no
         custom title bar or close glyph."""
         win = tk.Toplevel(self)
-        win.title("Help")
+        win.title("Dexelect Help")
         win.transient(self)
         w = max(480, int(self.winfo_width() * 0.7))
         h = max(400, int(self.winfo_height() * 0.8))
@@ -659,7 +701,7 @@ class DexelectApp(tk.Tk):
         text_widget.tag_configure("body", foreground="gray25")
 
         try:
-            path = resource_path("ui/gui-help.md")
+            path = resource_path("ui/gui/help.md")
             with open(path, "r", encoding="utf-8") as f:
                 lines = f.readlines()
         except Exception:
@@ -984,49 +1026,49 @@ class DexelectApp(tk.Tk):
         # ---- Stats strip ----
         stats_frame = tk.Frame(gen_inner)
         stats_frame.grid(row=4, column=0, sticky="ew", padx=16, pady=(0, 8))
-        stats_frame.grid_columnconfigure(0, weight=1)
-        stats_frame.grid_columnconfigure(1, weight=0)
-
-        left = tk.Frame(stats_frame)
-        left.grid(row=0, column=0, padx=(16, 0), pady=8, sticky="w")
 
         self.stat_labels = {}
-        for col, (key, label) in enumerate([("lean", "Lean"), ("spread", "Spread"), ("pattern", "Pattern")]):
-            hdr = tk.Frame(left)
-            hdr.grid(row=0, column=col, sticky="w", padx=(0, 20))
+        self._stat_blocks = []
+        stats = [("lean", "Lean"), ("spread", "Spread"),
+                 ("pattern", "Pattern"), ("distribution", "Distribution")]
+        # Blocks sit in even columns; the odd columns between them are
+        # equal-width spacers, so the blocks spread evenly with window size
+        # while Lean/Distribution stay flush with the HM strip's 16 px
+        # content padding above. The strip's natural width (edge padding +
+        # 12 px minimum gaps) doubles as the no-wrap threshold in
+        # _update_stats_layout, so the staged default window never wraps.
+        for i, (key, label) in enumerate(stats):
+            if i:
+                stats_frame.grid_columnconfigure(2 * i - 1, weight=1, uniform="statgap", minsize=12)
+            block = tk.Frame(stats_frame)
+            if i == 0:
+                block.grid(row=0, column=0, padx=(16, 0), pady=8)
+            elif i == len(stats) - 1:
+                block.grid(row=0, column=2 * i, padx=(0, 16), pady=8)
+            else:
+                block.grid(row=0, column=2 * i, pady=8)
+            hdr = tk.Frame(block)
+            hdr.grid(row=0, column=0, sticky="w")
             tk.Label(hdr, text=label, font=self.font_bold, anchor="w").pack(side="left")
             tip = self.tooltips.get(key, "")
             if tip:
                 icon = _icon_canvas(hdr)
                 icon.pack(side="left", padx=(5, 0), anchor="center")
                 _Tooltip(icon, tip)
-            val = tk.Label(left, text="—", font=self.font_fixed, fg=C_MUTED, anchor="w", width=16)
-            val.grid(row=1, column=col, sticky="w")
+            if key == "distribution":
+                smap_btn = tk.Label(hdr, text="\N{TRIGRAM FOR HEAVEN}", fg="gray35", cursor="hand2", bd=0)
+                smap_btn.pack(side="left", padx=(5, 0), anchor="center")
+                smap_btn.bind("<Button-1>", lambda e: self._switch_tab("Spheres"))
+                smap_btn.bind("<Enter>", lambda e: smap_btn.configure(fg="black"))
+                smap_btn.bind("<Leave>", lambda e: smap_btn.configure(fg="gray35"))
+                val = tk.Label(block, text="—", font=self.font_fixed, fg=C_MUTED, anchor="w")
+            else:
+                val = tk.Label(block, text="—", font=self.font_fixed, fg=C_MUTED, anchor="w", width=16)
+            val.grid(row=1, column=0, sticky="w")
             self.stat_labels[key] = val
-
-        right = tk.Frame(stats_frame)
-        right.grid(row=0, column=1, padx=(0, 16), pady=8, sticky="e")
-
-        hdr = tk.Frame(right)
-        hdr.grid(row=0, column=0, sticky="e")
-        tk.Label(hdr, text="Distribution", font=self.font_bold, anchor="e").pack(side="left")
-        tip = self.tooltips.get("distribution", "")
-        if tip:
-            icon = _icon_canvas(hdr)
-            icon.pack(side="left", padx=(5, 0), anchor="center")
-            _Tooltip(icon, tip)
-        smap_btn = tk.Label(hdr, text="\u2630", fg="gray35", cursor="hand2", bd=0)
-        smap_btn.pack(side="left", padx=(5, 0), anchor="center")
-        smap_btn.bind("<Button-1>", lambda e: self._switch_tab("Spheres"))
-        smap_btn.bind("<Enter>", lambda e: smap_btn.configure(fg="black"))
-        smap_btn.bind("<Leave>", lambda e: smap_btn.configure(fg="gray35"))
-        dist_val = tk.Label(right, text="—", font=self.font_fixed, fg=C_MUTED, anchor="e")
-        dist_val.grid(row=1, column=0, sticky="e")
-        self.stat_labels["distribution"] = dist_val
+            self._stat_blocks.append(block)
 
         self._stats_frame   = stats_frame
-        self._stats_left    = left
-        self._stats_right   = right
         self._stats_wrapped = False
         stats_frame.bind("<Configure>", lambda e: self._debounce("_stats_resize_job", 80, self._update_stats_layout))
 
@@ -1176,36 +1218,45 @@ class DexelectApp(tk.Tk):
         self.after_idle(self._refit_gen_height)
 
     def _update_stats_layout(self):
-        """Wrap the Distribution panel to a second row when there isn't enough horizontal room."""
+        """Wrap the Distribution block to a second row when there isn't enough horizontal room."""
         sf = self._stats_frame
         sf.update_idletasks()
         available = sf.winfo_width()
         if available <= 1:
             return
-        left  = self._stats_left
-        right = self._stats_right
-        need  = left.winfo_reqwidth() + right.winfo_reqwidth() + 32  # 16 px padx each side
+        blocks = self._stat_blocks
+        # 16 px edge padding each side + 12 px minimum gap between blocks:
+        # exactly the strip's natural (staged) width, so the default window
+        # size never wraps.
+        need = sum(b.winfo_reqwidth() for b in blocks) + 32 + 12 * (len(blocks) - 1)
+        dist = blocks[-1]
+        last_gap_col = 2 * len(blocks) - 3  # spacer between Pattern and Distribution
         if available < need and not self._stats_wrapped:
             self._stats_wrapped = True
-            left.grid(row=0, column=0, columnspan=2, padx=(16, 16), pady=(8, 4), sticky="w")
-            right.grid(row=1, column=0, columnspan=2, padx=(0, 16), pady=(4, 8), sticky="e")
+            sf.grid_columnconfigure(last_gap_col, weight=0, uniform="")
+            dist.grid(row=1, column=0, columnspan=2 * len(blocks) - 1, padx=0, pady=(0, 8))
             self.after_idle(self._refit_gen_height)
         elif available >= need and self._stats_wrapped:
             self._stats_wrapped = False
-            left.grid(row=0, column=0, padx=(16, 0), pady=8, sticky="w")
-            right.grid(row=0, column=1, padx=(0, 16), pady=8, sticky="e")
+            sf.grid_columnconfigure(last_gap_col, weight=1, uniform="statgap")
+            dist.grid(row=0, column=2 * len(blocks) - 2, columnspan=1, padx=(0, 16), pady=8)
             self.after_idle(self._refit_gen_height)
 
     def _render_type_badges(self, types_frame, types: list[str]):
-        """Render colored type badges (swatch + label) into the given frame."""
+        """Render colored type badges (swatch glyph + name) into the given frame.
+
+        One label per type: the swatch is a text glyph in the same color as the
+        name, which halves the party's badge widget count vs a frame+swatch+label
+        trio (widget count measurably affects Windows window-move smoothness).
+        """
         for w in types_frame.winfo_children():
             w.destroy()
         for col, type_name in enumerate(types):
-            color = TYPE_COLORS.get(type_name.lower(), C_MUTED)
-            badge = tk.Frame(types_frame)
-            badge.grid(row=0, column=col, padx=(0, 6))
-            tk.Frame(badge, width=12, height=12, bg=color).grid(row=0, column=0, padx=(0, 4))
-            tk.Label(badge, text=type_name.capitalize(), fg=color, anchor="w").grid(row=0, column=1)
+            key = type_name.lower()
+            limit = _BADGE_LUM_EXCEPTIONS.get(key, _BADGE_LUM_LIMIT)
+            color = _badge_color(TYPE_COLORS.get(key, C_MUTED), limit)
+            tk.Label(types_frame, text=f"\u25a0 {type_name.capitalize()}",
+                     fg=color, anchor="w").grid(row=0, column=col, padx=(0, 6))
 
 
     # =========================================================================
@@ -1936,7 +1987,7 @@ class DexelectApp(tk.Tk):
             balance_str = "N/A"
 
         # --- Render template ---
-        template_path = resource_path("ui/export_template.txt")
+        template_path = resource_path("ui/gui/export_template.txt")
         with open(template_path, "r", encoding="utf-8") as f:
             template = f.read()
 

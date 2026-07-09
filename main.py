@@ -4,8 +4,7 @@ from ui.cli import ui_loop
 
 def main():
     parser = argparse.ArgumentParser(description="Dexelect")
-    parser.add_argument("--ui", choices=["cli", "gui", "tk"], default="gui",
-                        help="Launch app with specified UI mode (gui = CustomTkinter, tk = plain Tk)")
+    parser.add_argument("--ui", choices=["cli", "gui"], default="gui", help="Launch app with specified UI mode")
     parser.add_argument("--fetch-sprites", action="store_true", help="Download sprites then exit")
     parser.add_argument("--gens", nargs="+", type=int, choices=[1, 2, 3, 4], default=[1, 2, 3, 4],
                         metavar="N", help="Generations to fetch when using --fetch-sprites")
@@ -24,11 +23,8 @@ def main():
 
     all_pools, all_pokemon, config_data, meta_data, mappings, global_settings, obtainable_pokemon = build_all_data_structures()
 
-    if args.ui in ("gui", "tk"):
-        if args.ui == "tk":
-            from ui.gui_tk import DexelectApp
-        else:
-            from ui.gui import DexelectApp
+    if args.ui == "gui":
+        from ui.gui import DexelectApp
         app = DexelectApp(all_pools, all_pokemon, config_data, meta_data, mappings, global_settings, obtainable_pokemon)
         app.mainloop()
     else:

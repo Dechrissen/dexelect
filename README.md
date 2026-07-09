@@ -164,4 +164,4 @@ Dexelect is licensed under the MIT License (see [`LICENSE`](/LICENSE)).
 
 The core code in this project (i.e., `core.py` logic and functions, data file format, data structures, classes) was neither designed nor written by an LLM.
 
-The GUI wrapper was created using LLMs; as such the one file that was exclusively authored by an LLM in this project is `/ui/gui.py`. Development work on this project is sometimes carried out utilizing LLMs for certain tedious tasks such as data file creation / formatting (the `.yaml` files in `/data`).
+The GUI wrapper was created using LLMs; as such the one file that was exclusively authored by an LLM in this project is `/ui/gui/app.py`. Development work on this project is sometimes carried out utilizing LLMs for certain tedious tasks such as data file creation / formatting (the `.yaml` files in `/data`).

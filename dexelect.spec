@@ -1,10 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
 import os
-from PyInstaller.utils.hooks import collect_data_files
-
-# customtkinter bundles its own assets (themes, fonts, icons) that must be
-# included explicitly — PyInstaller won't find them via import analysis alone.
-ctk_datas = collect_data_files('customtkinter')
 
 datas = [
     ('config',         'config'),
@@ -12,17 +7,17 @@ datas = [
     ('assets/sprites', 'assets/sprites'),
     ('assets/icons',   'assets/icons'),
     ('assets/logo',    'assets/logo'),
-    ('ui/gui-help.md',         'ui'),
-    ('ui/tooltips.yaml',       'ui'),
-    ('ui/export_template.txt', 'ui'),
-] + ctk_datas
+    ('ui/gui/help.md',             'ui/gui'),
+    ('ui/gui/tooltips.yaml',       'ui/gui'),
+    ('ui/gui/export_template.txt', 'ui/gui'),
+]
 
 a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
     datas=datas,
-    hiddenimports=['customtkinter', 'PIL._tkinter_finder'],
+    hiddenimports=['PIL._tkinter_finder'],
     hookspath=[],
     runtime_hooks=[],
     excludes=[],
