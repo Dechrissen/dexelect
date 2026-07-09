@@ -252,7 +252,8 @@ SPRITE_MAX = 112  # sprite size (px) — pixel art, fixed integer size
 class DexelectApp(tk.Tk):
 
     def __init__(self, all_pools, all_pokemon, config_data, meta_data, mappings, global_settings, obtainable_pokemon):
-        super().__init__()
+        # className='dexelect' sets WM_CLASS so it matches StartupWMClass in the .desktop launcher files
+        super().__init__(className='dexelect')
 
         # ---- Window setup ----
         # Hidden while the UI is built and measured (_apply_initial_geometry

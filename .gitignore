@@ -1,9 +1,7 @@
 __pycache__
-data/__pycache__
 .venv
 .vscode
 .idea
 build
 dist
 assets/sprites
-dexelect_debug.log

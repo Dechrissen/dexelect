@@ -34,19 +34,24 @@
 
 
 
-- add event support generally (gen 2/3)
+- add event support generally (gen 2/3/4)
   - might just be eon_ticket acquisition method toggle
   - add setting to meta file for G/S that is a boolean to enable or disable whether player has access to CELEBI event. 
   celebi event data (gs ball acquisition method? will just be in the data files but only work if this setting is 
   turned on.)
+  - shaymin darkrai
 
 - figure out if we need to handle stone availability in the config/meta files. If Flareon gets generated in party in 
   gen 2, it will assume a fire stone is available. is it? maybe back to the original idea of adding it to the 
   spheres list when it becomes available, then checking if stones are acquired by the time the pokemon is generated.
     - same with other evo items
+    - or simply "is X evo item available in Y game at all?" boolean
 
 
 - add feature "only generate pokemon in Sphere X" (or should this only be accomplished by the sphere_modes in meta file?)
+  - simply add 'sphere_1_only', 'sphere_2_only', etc. for every game?
+  - or 'midgame_spheres'
+  - or option to select individual spheres, but this will require rework -- probably not worth it
 
 - add to AUR somehow, or add some instructions in README for "how to install on Linux so it can run from launchers like wofi, etc.".
   - Use a `.desktop` file setup?
@@ -55,8 +60,6 @@
   - app icon which can be used by application launchers in Linux but also to replace the top left window icon in Windows
   - maybe install an install.sh script to build the binary, create the /bin entry, put the icon in the right spot, and make the .desktop file
   
-- add `--help` to main.py
-
 - add Claude skill file which acts as instructions for Claude to help guide users when adding a new romhack from the command line (Claude code). e.g. it knows the structure of the pokedex and locations files, it knows the data it needs and where to get it (Serebii or something), and it knows how to add all that to the repo, but it asks user questions along the way, like "does this romhack have custom pokemon or can I use an existing pokedex file?". It needs context about whole project structure.
 
 - move to 1.0.0 after config file schemas / system is finished (so users can keep config files and it can be `.gitignore`ed in the repo)
@@ -93,4 +96,5 @@
   - then i can start releasing new rulesets, themed challenges, etc. and distribute the config yamls to people
     - e.g. mono-type runs or 2nd stage only runs
 
-- add acq details and balance stats to 'Random (Obtainable)' parties
+
+- fix `./install` instructions in readme for Linux
