@@ -436,6 +436,84 @@ def is_party_progression_viable(party, all_pools, all_pokemon, config_data, meta
             print("Party is progression viable!")
         return final_party_with_acquisition_data
 
+def get_config_agnostic_party_acquisition_data(party, all_pools, all_pokemon) -> list:
+    """
+    Returns the party (list) with added acquisition data based on the pools (or None
+    for an individual mon if it's not found). Does not validate against config settings
+    or meta data like is_party_progression_viable() does.
+
+    args:
+        party (list of Pokemon objects)
+        all_pools (dict of pools)
+        all_pokemon (dict of Pokemon objects)
+
+    returns:
+        final_party_with_acquisition_data
+
+    final_party_with_acquisition_data is a list of these objects:
+        {
+            "party_member_obj": Pokemon object,
+            "earliest_form": earliest form found for that Pokemon in the pools,
+            "earliest_pool": pool the earliest form is found in,
+            "random_pool_entry_instance": a random pool entry from the instances (in the earliest pool) of the earliest form
+        }
+    """
+
+    final_party_with_acquisition_data = []
+
+    for mon in party:
+        form_found = False
+        # keep track of all the previous evos we need to search for in the pools first (order matters)
+        cur_mon = mon
+        forms_to_search_in_order = [cur_mon]
+        # while the current mon has a previous evo, add it to the list to search for
+        while cur_mon.get_immediate_child(all_pokemon):
+            cur_mon = cur_mon.get_immediate_child(all_pokemon)
+            forms_to_search_in_order.append(cur_mon)
+
+        # the latest mon added to forms_to_search_in_order is the lowest stage, so we want to reverse it
+        forms_to_search_in_order.reverse() #TODO should we actually do this in descending order? (i.e. should it check for highest evo first?)
+
+        earliest_form_found, earliest_pool_available = None, None
+        # add instances of the earliest available form of this mon (its pool_entry) to a list
+        instances_found = []
+
+        for pool_num in all_pools.keys():
+
+            cur_pool = all_pools[pool_num]
+            cur_pool_entries = cur_pool['pool_entries'] # list of pool entries for this pool
+            #cur_pool_inventory = cur_pool['inventory'] # list of items for this pool #TODO are we tracking items ever?
+
+            # iteratively check for the earliest form --> latest form of an evolution line
+            # and exit loop when a form is found
+            for form in forms_to_search_in_order:
+                for pool_entry in cur_pool_entries:
+                    if (form.name == pool_entry['pokemon_obj'].name):
+                        instances_found.append(pool_entry)
+                        form_found = True
+                        earliest_pool_available = pool_num
+                        earliest_form_found = form
+                if form_found:
+                    break
+            if form_found:
+                break
+
+        if not form_found:
+            # if DEBUG:
+            #     print("No obtainable forms found for", mon.name, "in enabled spheres", enabled_spheres, ", so setting values to None for acquisition data for this mon")
+            # doing nothing here because `earliest_form_found, earliest_pool_available = None, None` from earlier, which is what we want if a mon isn't found
+            pass
+
+        final_party_with_acquisition_data.append(
+            {
+                "party_member_obj": mon,
+                "earliest_form": earliest_form_found,
+                "earliest_pool": earliest_pool_available,
+                "random_pool_entry_instance": random.choice(instances_found) if instances_found else None,
+            }
+        )
+
+    return final_party_with_acquisition_data
 
 def assign_balance_grade(party_with_acquisition_data, meta_data, config_data) -> dict:
     """
@@ -616,34 +694,54 @@ def generate_random_mon(all_pokemon: dict[str, 'Pokemon']) -> 'Pokemon':
     """
     return random.choice(list(all_pokemon.values()))
 
-def generate_fully_randomized_party(pokemon_dict: dict[str, 'Pokemon'], n: int = 6) -> dict:
+def generate_fully_randomized_party(pokemon_dict: dict[str, 'Pokemon'], n: int = 6, all_pools=None, all_pokemon=None) -> dict:
     """
-    Generates a fully randomized party of Pokemon with empty balance stats and acquisition data (since the party is not
-    generated with any considerations about acquisition/viability, these stats are irrelevant).
+    Generates a fully randomized party of Pokemon with balance stats (always empty) and acquisition data
+    (if a Pokemon is not obtainable, acquisition data will be None).
 
     args:
-        pokemon_dict (dict of Pokemon objects)
+        pokemon_dict: dict of Pokemon objects to draw the random party from (may be a subset, e.g. obtainable_pokemon)
         n (int): the party size
+        (optional) all_pools: dict of pools
+        (optional) all_pokemon: full dict of Pokemon objects, used to walk pre-evolutions when looking up
+            acquisition data. Falls back to pokemon_dict if not provided. Pass the full set if pokemon_dict
+            is a subset like obtainable_pokemon: currently, any pre-evolution missing from such a subset is
+            guaranteed to be non-poolable anyway, so omitting it from the walk is harmless.
 
     returns:
-        final_party_blob (dict): the full party blob with empty balance stats and acquisition data
+        final_party_blob (dict): the full party blob with balance stats (always empty) and acquisition data
     """
-    party = []
+    party_with_acquisition_data = []
 
-    for i in range(n):
-        mon = generate_random_mon(pokemon_dict)
-        # fill its entry with dummy (empty) acquisition data
-        entry = {
-            "party_member_obj": mon,
-            "earliest_form": None,
-            "earliest_pool": None,
-            "random_pool_entry_instance": None
-        }
-        party.append(entry)
+    if all_pools:
+        # all_pools was passed in, which means we want to get acquisition data for the party regardless of viability
+        party = []
+        for i in range(n):
+            mon = generate_random_mon(pokemon_dict)
+            party.append(mon)
+        party_with_acquisition_data = get_config_agnostic_party_acquisition_data(
+            party, all_pools, all_pokemon if all_pokemon is not None else pokemon_dict
+        )
+    else:
+        # we never get to this branch actually, since i decided to make both 'Random (Obtainable)' and
+        # 'Random (National Dex)' pass in all_pools so acquisition data can be shown partially
+        # for a fully random National Dex party (only for those that are actually obtainable).
+        # TODO we could delete this branch, currently an artifact but maybe we use it for something else
+        # where we don't have to pass in all_pools?
+        for i in range(n):
+            mon = generate_random_mon(pokemon_dict)
+            # fill its entry with dummy (empty) acquisition data
+            entry = {
+                "party_member_obj": mon,
+                "earliest_form": None,
+                "earliest_pool": None,
+                "random_pool_entry_instance": None
+            }
+            party_with_acquisition_data.append(entry)
 
     # add dummy (empty) balance stats to the final party blob
     final_party_blob = {
-        "party_with_acquisition_data": party,
+        "party_with_acquisition_data": party_with_acquisition_data,
         'party_distribution': None,
         'score_median': None,
         'lean': None,

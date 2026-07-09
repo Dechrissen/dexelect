@@ -380,13 +380,13 @@ def ui_loop(all_pools, all_pokemon, config_data, meta_data, mappings, global_set
         if generation_mode == 'Random (Obtainable)':
             print("Generating party...\n")
             start = time.time()
-            party_blob = generate_fully_randomized_party(obtainable_pokemon, n=party_size)
+            party_blob = generate_fully_randomized_party(obtainable_pokemon, n=party_size, all_pools=all_pools, all_pokemon=all_pokemon)
             end = time.time()
             duration = end - start
         if generation_mode == 'Random (National Dex)':
             print("Generating party...\n")
             start = time.time()
-            party_blob = generate_fully_randomized_party(all_pokemon, n=party_size)
+            party_blob = generate_fully_randomized_party(all_pokemon, n=party_size, all_pools=all_pools, all_pokemon=all_pokemon)
             end = time.time()
             duration = end - start
         elif generation_mode == 'Progression':

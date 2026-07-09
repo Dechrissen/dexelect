@@ -1789,9 +1789,9 @@ class DexelectApp(tk.Tk):
             start = time.time()
 
             if gen_mode == "Random (National Dex)":
-                party_blob = generate_fully_randomized_party(self.all_pokemon, n=int(self.var_party_size.get()))
+                party_blob = generate_fully_randomized_party(self.all_pokemon, n=int(self.var_party_size.get()), all_pools=self.all_pools, all_pokemon=self.all_pokemon)
             elif gen_mode == "Random (Obtainable)":
-                party_blob = generate_fully_randomized_party(self.obtainable_pokemon, n=int(self.var_party_size.get()))
+                party_blob = generate_fully_randomized_party(self.obtainable_pokemon, n=int(self.var_party_size.get()), all_pools=self.all_pools, all_pokemon=self.all_pokemon)
             else:
                 party_blob = generate_final_party(
                     self.all_pools, self.all_pokemon,
@@ -1874,10 +1874,7 @@ class DexelectApp(tk.Tk):
                 self._sprite_images[i] = None
                 card["sprite"].unbind("<Button-1>")
 
-            if is_random and show_acq:
-                card["acq"].configure(text="N/A")
-                card["sep"].grid_remove()
-            elif show_acq and pokemon["random_pool_entry_instance"] is not None:
+            if show_acq and pokemon["random_pool_entry_instance"] is not None:
                 prescribed    = pokemon["random_pool_entry_instance"]
                 method        = prescribed["acquisition_method"]
                 location      = prescribed["acquiring_location"]
@@ -1892,6 +1889,9 @@ class DexelectApp(tk.Tk):
                     )
                 )
                 card["sep"].grid()
+            elif is_random and show_acq:
+                card["acq"].configure(text="N/A")
+                card["sep"].grid_remove()
             else:
                 card["acq"].configure(text="")
                 card["sep"].grid_remove()
@@ -1945,7 +1945,7 @@ class DexelectApp(tk.Tk):
         for i, member in enumerate(sorted_party, 1):
             mon   = member["party_member_obj"]
             entry = member["random_pool_entry_instance"]
-            if is_random or entry is None:
+            if entry is None:
                 party_lines.append(f"{i}. {mon.name}")
             else:
                 form     = member["earliest_form"].name
