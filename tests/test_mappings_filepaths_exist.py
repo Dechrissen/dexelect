@@ -23,6 +23,10 @@ def collect_paths():
 
     for game, files in mappings.items():
         for key, rel_path in files.items():
+            # Skip non-path values (e.g. the `romhack: true` flag); only
+            # string-valued keys point at files/dirs on disk.
+            if not isinstance(rel_path, str):
+                continue
             p = Path(rel_path)
             results.append((game, key, p))
 

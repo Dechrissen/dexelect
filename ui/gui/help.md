@@ -56,6 +56,8 @@ The tool's output can be fine-tuned to your liking by tweaking values such as:
 
 Hover over the tooltips for an explanation of each config field.
 
+Click 'Load Preset' to auto-populate config values according to bundled config presets. Click 'Restore Defaults' to load the suggested config settings.
+
 ## Terminology
 
 ### Sphere

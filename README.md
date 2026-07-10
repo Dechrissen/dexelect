@@ -123,7 +123,7 @@ Requires Python 3.10+.
   - 'Generate', 'Spheres', and 'Config' tabs at the top can be switched between
   - Click 'Generate Party' (or press Enter) to generate a party
   - Change sphere generation mode and view per-sphere location lists in the 'Spheres' tab
-  - Modify settings in the 'Config' tab to fine-tune output
+  - Modify settings in the 'Config' tab to customize output party restrictions
   
 > [!NOTE]
 > If you are running the standalone binary, the config files are in `/_internal/config`. They can be modified in a text editor, but the 'Config' tab in the GUI is preferred.

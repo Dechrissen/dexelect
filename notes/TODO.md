@@ -22,6 +22,7 @@
 - Finish unit test suite
 
 - add Pool class
+
 - config should maybe be a Config class. This would make it easier to validate and pass along to functions
 
 - coverage bar graphs, etc. (type coverage distribution)
@@ -43,17 +44,9 @@
 
 
 
-
-- add feature "only generate pokemon in Sphere X" (or should this only be accomplished by the sphere_modes in meta file?)
-  - simply add 'sphere_1_only', 'sphere_2_only', etc. for every game?
-  - or 'midgame_spheres'
-  - or option to select individual spheres, but this will require rework -- probably not worth it
-
 - add to AUR somehow
   
 - add Claude skill file which acts as instructions for Claude to help guide users when adding a new romhack from the command line (Claude code). e.g. it knows the structure of the pokedex and locations files, it knows the data it needs and where to get it (Serebii or something), and it knows how to add all that to the repo, but it asks user questions along the way, like "does this romhack have custom pokemon or can I use an existing pokedex file?". It needs context about whole project structure.
-
-- move to 1.0.0 after config file schemas / system is finished (so users can keep config files and it can be `.gitignore`ed in the repo)
 
 - an "update" button in the standalone binary GUI, so users can update in-app
   
@@ -64,7 +57,7 @@
   
 - wacky idea: "prescribed poke ball" option that displays the type of ball u should catch something in, like a ball png for the specific ball in the top right of the card. can be in the "Display" toggles. Would require some additional progression/config data because certain balls are not available till later in game.
 
-- add honey tree calcs - https://www.dragonflycave.com/sinnoh/honey-trees/
+- honey tree calcs - https://www.dragonflycave.com/sinnoh/honey-trees/
 
 - add a web ui option that can be selected via command line and open locally in browser, but also be the entry point for "standalone hosting" of the web app served on my site. something that runs a webserver on a port or something so we can use the python backend.
 
@@ -73,22 +66,18 @@
 - DEBUG stuff:
   - have debug details be output to a file
   - have party be output regularly even if it doesnt fail so we can see the party in debug
-
-- improve debug logging
+  - improve debug logging
 
 - might not make sense to have postgame spheres at all (e.g., in D/P Cresselia can only be obtained post-national dex which contradicts our exclusion of other post-national dex stuff like poke radar and swarms etc. So maybe postgame doesn't need to be included in any of the games.)
   - alternatively, add all postgame stuff in all games (post-national dex stuff)
 
 
-- add some script that generates the config files for each game (creates the yaml) or something that resets it to the default (recommended) values before i push a release (or maybe have options in the UI to switch to certain presets, like "recommended", "hard", etc)
-  - `config_gen1.default.yaml`
-  - `config_gen1.hard.yaml`
-  - then i can start releasing new rulesets, themed challenges, etc. and distribute the config yamls to people
-    - e.g. mono-type runs or 2nd stage only runs
-  - add a 'use suggested settings' button to the config tab which loads the suggested config
+- add documentation about how to add new config presets (CONTRIBUTING?)
 
 - figure out if we need to handle stone availability in the config/meta files. If Flareon gets generated in party in 
   gen 2, it will assume a fire stone is available. is it? maybe back to the original idea of adding it to the 
   spheres list when it becomes available, then checking if stones are acquired by the time the pokemon is generated.
     - same with other evo items
     - or simply "is X evo item available in Y game at all?" boolean
+
+- add some popular romhacks maybe

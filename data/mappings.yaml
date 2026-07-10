@@ -62,3 +62,4 @@ Solus RGB:
   locations: 'data/gen1/romhacks/locations_solusrgb.yaml'
   config: 'config/config_gen1.yaml'
   sprites: 'assets/sprites/gen1'
+  romhack: true

@@ -6,7 +6,7 @@ import shutil
 
 # Directory holding the pristine, committed config presets. `default` is the
 # baseline preset seeded on first run; future themed presets (e.g. `hard`,
-# `fun`) are sibling folders, each a full set of per-game config files.
+# `easy`) are sibling folders, each a full set of per-game config files.
 CONFIG_PRESETS_DIR = 'config/presets'
 
 # Default values seeded into global_settings.yaml when the file is absent or a
@@ -97,6 +97,34 @@ def seed_working_config(config_file_path, preset="default", force=False):
         source = resource_path(os.path.join(CONFIG_PRESETS_DIR, preset, basename))
         shutil.copyfile(source, working)
     return working
+
+def _preset_display_name(preset_dir, slug):
+    """Human-facing label for a preset: the `name:` field of its optional
+    config/presets/<slug>/preset.yaml (any string — spaces and punctuation are
+    fine), falling back to the folder slug when that file/field is absent."""
+    data = _load_yaml_or_empty(os.path.join(preset_dir, 'preset.yaml'))
+    name = data.get('name')
+    return name.strip() if isinstance(name, str) and name.strip() else slug
+
+def list_config_presets(config_file_path):
+    """
+    Return the presets that provide a config for the given game as a list of
+    (id, label) pairs, where `id` is the preset's folder name under
+    config/presets/ — a filesystem-safe slug, and the exact value to pass as
+    `seed_working_config(..., preset=id)` — and `label` is the display name
+    (see _preset_display_name). A folder qualifies only if it contains a file
+    matching `config_file_path`'s basename (e.g. 'config_gen1.yaml'), so a
+    preset lacking a given gen's config simply won't be offered for it.
+    'default' sorts first; the rest follow alphabetically by label.
+    """
+    basename = os.path.basename(config_file_path)
+    presets_root = resource_path(CONFIG_PRESETS_DIR)
+    pairs = [
+        (slug, _preset_display_name(os.path.join(presets_root, slug), slug))
+        for slug in os.listdir(presets_root)
+        if os.path.isfile(os.path.join(presets_root, slug, basename))
+    ]
+    return sorted(pairs, key=lambda p: (p[0] != 'default', p[1].lower()))
 
 def expand_file_paths(game_mappings):
 

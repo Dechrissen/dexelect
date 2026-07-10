@@ -34,7 +34,7 @@ import webbrowser
 from datetime import datetime
 from PIL import Image, ImageTk
 from core import generate_final_party, generate_fully_randomized_party, count_new_species_per_sphere
-from data.loader import build_all_data_structures, seed_working_config
+from data.loader import build_all_data_structures, seed_working_config, list_config_presets
 from util import resource_path, format_duration
 from version import __version__
 
@@ -387,7 +387,36 @@ class DexelectApp(tk.Tk):
         config_path = self.mappings[game]["config"]
         seed_working_config(config_path, preset="default", force=True)
         self._reload_data()
-        self._set_config_status("Default config values restored.", color=C_SUCCESS)
+        self._set_config_status("Loaded 'Default' preset values.", color=C_SUCCESS)
+
+    def _on_load_preset(self, preset_id, label):
+        """Overwrite the current game's working config with the chosen preset
+        (folder config/presets/<preset_id>/), then reload — same effect as
+        _on_load_defaults but for any non-default preset. `label` is the display
+        name, used only for the status message."""
+        game = self.var_game.get()
+        config_path = self.mappings[game]["config"]
+        seed_working_config(config_path, preset=preset_id, force=True)
+        self._reload_data()
+        self._set_config_status(f"Loaded '{label}' preset values.", color=C_SUCCESS)
+
+    def _rebuild_preset_menu(self):
+        """Repopulate the Load Preset menu from the presets on disk each time it
+        opens, so newly-added preset folders show up without a restart. Menu
+        entries show each preset's display name; 'default' is excluded (the
+        dedicated Restore Defaults button covers it)."""
+        menu = self._preset_menu
+        menu.delete(0, "end")
+        game = self.var_game.get()
+        config_path = self.mappings[game]["config"]
+        presets = [(pid, label) for pid, label in list_config_presets(config_path)
+                   if pid != "default"]
+        if not presets:
+            menu.add_command(label="(no other presets)", state="disabled")
+            return
+        for pid, label in presets:
+            menu.add_command(label=label,
+                             command=lambda p=pid, l=label: self._on_load_preset(p, l))
 
 
     # =========================================================================
@@ -1347,15 +1376,21 @@ class DexelectApp(tk.Tk):
         self.config_status_label = tk.Label(save_bar, text="", fg=C_MUTED, anchor="w")
         self.config_status_label.grid(row=0, column=0, sticky="w")
 
+        preset_btn = ttk.Menubutton(save_bar, text="Load Preset", direction="above")
+        self._preset_menu = tk.Menu(preset_btn, tearoff=0,
+                                    postcommand=self._rebuild_preset_menu)
+        preset_btn["menu"] = self._preset_menu
+        preset_btn.grid(row=0, column=1, padx=(0, 8))
+
         ttk.Button(
             save_bar,
             text="Restore Defaults",
             command=self._on_load_defaults,
-        ).grid(row=0, column=1, padx=(0, 12))
+        ).grid(row=0, column=2, padx=(0, 12))
 
         self.config_file_label = tk.Label(save_bar, text="", font=self.font_fixed,
                                           fg=C_MUTED, anchor="e")
-        self.config_file_label.grid(row=0, column=2, sticky="e", padx=(0, 4))
+        self.config_file_label.grid(row=0, column=3, sticky="e", padx=(0, 4))
 
     def _sync_config_tab(self):
         """Build the Config controls only while the Config tab is selected; tear
@@ -1632,7 +1667,7 @@ class DexelectApp(tk.Tk):
         menu.delete(0, "end")
 
         def is_romhack(name):
-            return "romhacks" in self.mappings[name]["pokedex"]
+            return self.mappings[name].get("romhack", False)
 
         for name in game_names:
             display = name + " (romhack)" if is_romhack(name) else name
