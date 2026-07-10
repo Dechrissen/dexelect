@@ -87,13 +87,17 @@ See [`CONTRIBUTING.md`](/CONTRIBUTING.md) if you'd like to add support for a rom
 
 ### Option 1: Download (Windows/Linux)
 
-1. Download and extract `dexelect-<version>-<platform>.zip` from the [latest release](https://github.com/Dechrissen/dexelect/releases/latest)
+1. [Download](https://github.com/Dechrissen/dexelect/releases/latest) and extract `dexelect-<version>-<platform>.zip`
 2. Run `dexelect.exe` on Windows, or `./dexelect` on Linux
-3. **Linux only** (optional): After extracting, run `./install.sh` to register Dexelect with your app launcher — you can then delete the downloaded folder. To update, repeat these steps with the new version (the old one will be overwritten).
+3. **Linux only** (optional): After extracting, run `./install.sh` to register Dexelect with your app launcher. You can then delete the downloaded folder. To update, repeat these steps with the new version (the old one will be overwritten).
 
 ### Option 2: Build the binary (Windows/Linux)
 
-Follow the [build instructions](/docs/BUILD.md).
+- **Build only** (Windows/Linux):
+`git clone https://github.com/Dechrissen/dexelect.git && cd dexelect && ./scripts/build.sh`. Output binary will be in `dist/dexelect/` (run `./dexelect` on Linux; `dexelect.exe` on Windows).
+- **Build and install to register Dexelect with your app launcher** (Linux): `git clone https://github.com/Dechrissen/dexelect.git && cd dexelect && ./scripts/build.sh && cd dist/dexelect && ./install.sh`
+
+See the [build instructions](/docs/BUILD.md) for more details.
 
 ### Option 3: Run from source (terminal)
 
@@ -103,12 +107,12 @@ Requires Python 3.10+.
 2. `cd dexelect`
 3. `pip install -r requirements.txt` (virtual environment recommended)
 4. (Optional) `python main.py --fetch-sprites` to enable sprite display in the GUI
-5. `python main.py`
+5. `python main.py` ro run the GUI
 
 
 ## Usage
 
-### Using the GUI
+### Using the GUI (`python main.py`)
 - The app is split into sidebar (left) and main window (right). Help option is at the top right.
 - Left sidebar:
   - The mode can be switched between 'Progression', 'Random (Obtainable)', and 'Random (National Dex)'

@@ -20,7 +20,8 @@ chmod +x "$APP_DIR/dexelect"
 ln -sf "$APP_DIR/dexelect" "$BIN_DIR/dexelect"
 
 # Install icon into the hicolor theme
-cp "$APP_DIR/assets/icons/256.png" "$ICON_DIR/dexelect.png"
+# (PyInstaller's onedir layout nests bundled data under _internal/)
+cp "$APP_DIR/_internal/assets/icons/256.png" "$ICON_DIR/dexelect.png"
 
 # Write .desktop file pointing at the stable installed location
 cat > "$DESKTOP_DIR/dexelect.desktop" << EOF

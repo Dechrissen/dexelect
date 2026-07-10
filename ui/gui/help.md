@@ -2,27 +2,24 @@
 
 ## Overview
 
-Dexelect is a progression-aware Pokémon party generator tool. It can generate a party according to the game's natural progression.
+Dexelect is a progression-aware Pokémon party generator tool which generates parties according to the game's natural progression.
 
-Output contains:
+Basic output:
 
-1. The party, along with details such as types and base stat totals for each member
-2. The acquisition details for each member (i.e., how and where to obtain them in the game)
-3. Party balance stats (Lean, Spread, Pattern, Distribution, HM Coverage) which describe the overall feasibility of assembling that party
+1. A party, along with per-member details such as types and base stat totals
+2. The acquisition details for each member (i.e., how and where to obtain them)
+3. Party balance stats, which describe the overall feasibility of assembling the party
 
-## How to Use
+## Options (Left Sidebar)
 
-To generate a party, click "Generate Party" or press Enter in the Generate tab.
-
-From the left sidebar, you can:
-
-- Change Game
-- Change Mode
-- Set Party Size (1–6)
-- Hide accompanying details for generated parties
-- Export party to text file
-
-To modify configuration options, navigate to the Config tab and make changes to your liking.
+- Game: Dropdown of available games
+- Mode: Radio list of available generation modes
+- Party Size: Radio list of party size limits (1–6)
+- Display: Checklist for toggling display of party details
+    - Acquisition Details: Per-Pokémon "how to acquire" details (which form, location, method)
+    - HM Coverage: Collective list of HMs learnable by the party
+    - Balance Stats: Semantic labels which describe the overall feasibility of assembling the party
+- Export Party: Save current party to a text file
 
 ## Modes
 
@@ -30,12 +27,36 @@ To modify configuration options, navigate to the Config tab and make changes to 
 Generates a party which adheres to logical game progression and config settings.
 
 ### Random (Obtainable)
-Generates a completely random party drawn from the set of obtainable Pokémon for the selected game. Config settings are ignored in this mode.
+Generates a completely random party drawn from the set of obtainable Pokémon for the selected game. Game restrictions and config settings are ignored in this mode (e.g., multiple legendary or starter Pokémon could co-occur).
 
 ### Random (National Dex)
-Generates a completely random party drawn from the National Pokédex for the selected game. Config settings are ignored in this mode.
+Generates a completely random party drawn from the National Pokédex for the selected game. Game restrictions and config settings are ignored in this mode (e.g., multiple legendary or starter Pokémon could co-occur).
 
-## Balance Stats / Terminology
+## Tabs (Right Panel)
+
+### Generate
+
+To generate a party while in the Generate tab, click "Generate Party" or press Enter.
+
+### Spheres
+
+In the Spheres tab, enabled spheres along with the number of new species they introduce are displayed.
+
+Sphere modes can be changed. Each game has its own set of available sphere modes. The 'all' option enables all spheres for a given game, including endgame and postgame (for typical usage, you'd probably want to keep these spheres disabled).
+
+### Config
+
+Use the Config tab to view and edit settings for the currently selected game.
+
+The tool's output can be fine-tuned to your liking by tweaking values such as:
+
+- Party balancing
+- Pokémon details (types, stat totals, etc.)
+- Allowed acquisition methods (walk, surf, old_rod, etc.)
+
+Hover over the tooltips for an explanation of each config field.
+
+## Terminology
 
 ### Sphere
 A broad chunk of game progression (e.g. Sphere 1 for Kanto spans Pallet Town to Viridian Forest).
@@ -51,24 +72,6 @@ The qualitative shape of the party across spheres (single_cluster / dual_cluster
 
 ### Distribution
 A breakdown of how many party members appear in each sphere.
-
-## Spheres
-
-Sphere modes can be changed in the Spheres tab. Enabled spheres (which vary depending on the active Sphere mode) are displayed in this tab.
-
-Each game has its own set of available Sphere modes. The 'all' option enables all spheres for a given game, including endgame and postgame (for typical usage, you'd probably want to keep these spheres disabled).
-
-## Configuration
-
-Use the Config tab to view and edit settings for the currently selected game.
-
-The tool's output can be fine-tuned to your liking by tweaking values such as:
-
-- Party balancing
-- Pokémon details (types, stat totals, etc.)
-- Allowed acquisition methods (walk, surf, old_rod, etc.)
-
-Hover over the tooltips in the Config tab for an explanation of each config field.
 
 ## Tips & Suggestions
 

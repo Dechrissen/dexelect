@@ -9,7 +9,7 @@ distribution: "A breakdown of the number of party members that appear in each sp
 hm_coverage: "HMs learnable by at least one party member are highlighted."
 
 # ---- Config options (Config tab) ----
-require_one_sphere_one: "If enabled, at least one Pokémon in the party must be obtainable in Sphere 1."
+require_one_sphere_one: "If enabled, at least one Pokémon in the party will be obtainable in Sphere 1."
 allowed_balancing: "Controls the allowed 'lean' values for the generated party. 'balanced' = median acquisition sphere near the game's midpoint. 'early_game_heavy' = biased toward early spheres. 'late_game_heavy' = biased toward late spheres."
 allowed_spreads: "Controls how tightly grouped the party's acquisition spheres are. 'clustered' = all members available within a narrow range. 'wide_spread' = members span most or all of the game. 'mixed_spread' = intermediate range."
 allowed_patterns: "Controls the qualitative shape of the party across spheres. 'single_cluster' = one contiguous group. 'dual_cluster' = two separate groups. 'early_late_split' = clusters at the start and end. 'middle_only' = all members in the middle portion of the game."
