@@ -226,4 +226,9 @@ sphere_generation_modes:
   all: [1,2,3,4,5,6,7]
   no_cerulean_cave: [1,2,3,4,5,6]
   pre_victory_road: [1,2,3,4,5]
+  early_game: [1,2]
+  mid_game: [3,4]
+  late_game: [5,6]
+
+suggested_sphere_mode: pre_victory_road
 

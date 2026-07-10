@@ -1,7 +1,16 @@
 __pycache__
+.pytest_cache
 .venv
 .vscode
 .idea
 build
 dist
 assets/sprites
+
+# Per-user settings — seeded from code defaults on first run (see data/loader.py)
+config/global_settings.yaml
+config/game_settings.yaml
+
+# Per-game working configs — seeded from config/presets/default/ on first run.
+# The pristine sources live under config/presets/ and stay tracked.
+config/config_gen*.yaml

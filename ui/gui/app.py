@@ -34,7 +34,7 @@ import webbrowser
 from datetime import datetime
 from PIL import Image, ImageTk
 from core import generate_final_party, generate_fully_randomized_party, count_new_species_per_sphere
-from data.loader import build_all_data_structures
+from data.loader import build_all_data_structures, seed_working_config
 from util import resource_path, format_duration
 from version import __version__
 
@@ -48,8 +48,11 @@ GAME_SETTINGS_PATH   = "config/game_settings.yaml"
 TOOLTIPS_PATH        = "ui/gui/tooltips.yaml"
 
 def read_yaml(path: str) -> dict:
-    with open(resource_path(path), "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
+    try:
+        with open(resource_path(path), "r", encoding="utf-8") as f:
+            return yaml.safe_load(f)
+    except FileNotFoundError:
+        return {}
 
 class _InlineListDumper(yaml.Dumper):
     """
@@ -376,9 +379,15 @@ class DexelectApp(tk.Tk):
         self._populate_ui_from_state()
         self._set_status("Config reloaded.", color=C_SUCCESS)
 
-    def _on_reload_from_disk(self):
+    def _on_load_defaults(self):
+        """Overwrite the current game's working config with the default preset,
+        then reload so the new values populate the Config tab and all derived
+        data structures (obtainable pool, etc.)."""
+        game = self.var_game.get()
+        config_path = self.mappings[game]["config"]
+        seed_working_config(config_path, preset="default", force=True)
         self._reload_data()
-        self._set_config_status("Config reloaded from disk.", color=C_SUCCESS)
+        self._set_config_status("Default config values restored.", color=C_SUCCESS)
 
 
     # =========================================================================
@@ -845,10 +854,12 @@ class DexelectApp(tk.Tk):
         modes = list(self.meta_data.get("sphere_generation_modes", {}).keys())
         current = self.meta_data.get("selected_sphere_mode", modes[0] if modes else "")
         self.var_sphere_mode.set(current)
+        suggested = self.meta_data.get("suggested_sphere_mode", "")
         menu = self._spheres_mode_menu["menu"]
         menu.delete(0, "end")
         for m in (modes if modes else [current]):
-            menu.add_command(label=m, command=lambda v=m: self._on_sphere_mode_selected(v))
+            label = f"{m}  (suggested)" if m == suggested else m
+            menu.add_command(label=label, command=lambda v=m: self._on_sphere_mode_selected(v))
         self._rerender_sphere_map()
 
     def _rerender_sphere_map(self):
@@ -1338,8 +1349,8 @@ class DexelectApp(tk.Tk):
 
         ttk.Button(
             save_bar,
-            text="Reload from Disk",
-            command=self._on_reload_from_disk,
+            text="Restore Defaults",
+            command=self._on_load_defaults,
         ).grid(row=0, column=1, padx=(0, 12))
 
         self.config_file_label = tk.Label(save_bar, text="", font=self.font_fixed,

@@ -331,3 +331,8 @@ spheres:
 sphere_generation_modes:
   all: [1,2,3,4,5,6] # all areas including postgame
   pre_victory_road_and_postgame: [1,2,3,4,5] # beginning of game up to postgame
+  early_game: [1,2]
+  mid_game: [3,4]
+  late_game: [5]
+
+suggested_sphere_mode: pre_victory_road_and_postgame

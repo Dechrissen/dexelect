@@ -1,8 +1,12 @@
 # -*- mode: python ; coding: utf-8 -*-
 import os
 
+# Bundle the pristine config presets tree (config/presets/<name>/...), which
+# includes future themed presets automatically. No top-level config/ files ship:
+# global_settings.yaml / game_settings.yaml seed from code defaults, and the
+# per-game working configs seed from config/presets/default/ — all on first run.
 datas = [
-    ('config',         'config'),
+    ('config/presets', 'config/presets'),
     ('data',           'data'),
     ('assets/sprites', 'assets/sprites'),
     ('assets/icons',   'assets/icons'),

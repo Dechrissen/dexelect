@@ -41,11 +41,7 @@
   turned on.)
   - shaymin darkrai
 
-- figure out if we need to handle stone availability in the config/meta files. If Flareon gets generated in party in 
-  gen 2, it will assume a fire stone is available. is it? maybe back to the original idea of adding it to the 
-  spheres list when it becomes available, then checking if stones are acquired by the time the pokemon is generated.
-    - same with other evo items
-    - or simply "is X evo item available in Y game at all?" boolean
+
 
 
 - add feature "only generate pokemon in Sphere X" (or should this only be accomplished by the sphere_modes in meta file?)
@@ -53,12 +49,7 @@
   - or 'midgame_spheres'
   - or option to select individual spheres, but this will require rework -- probably not worth it
 
-- add to AUR somehow, or add some instructions in README for "how to install on Linux so it can run from launchers like wofi, etc.".
-  - Use a `.desktop` file setup?
-  - add to `/bin`?
-  - PATH?
-  - app icon which can be used by application launchers in Linux but also to replace the top left window icon in Windows
-  - maybe install an install.sh script to build the binary, create the /bin entry, put the icon in the right spot, and make the .desktop file
+- add to AUR somehow
   
 - add Claude skill file which acts as instructions for Claude to help guide users when adding a new romhack from the command line (Claude code). e.g. it knows the structure of the pokedex and locations files, it knows the data it needs and where to get it (Serebii or something), and it knows how to add all that to the repo, but it asks user questions along the way, like "does this romhack have custom pokemon or can I use an existing pokedex file?". It needs context about whole project structure.
 
@@ -66,7 +57,6 @@
 
 - an "update" button in the standalone binary GUI, so users can update in-app
   
-- dynamic color theme matching game? (GUI)
 
 - for the CLI, add a flag that lets you generate X number of teams and then save to a file
   - i guess this could also be used for coverage testing to make sure certain distributions are being met
@@ -76,9 +66,9 @@
 
 - add honey tree calcs - https://www.dragonflycave.com/sinnoh/honey-trees/
 
-- add a web ui option that can be selected via command line and open locally in browser, but also be the entry point for "standalone hosting" of the web app served on my site
+- add a web ui option that can be selected via command line and open locally in browser, but also be the entry point for "standalone hosting" of the web app served on my site. something that runs a webserver on a port or something so we can use the python backend.
 
-- add mac binary
+- add mac binary to github workflow, and mac build instructions to readme 
 
 - DEBUG stuff:
   - have debug details be output to a file
@@ -95,6 +85,10 @@
   - `config_gen1.hard.yaml`
   - then i can start releasing new rulesets, themed challenges, etc. and distribute the config yamls to people
     - e.g. mono-type runs or 2nd stage only runs
+  - add a 'use suggested settings' button to the config tab which loads the suggested config
 
-
-- fix `./install` instructions in readme for Linux
+- figure out if we need to handle stone availability in the config/meta files. If Flareon gets generated in party in 
+  gen 2, it will assume a fire stone is available. is it? maybe back to the original idea of adding it to the 
+  spheres list when it becomes available, then checking if stones are acquired by the time the pokemon is generated.
+    - same with other evo items
+    - or simply "is X evo item available in Y game at all?" boolean

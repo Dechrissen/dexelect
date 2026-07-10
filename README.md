@@ -107,7 +107,7 @@ Requires Python 3.10+.
 2. `cd dexelect`
 3. `pip install -r requirements.txt` (virtual environment recommended)
 4. (Optional) `python main.py --fetch-sprites` to enable sprite display in the GUI
-5. `python main.py` ro run the GUI
+5. `python main.py` to run the GUI
 
 
 ## Usage
