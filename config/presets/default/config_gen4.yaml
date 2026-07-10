@@ -8,7 +8,7 @@ allowed_spreads:
 allowed_patterns:
   value: [single_cluster, dual_cluster, early_late_split, middle_only]
   options: [single_cluster, dual_cluster, early_late_split, middle_only]
-force_starter: false
+force_starter: true
 allow_not_fully_evolved: false
 max_evo_stage: 3
 allowed_evo_methods:
@@ -99,7 +99,7 @@ allowed_acquisition_methods:
   roaming: true
   honey_tree: true
   binoculars: true
-  odd_keystone: true
+  odd_keystone: false
   munchlax_tree: true
 generation_filter:
   value: []

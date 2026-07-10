@@ -1,4 +1,4 @@
-require_one_sphere_one: true
+require_one_sphere_one: false
 allowed_balancing:
   value: [balanced, early_game_heavy, late_game_heavy]
   options: [balanced, early_game_heavy, late_game_heavy]
@@ -8,7 +8,7 @@ allowed_spreads:
 allowed_patterns:
   value: [single_cluster, dual_cluster, early_late_split, middle_only]
   options: [single_cluster, dual_cluster, early_late_split, middle_only]
-force_starter: false
+force_starter: true
 allow_not_fully_evolved: false
 max_evo_stage: 3
 allowed_evo_methods:
@@ -51,10 +51,10 @@ type_blacklist:
   options: [normal, fire, water, grass, electric, flying, fighting, ice, psychic,
     ground, rock, poison, bug, dragon, ghost, steel, dark]
 ensure_hm_coverage:
-  CUT: true
+  CUT: false
   FLY: true
   SURF: true
-  STRENGTH: true
+  STRENGTH: false
   FLASH: false
   ROCK_SMASH: false
   WATERFALL: false
