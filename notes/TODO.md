@@ -73,6 +73,7 @@
 
 
 - add documentation about how to add new config presets (CONTRIBUTING?)
+  - `preset.yaml` in a dir `hard` under `presets` with `name: "Hard Mode"` as its only field
 
 - figure out if we need to handle stone availability in the config/meta files. If Flareon gets generated in party in 
   gen 2, it will assume a fire stone is available. is it? maybe back to the original idea of adding it to the 
