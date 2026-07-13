@@ -1,0 +1,22 @@
+name: Bug report (desktop app)
+description: Report a bug in the Dexelect desktop app
+labels: ["bug", "gui"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you do, and what went wrong?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Dexelect version
+      description: Shown next to the logo.
+      placeholder: e.g. v0.12.0
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: e.g. Windows 11, Arch Linux
