@@ -3,7 +3,7 @@
 ## Building
 
 Prerequisites:
-- Python 3.10+
+- Python 3.12+
 
 Steps to build:
 1. `git clone https://github.com/Dechrissen/dexelect.git`

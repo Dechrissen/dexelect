@@ -28,13 +28,12 @@ import yaml
 import threading
 import time
 import os
-import re
 import sys
 import webbrowser
-from datetime import datetime
 from PIL import Image, ImageTk
 from core import generate_final_party, generate_fully_randomized_party, count_new_species_per_sphere
 from data.loader import build_all_data_structures, seed_working_config, list_config_presets
+from ui.export import build_export_text, default_export_filename
 from util import resource_path, format_duration
 from version import __version__
 
@@ -2000,97 +1999,15 @@ class DexelectApp(tk.Tk):
         if self.last_party_blob is None:
             return
 
-        game      = self.var_game.get()
-        mode      = self.var_gen_mode.get()
-        blob      = self.last_party_blob
-        is_random = mode in ("Random (National Dex)", "Random (Obtainable)")
-
-        # --- Party list ---
-        def sort_key(p):
-            prescribed = p["random_pool_entry_instance"]
-            method = prescribed["acquisition_method"] if prescribed else None
-            earliest_pool = p.get("earliest_pool", 9999) or 9999
-            return (0 if method == "starter" else 1, earliest_pool)
-
-        sorted_party = sorted(blob["party_with_acquisition_data"], key=sort_key)
-        party_lines = []
-        for i, member in enumerate(sorted_party, 1):
-            mon   = member["party_member_obj"]
-            entry = member["random_pool_entry_instance"]
-            if entry is None:
-                party_lines.append(f"{i}. {mon.name}")
-            else:
-                form     = member["earliest_form"].name
-                method   = entry["acquisition_method"]
-                location = entry["acquiring_location"]
-                pool     = member["earliest_pool"]
-                party_lines.append(
-                    f"{i}. {mon.name} — Acquire as {form} via {method} at {location} (Sphere {pool})"
-                )
-        party_str = "\n".join(party_lines)
-
-        # --- HM Coverage ---
-        hm_config = self.config_data.get("ensure_hm_coverage", {})
-        hm_set = set(
-            hm for m in blob["party_with_acquisition_data"]
-            for hm in m["party_member_obj"].hm_learnset
+        game   = self.var_game.get()
+        output = build_export_text(
+            self.last_party_blob, game, self.var_gen_mode.get(), self.config_data, "desktop"
         )
-        if hm_config:
-            hm_parts = [
-                f"{hm}(Y)" if hm in hm_set else f"{hm}(N)"
-                for hm in hm_config
-            ]
-            hm_str = "  ".join(hm_parts)
-        else:
-            hm_str = "—"
-
-        # --- Balance Stats ---
-        if not is_random and blob.get("lean") is not None:
-            dist     = blob.get("party_distribution") or {}
-            dist_str = "  ".join(f"S{s}: {dist[s]}" for s in dist) if dist else "—"
-            pattern  = blob.get("pattern") or "—"
-            balance_str = (
-                f"Lean:         {blob.get('lean', '—')}\n"
-                f"Spread:       {blob.get('spread', '—')}\n"
-                f"Pattern:      {pattern}\n"
-                f"Distribution: {dist_str}"
-            )
-        else:
-            balance_str = "N/A"
-
-        # --- Render template ---
-        template_path = resource_path("ui/gui/export_template.txt")
-        with open(template_path, "r", encoding="utf-8") as f:
-            template = f.read()
-
-        ctx = {
-            "game":          game,
-            "mode":          mode,
-            "party":         party_str,
-            "hm_coverage":   hm_str,
-            "balance_stats": balance_str,
-            "version":       __version__,
-            "timestamp":     datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        }
-
-        def _render(tmpl, context):
-            return re.sub(
-                r"\{\{\s*(\w+)\s*\}\}",
-                lambda m: str(context.get(m.group(1).strip(), m.group(0))),
-                tmpl,
-            )
-
-        output = _render(template, ctx)
-
-        # --- Save dialog ---
-        ts       = datetime.now().strftime("%Y%m%d_%H%M%S")
-        game_slug = re.sub(r"[^\w]+", "_", game.lower()).strip("_")
-        default_name = f"dexelect_generated_party_{game_slug}_{ts}.txt"
 
         path = filedialog.asksaveasfilename(
             defaultextension=".txt",
             filetypes=[("Text files", "*.txt"), ("All files", "*.*")],
-            initialfile=default_name,
+            initialfile=default_export_filename(game),
             title="Export Party",
         )
         if not path:

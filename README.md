@@ -22,7 +22,7 @@
 </p>
 
 
-# Dexelect – Progression-aware Team Generator
+## Dexelect – Progression-aware Pokémon Team Generator
 
 Dexelect is a tool for generating (prescribing) a random, progression-faithful team of Pokémon for use in a challenge playthrough. Customization options are available to curate the output party further.
 
@@ -72,6 +72,12 @@ See [`CONTRIBUTING.md`](/CONTRIBUTING.md) if you'd like to add support for a rom
 | 4   | Diamond    | ✔         |
 | 4   | Pearl      | ✔         |
 | 4   | Platinum   | Planned   |
+| 5   | Black      | Planned   |
+| 5   | White      | Planned   |
+| 5   | Black 2    | Planned   |
+| 5   | White 2    | Planned   |
+| 6   | X          | Planned   |
+| 6   | Y          | Planned   |
 
 ### Romhacks
 
@@ -80,39 +86,55 @@ See [`CONTRIBUTING.md`](/CONTRIBUTING.md) if you'd like to add support for a rom
 | 1   | [Solus RGB](https://github.com/Dechrissen/poke-solus-rgb) | ✔  |
 
 ### Implementation quirks
-- **Munchlax trees** – In Diamond/Pearl/Platinum, [Munchlax trees](https://bulbapedia.bulbagarden.net/wiki/Honey_Tree#Munchlax_trees) are a special case to handle. A random 4/21 total Honey Trees in the game are upgraded to special Munchlax trees in which Munchlax can be encountered 1% of the time. The locations are dependent on Trainer ID and secret ID, so there's no way to know where they are until finding them in a new file. This means there is no reliable point in the game to use as the acquisition point for Munchlax, and the party balance stats will not be 100% accurate. The solution I settled on for Dexelect (since it uses a sphere progression system) was to _assume that Munchlax trees are accessible in Sphere 3_, since by that point in the game, the probability of having access to at least one of the 4 Munchlax trees is 91% (up from 77% in Sphere 2 and 0% in Sphere 1) which seemed like a high enough probability to rely on for calculating party balance stats.
+- <details>
+  <summary><b>Munchlax trees</b> <i>(click to show/hide)</i></summary>
+
+  In Diamond/Pearl/Platinum, [Munchlax trees](https://bulbapedia.bulbagarden.net/wiki/Honey_Tree#Munchlax_trees) are a special case to handle. A random 4/21 total Honey Trees in the game are upgraded to special Munchlax trees in which Munchlax can be encountered 1% of the time. The locations are dependent on Trainer ID and secret ID, so there's no way to know where they are until finding them in a new file. This means there is no reliable point in the game to use as the acquisition point for Munchlax, and the party balance stats will not be 100% accurate. The solution I settled on for Dexelect (since it uses a sphere progression system) was to _assume that Munchlax trees are accessible in Sphere 3_, since by that point in the game, the probability of having access to at least one of the 4 Munchlax trees is 91% (up from 77% in Sphere 2 and 0% in Sphere 1) which seemed like a high enough probability to rely on for calculating party balance stats.
+  </details>
 
 
 ## Installation
 
 ### Option 1: Download (Windows/Linux)
+<details>
+  <summary><i>Click to show/hide</i></summary>
 
 1. [Download](https://github.com/Dechrissen/dexelect/releases/latest) and extract `dexelect-<version>-<platform>.zip`
 2. Run `dexelect.exe` on Windows, or `./dexelect` on Linux
 3. **Linux only** (optional): After extracting, run `./install.sh` to register Dexelect with your app launcher. You can then delete the downloaded folder. To update, repeat these steps with the new version (the old one will be overwritten).
+</details>
 
 ### Option 2: Build the binary (Windows/Linux)
+<details>
+  <summary><i>Click to show/hide</i></summary>
 
 - **Build only** (Windows/Linux):
 `git clone https://github.com/Dechrissen/dexelect.git && cd dexelect && ./scripts/build.sh`. Output binary will be in `dist/dexelect/` (run `./dexelect` on Linux; `dexelect.exe` on Windows).
 - **Build and install to register Dexelect with your app launcher** (Linux): `git clone https://github.com/Dechrissen/dexelect.git && cd dexelect && ./scripts/build.sh && cd dist/dexelect && ./install.sh`
 
 See the [build instructions](/docs/BUILD.md) for more details.
+</details>
 
 ### Option 3: Run from source (terminal)
-
-Requires Python 3.10+.
+<details>
+  <summary><i>Click to show/hide</i></summary>
+Requires Python 3.12+.
 
 1. `git clone https://github.com/Dechrissen/dexelect.git`
 2. `cd dexelect`
 3. `pip install -r requirements.txt` (virtual environment recommended)
 4. (Optional) `python main.py --fetch-sprites` to enable sprite display in the GUI
-5. `python main.py` to run the GUI
+5. `python main.py` to run the GUI (optionally add `--ui=cli` for CLI or `--ui=web` for local Flask web app)
 
+Run `python main.py --help` for available flags.
+</details>
 
 ## Usage
 
-### Using the GUI (`python main.py`)
+### Using the GUI
+<details>
+  <summary><i>Click to show/hide</i></summary>
+
 - The app is split into sidebar (left) and main window (right). Help option is at the top right.
 - Left sidebar:
   - The mode can be switched between 'Progression', 'Random (Obtainable)', and 'Random (National Dex)'
@@ -122,13 +144,36 @@ Requires Python 3.10+.
 - Main window:
   - 'Generate', 'Spheres', and 'Config' tabs at the top can be switched between
   - Click 'Generate Party' (or press Enter) to generate a team
-  - Change sphere generation mode and view per-sphere location lists in the 'Spheres' tab
+  - Change sphere mode and view per-sphere location lists in the 'Spheres' tab
   - Modify settings in the 'Config' tab to customize output party restrictions
   
 > [!NOTE]
 > If you are running the standalone binary, the config files are in `/_internal/config`. They can be modified in a text editor, but the 'Config' tab in the GUI is preferred.
 
-### Using the CLI app (`python main.py --ui=cli`)
+</details>
+
+### Using the web app
+<details>
+  <summary><i>Click to show/hide</i></summary>
+
+Visit [LINK TBD]. Alternatively, run `python main.py --ui=web` and visit the `url:port` shown in your terminal.
+
+The web app is organized into a main header (with Game selector and 'Generate Party' button) and tabs for navigation.
+- Click 'Generate Party' to generate a team
+- Tabs
+  - **Party** – Where the generated party will be displayed
+  - **Setup** – For changing global settings (generation mode, party size, etc.)
+  - **Spheres** – For changing sphere modes and viewing per-sphere location lists 
+  - **Config** – For modifying settings to customize output party restrictions
+  - **Help** – Display the help dialog
+</details>
+
+### Using the CLI app
+<details>
+  <summary><i>Click to show/hide</i></summary>
+
+Run `python main.py --ui=cli`.
+
 - `ENTER` – Generate a team with the current settings
 - `G` – Open the 'Supported Games' menu to switch current game
 - `M` – Open the 'Generation Mode' menu to change the team generation mode
@@ -140,11 +185,11 @@ Requires Python 3.10+.
 #### Modifying config settings for the CLI app
 Open `/config/config_gen1.yaml` (for Gen 1 games for instance). Modify values according to your preferences. 
 Save the file and then, if the app was running, use the `R` option in the app to reload.
-
+</details>
 
 ## Credits
 - [Quadrixis](https://github.com/Quadrixis) – assistance with progression data planning and app testing
-
+- [Jade Lune](https://systemrift.com/) – logo and icon design
 
 ## Support Dexelect
 
@@ -169,3 +214,6 @@ Dexelect is licensed under the MIT License (see [`LICENSE`](/LICENSE)).
 The core code in this project (i.e., `core.py` logic and functions, data file format, data structures, classes) was neither designed nor written by an LLM.
 
 The GUI wrappers (local `Tk` GUI and web app) were created using LLMs; as such the directories that were exclusively authored by an LLM in this project are `ui/gui/` and `ui/web/`. Development work on this project is sometimes carried out utilizing LLMs for certain tedious tasks such as data file creation and formatting (the `.yaml` files in `/data`).
+
+## Legal
+Pokémon and all respective names and sprites are © and ™ of Nintendo, Game Freak, and The Pokémon Company. Dexelect is an unofficial fan project and is not affiliated with, endorsed, or sponsored by them.

@@ -11,6 +11,8 @@ const state = {
   spheres: [],       // [{num, new_species, contents:[{name,type}]}] for the Spheres tab
   sphereModeMap: {}, // sphere mode -> list of active sphere nums
   hasParty: false,   // a party is currently rendered (gates HM/stats visibility)
+  exportText: null,  // pre-rendered export .txt from the generate response
+  exportFilename: null,
 };
 
 // Text colors matching the desktop GUI (ui/gui/app.py C_COVERED / C_DIM).
@@ -252,6 +254,9 @@ async function generate() {
   setStatus("Generating…");
   $("result").innerHTML = "";
   state.hasParty = false;
+  state.exportText = null;
+  state.exportFilename = null;
+  $("export").disabled = true;  // greyed out until a party is on screen again
   applyDisplayToggles();  // hide the stale HM coverage / stats strips
 
   const body = {
@@ -281,7 +286,25 @@ async function generate() {
 
   setStatus("");
   renderParty(data);
+  state.exportText = data.export_text || null;
+  state.exportFilename = data.export_filename || null;
+  $("export").disabled = !state.exportText;
   showTab("party");  // jump to the result once it's ready
+}
+
+// Download the pre-rendered export text as a .txt file. Purely client-side:
+// the string arrived with the generate response, so clicking issues no request.
+function exportParty() {
+  if (!state.exportText) return;
+  const blob = new Blob([state.exportText], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = state.exportFilename || "dexelect_generated_party.txt";
+  document.body.appendChild(a);  // Firefox needs the anchor in the DOM to click
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
 }
 
 function renderParty(data) {
@@ -393,6 +416,7 @@ async function init() {
     loadPreset("default");
   };
   $("generate").onclick = generate;
+  $("export").onclick = exportParty;
 
   await loadGame(games[0]);
 }

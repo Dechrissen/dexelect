@@ -32,6 +32,7 @@ from data.loader import (
     list_config_presets,
     load_preset_config,
 )
+from ui.export import build_export_text, default_export_filename
 
 # The three generation modes, mirrored from the CLI (ui/cli.py GENERATION_MODES).
 GENERATION_MODES = ["Progression", "Random (Obtainable)", "Random (National Dex)"]
@@ -256,6 +257,12 @@ def create_app():
             return jsonify({"error": f"Unknown game: {game}"}), 400
 
         generation_mode = payload.get("generation_mode", GENERATION_MODES[0])
+        # Pin to the known vocabulary. Unknown values always fell through to
+        # the Progression branch below; naming that explicitly matters now that
+        # the mode string is also rendered into export_text — the exported file
+        # must state the mode that actually ran, not echo arbitrary client JSON.
+        if generation_mode not in GENERATION_MODES:
+            generation_mode = GENERATION_MODES[0]
         sphere_mode = payload.get("sphere_mode")
         if not isinstance(sphere_mode, str):
             sphere_mode = None  # build_game_data resolves the fallback
@@ -313,7 +320,14 @@ def create_app():
                 "error": "Could not generate a valid party. Try adjusting settings."
             }), 200
 
-        return jsonify(_serialize_blob(blob, mappings, game, config_data))
+        result = _serialize_blob(blob, mappings, game, config_data)
+        # Pre-rendered "Export Party" .txt (same renderer as the desktop GUI).
+        # Riding along in this response keeps the server stateless and means
+        # the front end's Export button is a pure client-side Blob download —
+        # no export endpoint exists to hit.
+        result["export_text"] = build_export_text(blob, game, generation_mode, config_data, "web")
+        result["export_filename"] = default_export_filename(game)
+        return jsonify(result)
 
     @app.route("/logo.png")
     def logo():

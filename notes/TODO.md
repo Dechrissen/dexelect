@@ -6,6 +6,8 @@
   - Yellow
   - Crystal
   - Emerald
+  - Platinum
+  - Colosseum / XD (support for 2 starters?)
 
 - clean up CLI UI code and add some comments
 

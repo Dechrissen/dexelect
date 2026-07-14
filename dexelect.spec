@@ -13,7 +13,7 @@ datas = [
     ('assets/logo',    'assets/logo'),
     ('ui/gui/help.md',             'ui/gui'),
     ('ui/gui/tooltips.yaml',       'ui/gui'),
-    ('ui/gui/export_template.txt', 'ui/gui'),
+    ('ui/export_template.txt', 'ui'),
 ]
 
 a = Analysis(
