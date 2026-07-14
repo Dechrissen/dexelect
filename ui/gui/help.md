@@ -1,14 +1,18 @@
-# Dexelect — Progression-aware Pokémon Party Generator
+# Dexelect — Progression-aware Pokémon Team Generator
 
 ## Overview
 
-Dexelect is a progression-aware Pokémon party generator tool which generates parties according to the game's natural progression.
+Dexelect is a progression-aware Pokémon team generator tool which generates teams according to the game's natural progression.
 
-Basic output:
+Tool output:
 
 1. A party, along with per-member details such as types and base stat totals
 2. The acquisition details for each member (i.e., how and where to obtain them)
 3. Party balance stats, which describe the overall feasibility of assembling the party
+
+## Basic Usage
+
+Pick a game from the Game dropdown on the left sidebar, then click "Generate Party".
 
 ## Options (Left Sidebar)
 
@@ -24,13 +28,13 @@ Basic output:
 ## Modes
 
 ### Progression
-Generates a party which adheres to logical game progression and config settings.
+Generates a team which adheres to logical game progression and config settings.
 
 ### Random (Obtainable)
-Generates a completely random party drawn from the set of obtainable Pokémon for the selected game. Game restrictions and config settings are ignored in this mode (e.g., multiple legendary or starter Pokémon could co-occur).
+Generates a completely random team drawn from the set of obtainable Pokémon for the selected game. Game restrictions and config settings are ignored in this mode (e.g., multiple legendary or starter Pokémon could co-occur).
 
 ### Random (National Dex)
-Generates a completely random party drawn from the National Pokédex for the selected game. Game restrictions and config settings are ignored in this mode (e.g., multiple legendary or starter Pokémon could co-occur).
+Generates a completely random team drawn from the National Pokédex for the selected game. Game restrictions and config settings are ignored in this mode (e.g., multiple legendary or starter Pokémon could co-occur).
 
 ## Tabs (Right Panel)
 
@@ -87,4 +91,8 @@ Generate a party and race your friends (using the same party) to finish the game
 
 ### General party inspiration
 To introduce variety to your playthroughs, Dexelect can be used to generate a party which you might not otherwise assemble on your own. For instance, if you only want 1 party member to be randomly chosen for you: set Party Size to 1 and Generation Mode to "Random (Obtainable)", then generate.
+
+## Legal
+
+Pokémon and all respective names and sprites are © and ™ of Nintendo, Game Freak, and The Pokémon Company. Dexelect is an unofficial fan project and is not affiliated with, endorsed, or sponsored by them.
 

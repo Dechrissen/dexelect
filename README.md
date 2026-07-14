@@ -22,9 +22,9 @@
 </p>
 
 
-# Dexelect – Progression-aware Party Generator
+# Dexelect – Progression-aware Team Generator
 
-Dexelect is a tool for generating (prescribing) a random, progression-faithful party of Pokémon for use in a challenge playthrough. Customization options are available to curate the output party further.
+Dexelect is a tool for generating (prescribing) a random, progression-faithful team of Pokémon for use in a challenge playthrough. Customization options are available to curate the output party further.
 
 <p align="center">
   <img alt="Dexelect GUI sample output" src="screenshots/sample-gui-output.png" width="80%">
@@ -121,7 +121,7 @@ Requires Python 3.10+.
   - 'Export Party' button exports party to `.txt` file
 - Main window:
   - 'Generate', 'Spheres', and 'Config' tabs at the top can be switched between
-  - Click 'Generate Party' (or press Enter) to generate a party
+  - Click 'Generate Party' (or press Enter) to generate a team
   - Change sphere generation mode and view per-sphere location lists in the 'Spheres' tab
   - Modify settings in the 'Config' tab to customize output party restrictions
   
@@ -129,9 +129,9 @@ Requires Python 3.10+.
 > If you are running the standalone binary, the config files are in `/_internal/config`. They can be modified in a text editor, but the 'Config' tab in the GUI is preferred.
 
 ### Using the CLI app (`python main.py --ui=cli`)
-- `ENTER` – Generate a party with the current settings
+- `ENTER` – Generate a team with the current settings
 - `G` – Open the 'Supported Games' menu to switch current game
-- `M` – Open the 'Generation Mode' menu to change the party generation mode
+- `M` – Open the 'Generation Mode' menu to change the team generation mode
 - `P` – Open the 'Set Party Size' menu to set party size (1–6)
 - `R` – Reload the config file from disk (after making any config changes while the app is running)
 - `H` – Display help menu
@@ -168,4 +168,4 @@ Dexelect is licensed under the MIT License (see [`LICENSE`](/LICENSE)).
 
 The core code in this project (i.e., `core.py` logic and functions, data file format, data structures, classes) was neither designed nor written by an LLM.
 
-The GUI wrapper was created using LLMs; as such the one file that was exclusively authored by an LLM in this project is `/ui/gui/app.py`. Development work on this project is sometimes carried out utilizing LLMs for certain tedious tasks such as data file creation / formatting (the `.yaml` files in `/data`).
+The GUI wrappers (local `Tk` GUI and web app) were created using LLMs; as such the directories that were exclusively authored by an LLM in this project are `ui/gui/` and `ui/web/`. Development work on this project is sometimes carried out utilizing LLMs for certain tedious tasks such as data file creation and formatting (the `.yaml` files in `/data`).

@@ -1,0 +1,118 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <title>Dexelect – Progression-aware Pokémon Team Generator</title>
+  <meta name="description" content="Dexelect is a tool for generating (prescribing) a random, progression-faithful team of Pokémon for use in a challenge playthrough. By Derek Andersen.">
+  <!-- Open Graph: how link previews render on Discord/social. og:image must be
+       an absolute URL, built from the request so it follows the deployed host. -->
+  <meta property="og:title" content="Dexelect – Progression-aware Pokémon Team Generator">
+  <meta property="og:description" content="Dexelect is a tool for generating (prescribing) a random, progression-faithful team of Pokémon for use in a challenge playthrough. By Derek Andersen.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ url_for('index', _external=True) }}">
+  <meta property="og:image" content="{{ url_for('og_image', _external=True) }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <link rel="icon" href="/favicon.ico">
+</head>
+
+<p><img src="/logo.png" alt="Dexelect" width="190"> <small>v{{ version }}</small></p>
+<p>Progression-aware Pokémon Team Generator</p>
+
+
+<!-- Persistent bar: game + generate are relevant on every tab. The status
+     message sits inline to the right of the button; it always holds at least
+     an &nbsp; (via setStatus) so the bar never reflows when it changes. -->
+<div>
+  <label>Game
+    <select id="game"></select>
+  </label>
+  <button id="generate" type="button">Generate Party</button>
+  <span id="status">&nbsp;</span>
+</div>
+
+<!-- Tab buttons. Panels below are shown one at a time via the `hidden`
+     attribute (native HTML, no CSS). app.js wires the switching. -->
+<nav id="tabs">
+  <button type="button" data-tab="party">Party</button>
+  <button type="button" data-tab="setup">Setup</button>
+  <button type="button" data-tab="spheres">Spheres</button>
+  <button type="button" data-tab="config">Config</button>
+  <button type="button" data-tab="help">Help</button>
+</nav>
+
+<hr>
+
+<section id="tab-party">
+  <h2 id="party_header" hidden>Party</h2>
+  <div id="result"><!-- party injected by app.js --></div>
+  <!-- HM coverage sits between the party and the stats strip (as in the GUI).
+       Both stay hidden until a party exists, and the Setup Display toggles
+       flip their `hidden` attributes even while this tab itself is hidden. -->
+  <!-- div, not p: the h3 header injected by renderHmCoverage is a block element -->
+  <div id="hm_coverage" hidden></div>
+  <div id="stats" hidden></div>
+</section>
+
+<section id="tab-setup" hidden>
+  <h2>Setup</h2>
+
+  <div>
+    <label>Generation mode
+      <select id="generation_mode"></select>
+    </label>
+  </div>
+
+  <div>
+    <label>Party size
+      <input id="party_size" type="number" min="1" max="6" value="6">
+    </label>
+  </div>
+
+  <div>
+    <strong>Display</strong><br>
+    <label><input id="show_acq" type="checkbox" checked> Acquisition Details</label><br>
+    <label><input id="show_hm" type="checkbox" checked> HM Coverage</label><br>
+    <label><input id="show_balance" type="checkbox" checked> Balance Stats</label>
+  </div>
+</section>
+
+<section id="tab-spheres" hidden>
+  <h2>Spheres</h2>
+
+  <div>
+    <label>Sphere mode
+      <select id="sphere_mode"></select>
+    </label>
+  </div>
+
+  <br>
+
+  <div id="sphere_map"><!-- sphere map injected by app.js --></div>
+</section>
+
+<section id="tab-config" hidden>
+  <h2>Config</h2>
+
+  <div>
+    <label>Preset
+      <select id="preset"></select>
+    </label>
+    <button id="restore_defaults" type="button">Restore Defaults</button>
+  </div>
+
+  <div id="config"><!-- levers injected by app.js --></div>
+</section>
+
+{% include "help.html" %}
+
+<footer>
+  <p><small>© 2026 Derek Andersen<br>
+    <a href="https://ko-fi.com/dechrissen" target="_blank" rel="noopener">Donate on Ko-fi</a> ·
+    <a href="https://github.com/Dechrissen/dexelect" target="_blank" rel="noopener">Star on GitHub</a> ·
+    <a href="https://github.com/Dechrissen/dexelect/releases/latest" target="_blank" rel="noopener">Download desktop app</a> ·
+    <a href="https://github.com/Dechrissen/dexelect/issues/new?template=bug_web.yml" target="_blank" rel="noopener">Report a bug</a>
+  </small></p>
+  <p><small>Pokémon and all respective names and sprites are © and ™ of Nintendo, Game Freak, and The Pokémon Company. Dexelect is an unofficial fan project and is not affiliated with, endorsed, or sponsored by them.</small></p>
+</footer>
+
+<script src="/static/app.js"></script>

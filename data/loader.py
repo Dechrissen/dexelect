@@ -98,6 +98,22 @@ def seed_working_config(config_file_path, preset="default", force=False):
         shutil.copyfile(source, working)
     return working
 
+def load_preset_config(config_file_path, preset="default"):
+    """
+    Web counterpart to seed_working_config: read a preset's config for a game
+    into a dict WITHOUT copying it to a working file (no disk writes). The web UI
+    starts from this pristine structure and overlays the user's in-memory
+    overrides before generating, so no per-user working files are ever created.
+
+    `config_file_path` is a game's mappings 'config' entry (e.g.
+    'config/config_gen1.yaml'); only its basename is used to locate the file
+    inside config/presets/<preset>/.
+    """
+    basename = os.path.basename(config_file_path)
+    source = resource_path(os.path.join(CONFIG_PRESETS_DIR, preset, basename))
+    with open(source) as f:
+        return yaml.safe_load(f)
+
 def _preset_display_name(preset_dir, slug):
     """Human-facing label for a preset: the `name:` field of its optional
     config/presets/<slug>/preset.yaml (any string — spaces and punctuation are
@@ -166,20 +182,56 @@ def build_all_data_structures():
     seed_all_working_configs(mappings)
     load_or_seed_game_settings(mappings)
 
-    # get relevant file paths for selected game in global_settings.yaml
-    pokedex_file_path, locations_file_path, meta_file_path, config_file_path = expand_file_paths(mappings[game])
+    # get the working config file path for the selected game
+    _, _, _, config_file_path = expand_file_paths(mappings[game])
 
-    # get selected game config data
+    # get selected game config data (the seeded, per-user working file)
     with open(resource_path(config_file_path)) as f:
         config_data = yaml.safe_load(f)
+
+    # selected sphere mode from game_settings.yaml; build_game_data resolves the
+    # fallback (suggested, then first available) if it's missing or invalid
+    game_settings_data = _load_yaml_or_empty('config/game_settings.yaml')
+    sphere_mode = game_settings_data.get(game)
+
+    # delegate the pure, disk-write-free build to build_game_data
+    all_pools, all_pokemon, meta_data, obtainable_pokemon = build_game_data(
+        game, config_data, sphere_mode, mappings
+    )
+
+    return all_pools, all_pokemon, config_data, meta_data, mappings, global_settings, obtainable_pokemon
+
+
+def build_game_data(game, config_data, sphere_mode, mappings):
+    """
+    Pure core extracted from build_all_data_structures: build every generation
+    data structure for `game` from an explicit `config_data` dict and
+    `sphere_mode`, reading ONLY the committed, read-only data files
+    (pokedex/locations/meta). Performs no seeding and writes nothing to disk, so
+    it is safe to call per-request from the web UI under multiple workers.
+
+    `sphere_mode` may be None or invalid; it is resolved against the game's
+    available modes (falling back to suggested_sphere_mode, then the first mode)
+    and injected into meta_data as 'selected_sphere_mode', exactly as the desktop
+    path did.
+
+    args:
+        game (str): a key in mappings
+        config_data (dict): config options — from a seeded working file on
+            desktop, or preset + user overrides in memory on web
+        sphere_mode (str | None): selected sphere mode, resolved if missing/invalid
+        mappings (dict): game -> file-path mappings
+
+    returns:
+        all_pools (dict), all_pokemon (dict), meta_data (dict), obtainable_pokemon (dict)
+    """
+    pokedex_file_path, locations_file_path, meta_file_path, _ = expand_file_paths(mappings[game])
 
     # get selected game metadata
     with open(resource_path(meta_file_path)) as m:
         meta_data = yaml.safe_load(m)
 
-    # inject selected sphere mode from game_settings.yaml into meta_data
-    game_settings_data = _load_yaml_or_empty('config/game_settings.yaml')
-    sphere_mode = game_settings_data.get(game)
+    # resolve + inject the selected sphere mode into meta_data
     available_modes = meta_data.get('sphere_generation_modes', {})
     if not sphere_mode or sphere_mode not in available_modes:
         suggested = meta_data.get('suggested_sphere_mode')
@@ -218,7 +270,7 @@ def build_all_data_structures():
     # in this game's pools at all.
     obtainable_pokemon = build_obtainable_pokemon(all_pools, all_pokemon)
 
-    return all_pools, all_pokemon, config_data, meta_data, mappings, global_settings, obtainable_pokemon
+    return all_pools, all_pokemon, meta_data, obtainable_pokemon
 
 def build_obtainable_pokemon(all_pools, all_pokemon) -> dict[str, 'Pokemon']:
     """

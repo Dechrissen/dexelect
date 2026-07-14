@@ -59,7 +59,6 @@
 
 - honey tree calcs - https://www.dragonflycave.com/sinnoh/honey-trees/
 
-- add a web ui option that can be selected via command line and open locally in browser, but also be the entry point for "standalone hosting" of the web app served on my site. something that runs a webserver on a port or something so we can use the python backend.
 
 - add mac binary to github workflow, and mac build instructions to readme 
 
@@ -82,3 +81,5 @@
     - or simply "is X evo item available in Y game at all?" boolean
 
 - add some popular romhacks maybe
+
+- add additional config value "force_max_allowed_evo_stage" so we can get stage 2 pokemon (maxed out) if max_evo_stage = 2 and allow_nfe = true.

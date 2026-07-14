@@ -276,6 +276,8 @@ class DexelectApp(tk.Tk):
         self.font_h1.configure(weight="bold", size=base_size + 4 * step)
         self.font_h2 = base.copy()
         self.font_h2.configure(weight="bold", size=base_size + 2 * step)
+        self.font_small = base.copy()
+        self.font_small.configure(size=base_size - step)
         self.font_fixed = tkfont.nametofont("TkFixedFont")
 
         # ---- App icon ----
@@ -643,7 +645,19 @@ class DexelectApp(tk.Tk):
         link_label(links, "GitHub", "https://github.com/Dechrissen/dexelect").pack(side="left")
         tk.Label(links, text="·", fg=C_MUTED).pack(side="left", padx=(4, 4))
         link_label(links, "Report a Bug",
-                   "https://github.com/Dechrissen/dexelect/issues/new?labels=bug").pack(side="left")
+                   "https://github.com/Dechrissen/dexelect/issues/new?template=bug_gui.yml").pack(side="left")
+
+        # Shortest form of the sprite/IP disclaimer; the full text lives in the
+        # Legal section of help.md, so clicking this line opens Help scrolled
+        # there. Stays muted (not C_LINK) to keep it visually quieter than the
+        # Ko-fi/GitHub links; the hand cursor + hover color signal it's clickable.
+        legal = tk.Label(footer, text="Dexelect is an unofficial fan project",
+                         fg=C_MUTED, font=self.font_small, cursor="hand2",
+                         justify="left")
+        legal.grid(row=2, column=0, columnspan=3, sticky="w", pady=(6, 0))
+        legal.bind("<Button-1>", lambda e: self._show_help(scroll_to="Legal"))
+        legal.bind("<Enter>", lambda e: legal.configure(fg=C_LINK))
+        legal.bind("<Leave>", lambda e: legal.configure(fg=C_MUTED))
 
 
     # =========================================================================
@@ -695,10 +709,14 @@ class DexelectApp(tk.Tk):
         else:
             self._show_help()
 
-    def _show_help(self):
+    def _show_help(self, scroll_to=None):
         """Open help as a native transient dialog: real titlebar, real OS close
         button, and tk.Text's built-in mousewheel scrolling — no overlay, no
-        custom title bar or close glyph."""
+        custom title bar or close glyph.
+
+        scroll_to: optional heading text (e.g. "Legal"); the dialog opens
+        scrolled so that section sits at the top."""
+        self._close_help()
         win = tk.Toplevel(self)
         win.title("Dexelect Help")
         win.transient(self)
@@ -721,6 +739,13 @@ class DexelectApp(tk.Tk):
 
         self._render_help_text(text)
         text.configure(state="disabled")
+
+        if scroll_to:
+            # Headings render as their own line, so anchor on a whole-line match
+            # to avoid hitting the same word inside body text.
+            idx = text.search(rf"^{scroll_to}$", "1.0", stopindex="end", regexp=True)
+            if idx:
+                text.yview(idx)
 
         win.bind("<Escape>", lambda e: self._close_help())
         win.focus_set()
@@ -1864,7 +1889,7 @@ class DexelectApp(tk.Tk):
             return
 
         if party_blob is None:
-            self._set_status("Could not generate a party. Try adjusting settings.", color=C_WARNING)
+            self._set_status("Could not generate a valid party. Try adjusting settings.", color=C_WARNING)
             return
 
         self._set_status(f"Party generated in {format_duration(duration)}.", color=C_SUCCESS)

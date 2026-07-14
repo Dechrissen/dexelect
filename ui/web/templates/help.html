@@ -1,0 +1,79 @@
+<!-- Help tab content, included by index.html. Web-specific counterpart to
+     ui/gui/help.md (which is written around the Tk GUI's sidebar/popup layout);
+     shared sections (Modes, Terminology, Tips) should be kept in sync by hand. -->
+<section id="tab-help" hidden>
+  <h2>Help</h2>
+
+  <h3>Overview</h3>
+  <p>Dexelect is a progression-aware Pokémon team generator tool which generates teams according to the game's natural progression.</p>
+  <p>Tool output:</p>
+  <ol>
+    <li>A party, along with per-member details such as types and base stat totals</li>
+    <li>The acquisition details for each member (i.e., how and where to obtain them)</li>
+    <li>Party balance stats, which describe the overall feasibility of assembling the party</li>
+  </ol>
+
+  <h3>Basic Usage</h3>
+  <p>Pick a game from the Game dropdown at the top of the page, then click "Generate Party".</p>
+
+  <h3>Modes</h3>
+  <p>The generation mode is selected in the Setup tab.</p>
+  <h4>Progression</h4>
+  <p>Generates a team which adheres to logical game progression and config settings.</p>
+  <h4>Random (Obtainable)</h4>
+  <p>Generates a completely random team drawn from the set of obtainable Pokémon for the selected game. Game restrictions and config settings are ignored in this mode (e.g., multiple legendary or starter Pokémon could co-occur).</p>
+  <h4>Random (National Dex)</h4>
+  <p>Generates a completely random team drawn from the National Pokédex for the selected game. Game restrictions and config settings are ignored in this mode (e.g., multiple legendary or starter Pokémon could co-occur).</p>
+
+  <h3>Tabs</h3>
+  <h4>Party</h4>
+  <p>Displays the generated party. Depending on the Display toggles in the Setup tab, each member's acquisition details, the party's collective HM coverage, and the party balance stats are shown alongside it.</p>
+  <h4>Setup</h4>
+  <ul>
+    <li>Generation Mode: Dropdown of available generation modes (see Modes above)</li>
+    <li>Party Size: Party size limit (1–6)</li>
+    <li>Display: Checklist for toggling display of party details
+      <ul>
+        <li>Acquisition Details: Per-Pokémon "how to acquire" details (which form, location, method)</li>
+        <li>HM Coverage: Collective list of HMs learnable by the party</li>
+        <li>Balance Stats: Semantic labels which describe the overall feasibility of assembling the party</li>
+      </ul>
+    </li>
+  </ul>
+  <h4>Spheres</h4>
+  <p>In the Spheres tab, enabled spheres along with the number of new species they introduce are displayed.</p>
+  <p>Sphere modes can be changed. Each game has its own set of available sphere modes. The 'all' option enables all spheres for a given game, including endgame and postgame (for typical usage, you'd probably want to keep these spheres disabled).</p>
+  <h4>Config</h4>
+  <p>Use the Config tab to view and edit settings for the currently selected game.</p>
+  <p>The tool's output can be fine-tuned to your liking by tweaking values such as:</p>
+  <ul>
+    <li>Party balancing</li>
+    <li>Pokémon details (types, stat totals, etc.)</li>
+    <li>Allowed acquisition methods (walk, surf, old_rod, etc.)</li>
+  </ul>
+  <p>Select an entry from the Preset dropdown to auto-populate config values according to bundled config presets. Click 'Restore Defaults' to load the suggested config settings.</p>
+  <p>Config changes apply to the parties you generate in your current browser session; reloading the page resets them.</p>
+
+  <h3>Terminology</h3>
+  <dl>
+    <dt><strong>Sphere</strong></dt>
+    <dd>A broad chunk of game progression (e.g. Sphere 1 for Kanto spans Pallet Town to Viridian Forest).</dd>
+    <dt><strong>Lean</strong></dt>
+    <dd>The general bias of the party toward early or late game (early_game_heavy / balanced / late_game_heavy).</dd>
+    <dt><strong>Spread</strong></dt>
+    <dd>How tightly grouped the party's acquisition spheres are (clustered / mixed_spread / wide_spread).</dd>
+    <dt><strong>Pattern</strong></dt>
+    <dd>The qualitative shape of the party across spheres (single_cluster / dual_cluster / early_late_split / middle_only).</dd>
+    <dt><strong>Distribution</strong></dt>
+    <dd>A breakdown of how many party members appear in each sphere.</dd>
+  </dl>
+
+  <h3>Tips &amp; Suggestions</h3>
+  <p>Dexelect intended usage is to "prescribe" a team to be used in challenge playthroughs. Depending on the restrictiveness of your configuration settings, the output party could be quite challenging to use in-game.</p>
+  <h4>Challenge run</h4>
+  <p>Generate a team with difficult configuration settings, and challenge yourself to enter the Hall of Fame using only that team.</p>
+  <h4>Race with friends</h4>
+  <p>Generate a team and race your friends (using the same team) to finish the game. In-game time (IGT) can be used to determine a victor at the end.</p>
+  <h4>General team inspiration</h4>
+  <p>To introduce variety to your playthroughs, Dexelect can be used to generate a team which you might not otherwise assemble on your own. For instance, if you only want 1 party member to be randomly chosen for you: set Party Size to 1 and Generation Mode to "Random (Obtainable)", then generate.</p>
+</section>

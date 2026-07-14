@@ -6,15 +6,29 @@ from models.pokemon import Pokemon
 from models.location import Location
 from models.sphere import Sphere
 import random
+import time
 
 #DEBUG = True
 DEBUG = False
+
+# Wall-clock ceiling for a single generate_final_party call (across all its
+# retries). A pathological config can otherwise burn the full
+# max_retries x max_iterations budget (~seconds of CPU) before returning None;
+# this caps that regardless of UI (cli / gui / web). See generate_final_party.
+#
+# Set as a safety net ABOVE the natural max_retries=300 exhaustion time (~1.3s
+# gen1 / ~1.9s gen4 on the dev box) with headroom for a slower VPS, so honest
+# hard-but-satisfiable configs aren't false-failed on slow hardware; only a
+# genuine runaway trips it. Must stay below the gunicorn --timeout (15s) so the
+# graceful in-app path wins. See ui/web/deploy/dexelect.service.
+GENERATION_TIME_BUDGET_S = 5.0
 
 GEN_RANGES = {1: (1, 151), 2: (152, 251), 3: (252, 386), 4: (387, 493)}
 
 def generate_final_party(all_pools: dict, all_pokemon: dict, config_data: dict, meta_data: dict,
                          obtainable_pokemon: dict, n: int = 6,
-                         retry: int = 0, max_retries: int = 300, max_iterations: int = 2000):
+                         retry: int = 0, max_retries: int = 300, max_iterations: int = 2000,
+                         deadline: float = None):
     """
     Generates a final party of Pokemon.
 
@@ -28,13 +42,22 @@ def generate_final_party(all_pools: dict, all_pokemon: dict, config_data: dict, 
         retry (int): optional
         max_retries (int): optional
         max_iterations (int): optional
+        deadline (float): optional time.monotonic() timestamp after which the
+            attempt is abandoned. Established on the first call from
+            GENERATION_TIME_BUDGET_S and inherited by every retry, so no single
+            request can exceed the budget regardless of config.
 
     returns:
         final party blob (party, acquisition data, distribution, balance stats)
-        OR None if it fails after max_retries
+        OR None if it fails after max_retries / the time budget is exhausted
     """
 
-    if retry > max_retries:
+    # First (non-retry) call sets the shared wall-clock deadline for this whole
+    # generation, including all recursive retries below.
+    if deadline is None:
+        deadline = time.monotonic() + GENERATION_TIME_BUDGET_S
+
+    if retry > max_retries or time.monotonic() > deadline:
         if DEBUG:
             print("Could not generate valid party with current settings!")
         return None
@@ -64,12 +87,13 @@ def generate_final_party(all_pools: dict, all_pokemon: dict, config_data: dict, 
     # ---- MAIN GENERATION LOOP WITH FAILSAFE ----
     # iteratively build a party that is valid according to the config options
     while len(tentative_party) < n:
-        if iterations > max_iterations:
-            # abort this attempt, retry whole function
+        if iterations > max_iterations or time.monotonic() > deadline:
+            # abort this attempt, retry whole function (which re-checks the
+            # deadline at its top and bails out if the budget is spent)
             return generate_final_party(all_pools, all_pokemon,
                                         config_data, meta_data,
                                         obtainable_pokemon, n, retry + 1,
-                                        max_retries, max_iterations)
+                                        max_retries, max_iterations, deadline)
 
         rand_mon = generate_random_mon(obtainable_pokemon)
 
@@ -102,7 +126,7 @@ def generate_final_party(all_pools: dict, all_pokemon: dict, config_data: dict, 
                 return generate_final_party(all_pools, all_pokemon,
                                             config_data, meta_data,
                                             obtainable_pokemon, n, retry + 1,
-                                            max_retries, max_iterations)
+                                            max_retries, max_iterations, deadline)
         if DEBUG:
             print("Generating balance stats...")
 
@@ -114,7 +138,7 @@ def generate_final_party(all_pools: dict, all_pokemon: dict, config_data: dict, 
             return generate_final_party(all_pools, all_pokemon,
                                         config_data, meta_data,
                                         obtainable_pokemon, n, retry + 1,
-                                        max_retries, max_iterations)
+                                        max_retries, max_iterations, deadline)
 
         final_party_blob = {
             "party_with_acquisition_data": party_with_acquisition_data,
@@ -134,7 +158,7 @@ def generate_final_party(all_pools: dict, all_pokemon: dict, config_data: dict, 
         return generate_final_party(all_pools, all_pokemon,
                                     config_data, meta_data,
                                     obtainable_pokemon, n, retry + 1,
-                                    max_retries, max_iterations)
+                                    max_retries, max_iterations, deadline)
 
 def is_party_valid(party, is_party_full, config_data, meta_data) -> bool:
     """

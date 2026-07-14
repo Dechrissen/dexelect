@@ -1,0 +1,42 @@
+# Dexelect web UI — systemd service (reference).
+#
+# Install: copy to /etc/systemd/system/dexelect.service (or run as a --user unit
+# under ~/.config/systemd/user/), edit the paths/User below, then:
+#   systemctl daemon-reload
+#   systemctl enable --now dexelect
+#
+# Runs gunicorn against the Flask app factory. Low-resource tuning (see plan):
+#   --workers 2   : plenty for the expected traffic; more just multiplies RAM
+#   --preload     : load app + read-only game data once in the master, then fork;
+#                   Linux copy-on-write shares those pages across workers, so the
+#                   2nd worker costs almost no extra memory (safe ONLY because the
+#                   web path is stateless and never mutates shared data)
+#   --timeout 15  : hard watchdog — a sync worker stuck on one request longer
+#                   than this is killed and respawned. Backstop BELOW the in-app
+#                   2s generation deadline (core.GENERATION_TIME_BUDGET_S): that
+#                   only bounds generate_final_party, whereas this also catches a
+#                   hang anywhere else in a request (data build, serialization,
+#                   an unforeseen wedge). 15s is far above the ~2-3s real worst
+#                   case, so it never trips a legitimate request, only a stuck one.
+#
+# nginx serves the sprites directly (see nginx-dexelect.conf), so gunicorn only
+# handles the HTML + JSON API.
+
+[Unit]
+Description=Dexelect web UI
+After=network.target
+
+[Service]
+User=youruser
+WorkingDirectory=/home/youruser/apps/dexelect
+ExecStart=/home/youruser/apps/dexelect/.venv/bin/gunicorn \
+          "ui.web.app:create_app()" \
+          --bind 127.0.0.1:8765 \
+          --workers 2 \
+          --timeout 15 \
+          --preload
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
