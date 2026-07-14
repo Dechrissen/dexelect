@@ -27,7 +27,9 @@
     <select id="game"></select>
   </label>
   <button id="generate" type="button">Generate Party</button>
-  <button id="export" type="button" disabled>Export Party</button>
+  <!-- autocomplete=off: Firefox otherwise restores the button's runtime
+       disabled/enabled state over this markup on soft reload (F5) -->
+  <button id="export" type="button" disabled autocomplete="off">Export Party</button>
   <span id="status">&nbsp;</span>
 </div>
 

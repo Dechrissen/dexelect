@@ -397,6 +397,10 @@ function applyDisplayToggles() {
 // ---- wiring ----------------------------------------------------------------
 
 async function init() {
+  // A fresh page never has a party, so the export button must start disabled
+  // even when the browser (Firefox on F5) restores its pre-reload state.
+  $("export").disabled = true;
+
   const { games } = await fetch("/api/games").then((r) => r.json());
   fillSelect($("game"), games, games[0]);
 
