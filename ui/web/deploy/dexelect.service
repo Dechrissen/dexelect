@@ -13,10 +13,10 @@
 #                   web path is stateless and never mutates shared data)
 #   --timeout 15  : hard watchdog — a sync worker stuck on one request longer
 #                   than this is killed and respawned. Backstop BELOW the in-app
-#                   2s generation deadline (core.GENERATION_TIME_BUDGET_S): that
+#                   5s generation deadline (core.GENERATION_TIME_BUDGET_S): that
 #                   only bounds generate_final_party, whereas this also catches a
 #                   hang anywhere else in a request (data build, serialization,
-#                   an unforeseen wedge). 15s is far above the ~2-3s real worst
+#                   an unforeseen wedge). 15s is far above the ~5s real worst
 #                   case, so it never trips a legitimate request, only a stuck one.
 #
 # nginx serves the sprites directly (see nginx-dexelect.conf), so gunicorn only

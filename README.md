@@ -118,7 +118,7 @@ See the [build instructions](/docs/BUILD.md) for more details.
 ### Option 3: Run from source (terminal)
 <details>
   <summary><i>Click to show/hide</i></summary>
-Requires Python 3.12+.
+Requires Python 3.11+.
 
 1. `git clone https://github.com/Dechrissen/dexelect.git`
 2. `cd dexelect`
@@ -131,7 +131,7 @@ Run `python main.py --help` for available flags.
 
 ## Usage
 
-### Using the GUI
+### Using the GUI app
 <details>
   <summary><i>Click to show/hide</i></summary>
 
@@ -146,9 +146,6 @@ Run `python main.py --help` for available flags.
   - Click 'Generate Party' (or press Enter) to generate a team
   - Change sphere mode and view per-sphere location lists in the 'Spheres' tab
   - Modify settings in the 'Config' tab to customize output party restrictions
-  
-> [!NOTE]
-> If you are running the standalone binary, the config files are in `/_internal/config`. They can be modified in a text editor, but the 'Config' tab in the GUI is preferred.
 
 </details>
 

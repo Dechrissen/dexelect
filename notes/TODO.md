@@ -85,3 +85,9 @@
 - add some popular romhacks maybe
 
 - add additional config value "force_max_allowed_evo_stage" so we can get stage 2 pokemon (maxed out) if max_evo_stage = 2 and allow_nfe = true.
+
+- add web app badge to top of readme
+
+- add base stat totals to web app UI
+
+- maybe add base stat totals and types to 'export party' txt file
