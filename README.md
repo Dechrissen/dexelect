@@ -11,14 +11,17 @@
 </p>
 
 <p align="center">
-  <a href='https://ko-fi.com/Q5Q311GBFF' target='_blank'><img height='32' style='border:0px;height:32px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
-  </br>
+  <a href="https://dexelect.derekandersen.net"><img
+  alt="Try Dexelect on the web"
+  src="https://img.shields.io/badge/try%20it-web%20app-orange"></a>
   <a href="https://github.com/Dechrissen/dexelect/releases/latest"><img
   alt="Download Dexelect"
   src="https://img.shields.io/badge/download-latest-green"></a>
   <a href="https://discord.gg/YTxu5uM7r6"><img
   alt="Solus Discord server"
   src="https://img.shields.io/discord/1346293888318443520?label=discord&logo=discord&logoColor=white&color=blue"></a> 
+  <br>
+  <a href='https://ko-fi.com/Q5Q311GBFF' target='_blank'><img height='32' style='border:0px;height:32px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 </p>
 
 
@@ -153,7 +156,9 @@ Run `python main.py --help` for available flags.
 <details>
   <summary><i>Click to show/hide</i></summary>
 
-Visit [LINK TBD]. Alternatively, run `python main.py --ui=web` and visit the `url:port` shown in your terminal.
+Visit the [live Dexelect web app](https://dexelect.derekandersen.net). 
+
+Alternatively, run `python main.py --ui=web` and visit the `url:port` shown in your terminal.
 
 The web app is organized into a main header (with Game selector and 'Generate Party' button) and tabs for navigation.
 - Click 'Generate Party' to generate a team
