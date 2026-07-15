@@ -8,7 +8,7 @@ cd /home/derek/apps/dexelect
 git reset --hard -q
 git pull -q
 .venv/bin/pip install -r requirements.txt --quiet
-.venv/bin/python -m main.py --fetch-sprites
+.venv/bin/python main.py --fetch-sprites
 sudo systemctl start dexelect.service
 echo "$now updated" >> /home/derek/dexelect.log
 sleep 1
